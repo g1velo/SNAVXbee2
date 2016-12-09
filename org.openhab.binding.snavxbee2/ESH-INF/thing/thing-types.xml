@@ -30,7 +30,7 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge" />
 		</supported-bridge-type-refs>
-		<label>SNAVXbee2 Binding Thing</label>
+		<label>SNAVXbee2 Binding Things</label>
 		<description>Sample thing for SNAVXbee2 Binding</description>
 		<channels>
 			<channel id="channel1" typeId="channel1" />
