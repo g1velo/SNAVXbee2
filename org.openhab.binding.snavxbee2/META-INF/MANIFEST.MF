@@ -5,9 +5,10 @@ Bundle-SymbolicName: org.openhab.binding.snavxbee2;singleton:=true
 Bundle-Vendor: openHAB
 Bundle-Version: 2.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/RXTXcomm.jar
 Import-Package: 
- gnu.io,
+ com.google.common.collect;version="10.0.1",
  org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.core.library.types,
  org.eclipse.smarthome.core.thing,
@@ -19,17 +20,32 @@ Import-Package:
  org.openhab.binding.snavxbee2.handler,
  org.slf4j
 Service-Component: OSGI-INF/*.xml
-Export-Package: com.digi.xbee.api,
- com.digi.xbee.api.connection,
- com.digi.xbee.api.connection.serial,
- com.digi.xbee.api.discoverdevices,
- com.digi.xbee.api.exceptions,
+Export-Package: com.digi.xbee.api;
+  uses:="com.digi.xbee.api.connection.serial,
+   org.slf4j,
+   com.digi.xbee.api.connection,
+   com.digi.xbee.api.models,
+   com.digi.xbee.api.listeners,
+   com.digi.xbee.api.io,
+   com.digi.xbee.api.packet",
+ com.digi.xbee.api.connection;
+  uses:="com.digi.xbee.api.models,
+   com.digi.xbee.api.listeners,
+   com.digi.xbee.api,
+   com.digi.xbee.api.packet",
+ com.digi.xbee.api.connection.serial;uses:="gnu.io,com.digi.xbee.api.connection",
+ com.digi.xbee.api.discoverdevices;uses:="com.digi.xbee.api.listeners,com.digi.xbee.api",
+ com.digi.xbee.api.exceptions;uses:="com.digi.xbee.api.models",
  com.digi.xbee.api.io,
- com.digi.xbee.api.listeners,
- com.digi.xbee.api.models,
- com.digi.xbee.api.packet,
- com.digi.xbee.api.packet.common,
- com.digi.xbee.api.packet.raw,
+ com.digi.xbee.api.listeners;
+  uses:="com.digi.xbee.api.models,
+   com.digi.xbee.api.io,
+   com.digi.xbee.api.packet,
+   com.digi.xbee.api",
+ com.digi.xbee.api.models;uses:="com.digi.xbee.api,com.digi.xbee.api.packet",
+ com.digi.xbee.api.packet;uses:="com.digi.xbee.api.models",
+ com.digi.xbee.api.packet.common;uses:="com.digi.xbee.api.models,com.digi.xbee.api.io,com.digi.xbee.api.packet",
+ com.digi.xbee.api.packet.raw;uses:="com.digi.xbee.api.models,com.digi.xbee.api.io,com.digi.xbee.api.packet",
  com.digi.xbee.api.utils,
- org.openhab.binding.snavxbee2,
- org.openhab.binding.snavxbee2.handler
+ org.openhab.binding.snavxbee2;uses:="org.eclipse.smarthome.core.thing",
+ org.openhab.binding.snavxbee2.handler;uses:="org.eclipse.smarthome.core.thing,org.eclipse.smarthome.core.thing.binding,org.eclipse.smarthome.core.types"

@@ -1,24 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="snavxbee"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+<thing:thing-descriptions bindingId="snavxbee2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-    <!-- Sample Thing Type -->
-    <thing-type id="sample">
-        <label>SNAVXbee2 Binding Thing</label>
-        <description>Sample thing for SNAVXbee2 Binding</description>
+	<!-- Bridge definition -->
 
-        <channels>
-            <channel id="channel1" typeId="sample-channel"/>
-        </channels>
-    </thing-type>
+	<bridge-type id="bridge">
+		<label>SNAV Xbee2 Serial Gateway</label>
+		<description>Xbee S2 connecteds with serial port
+        </description>
+		<config-description>
+			<parameter name="serialPort" type="text" required="true">
+				<context>serial-port</context>
+				<label>Serial Port</label>
+				<description>The serial port the SNAVXbee2 Gateway is connected to
+                </description>
+			</parameter>
+			<parameter name="baudRate" type="integer" required="false" min="300" max="250000">
+				<label>Baudrate</label>
+				<description>Baudrate for serial port
+                </description>
+				<default>9600</default>
+			</parameter>
+		</config-description>
+	</bridge-type>
 
-    <!-- Sample Channel Type -->
-    <channel-type id="sample-channel">
-        <item-type>snavxbee2Item</item-type>
-        <label>SNAVXbee2 Binding Channel</label>
-        <description>Sample channel for SNAVXbee2 Binding</description>
-    </channel-type>
+	<!-- Sample Thing Type -->
+	<thing-type id="sample">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 Binding Thing</label>
+		<description>Sample thing for SNAVXbee2 Binding</description>
+		<channels>
+			<channel id="channel1" typeId="channel1" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit addrees Xbee64BitsAddress
+                </description>
+			</parameter>
+			<parameter name="IOChannel" type="text" required="true">
+				<context>IOChannel </context>
+				<label>Xbee IOChannel</label>
+				<description>The IOChannel of the Xbee Device </description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<!-- Sample Channel Type -->
+	<channel-type id="channel1">
+		<item-type>snavxbee2Item</item-type>
+		<label>SNAVXbee2 Binding Channel</label>
+		<description>Sample channel for SNAVXbee2 Binding</description>
+	</channel-type>
 
 </thing:thing-descriptions>

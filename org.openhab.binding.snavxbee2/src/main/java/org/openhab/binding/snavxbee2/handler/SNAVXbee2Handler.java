@@ -29,10 +29,14 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
     public SNAVXbee2Handler(Thing thing) {
         super(thing);
+        logger.debug("in {} method : contructor(Thing) ", this.getClass());
     }
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
+
+        logger.debug("in {} method : handlecommand for channel {} ", this.getClass(), channelUID);
+
         if (channelUID.getId().equals(CHANNEL_1)) {
             // TODO: handle command
 
@@ -45,12 +49,18 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                     + " Could be handling command ----------------------------------");
 
         }
+
+        // getBridgeHandler().
+
     }
 
     @Override
     public void initialize() {
         // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
         // Long running initialization should be done asynchronously in background.
+        logger.debug("@@@@@@@@@@@@@@@@_____________  in {} initialise()  for .getBridgeUID {} :  getThingTypeUID : {} ",
+                this.getClass(), thing.getBridgeUID(), thing.getThingTypeUID());
+
         updateStatus(ThingStatus.ONLINE);
 
         // Note: When initialization can NOT be done set the status with more details for further
@@ -60,4 +70,5 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
         // "Can not access device as username and/or password are invalid");
     }
+
 }
