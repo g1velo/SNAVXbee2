@@ -48,5 +48,8 @@ Export-Package: com.digi.xbee.api;
  com.digi.xbee.api.packet.common;uses:="com.digi.xbee.api.models,com.digi.xbee.api.io,com.digi.xbee.api.packet",
  com.digi.xbee.api.packet.raw;uses:="com.digi.xbee.api.models,com.digi.xbee.api.io,com.digi.xbee.api.packet",
  com.digi.xbee.api.utils,
+ org.openhab.binding.snavxbee.util,
  org.openhab.binding.snavxbee2;uses:="org.eclipse.smarthome.core.thing",
- org.openhab.binding.snavxbee2.handler;uses:="org.eclipse.smarthome.core.thing,org.eclipse.smarthome.core.thing.binding,org.eclipse.smarthome.core.types"
+ org.openhab.binding.snavxbee2.handler;uses:="org.eclipse.smarthome.core.thing,org.eclipse.smarthome.core.thing.binding,org.eclipse.smarthome.core.types",
+ org.openhab.binding.snavxbee2.internal;x-internal:=true,
+ org.openhab.binding.snavxbee2.utils
