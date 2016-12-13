@@ -31,6 +31,7 @@ public class SNAVXbee2BindingConstants {
 
     // List of all Channel ids
     public final static String CHANNEL_1 = "channel1";
+    public final static String TEMPERATURE = "temperature";
 
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
 

@@ -28,21 +28,14 @@ import org.slf4j.LoggerFactory;
  */
 public class SNAVXbee2HandlerFactory extends BaseThingHandlerFactory {
 
-    // private final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections.singleton(THING_TYPE_SAMPLE);
-
-    // private final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections.singleton(THING_TYPE_BRIDGE);
-
-    // public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets.union(THING_TYPE_SAMPLE, THING_TYPE_BRIDGE);
-
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
-        logger.debug("thingTypeUID : {} SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID) : {} ", thingTypeUID,
+
+        logger.debug("!! thingTypeUID : {} SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID) : {} ", thingTypeUID,
                 SUPPORTED_DEVICE_TYPES_UIDS.contains(thingTypeUID));
-        // return SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
         return SUPPORTED_DEVICE_TYPES_UIDS.contains(thingTypeUID);
-        // return true;
     }
 
     @Override

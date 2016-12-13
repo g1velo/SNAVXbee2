@@ -9,12 +9,15 @@ package org.openhab.binding.snavxbee2.handler;
 
 import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.CHANNEL_1;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.smarthome.config.core.Configuration;
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.utils.ThingConfiguration;
@@ -32,6 +35,9 @@ public class SNAVXbee2Handler extends BaseThingHandler {
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2Handler.class);
     private Configuration thingConfig;
     private ThingConfiguration tc;
+    private String xbee64BitsAddress;
+    private String xbeeNodeID;
+    private String xbeeCommand;
 
     public SNAVXbee2Handler(Thing thing) {
         super(thing);
@@ -46,7 +52,6 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         if (channelUID.getId().equals(CHANNEL_1)) {
             // TODO: handle command
-
             // Note: if communication with thing fails for some reason,
             // indicate that by setting the status with detail information
             // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
@@ -55,9 +60,33 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             logger.debug(getThing().getStatusInfo() + "  " + getThing().getUID() + getThing().getThingTypeUID()
                     + " Could be handling command ----------------------------------");
 
+            switch (command.toString()) {
+                case "ON":
+                    logger.debug("setting : " + channelUID.getId() + " to " + command);
+                    this.xbeeCommand = "e";
+                    break;
+                case "OFF":
+                    logger.debug("setting : " + channelUID.getId() + " to " + command);
+                    this.xbeeCommand = "o";
+                    break;
+                default:
+                    logger.info("Don't know what to do with command : " + command);
+                    this.xbeeCommand = "[";
+                    break;
+
+            }
+
         }
 
-        // getBridgeHandler().
+        xbee64BitsAddress = "0013A20040E31560";
+        xbee64BitsAddress = "LULUTEMP";
+
+        logger.debug(" handler xbee64BitsAddress : {}  this.xbeeCommand : {} ", this.xbee64BitsAddress,
+                this.xbeeCommand);
+
+        // getBridgeHandler().sendCommandToDevice(tc.xbee64BitsAddress, xbeeCommand);
+
+        getBridgeHandler().sendCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
 
     }
 
@@ -65,10 +94,33 @@ public class SNAVXbee2Handler extends BaseThingHandler {
     public void initialize() {
         // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
         // Long running initialization should be done asynchronously in background.
-        logger.debug("@@@@@@@@@@@@@@@@_____________  in {} initialise()  for .getBridgeUID {} :  getThingTypeUID : {} ",
-                this.getClass(), thing.getBridgeUID(), thing.getThingTypeUID());
+        logger.debug(
+                "@@@@@@@@@@@@@@@@_____________  in {} initialise()  for .getBridgeUID {} :  getThingTypeUID : {} getUID : {} ",
+                this.getClass(), thing.getBridgeUID(), thing.getThingTypeUID(), thing.getUID());
 
         updateStatus(ThingStatus.ONLINE);
+
+        Collection<Thing> things = thingRegistry.getAll();
+
+        for (Thing t : things) {
+
+            logger.debug(" t.getUID() {} t.getThingTypeUID() {}", t.getUID(), t.getThingTypeUID());
+
+            ThingStatusInfo statusInfo = t.getStatusInfo();
+            switch (statusInfo.getStatus()) {
+                case ONLINE:
+                    logger.debug("Thing is online");
+                    break;
+                case OFFLINE:
+                    logger.debug("Thing is offline");
+                    break;
+                default:
+                    logger.debug("Thing is in state " + statusInfo.getStatus());
+                    break;
+            }
+            logger.debug("Thing status detail: " + statusInfo.getStatusDetail());
+            logger.debug("Thing status description: " + statusInfo.getDescription());
+        }
 
         // Note: When initialization can NOT be done set the status with more details for further
         // analysis. See also class ThingStatusDetail for all available status details.
@@ -76,6 +128,8 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         // as expected. E.g.
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
         // "Can not access device as username and/or password are invalid");
+
+        // updateStatus(ThingStatus.ONLINE);
 
         thingConfig = thing.getConfiguration();
 
@@ -90,8 +144,19 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         // tc.xbee64BitsAddress = (String) thingConfig.get("Xbee64BitsAddress");
         // tc.ioChannel = (String) thingConfig.get("IOChannel");
-        // logger.debug("XXXThing configuration : Xbee address : {} Io Channel : {} ", tc.xbee64BitsAddress,
-        // tc.ioChannel);
+
+        // logger.debug(" tc.xbee64BitsAddress : {} ", tc.xbee64BitsAddress);
+    }
+
+    public synchronized SNAVXbee2BridgeHandler getBridgeHandler() {
+
+        SNAVXbee2BridgeHandler myBridgeHandler = null;
+        logger.debug(" Bridge Status" + getBridge().getStatus());
+
+        Bridge bridge = getBridge();
+        myBridgeHandler = (SNAVXbee2BridgeHandler) bridge.getHandler();
+
+        return myBridgeHandler;
 
     }
 
