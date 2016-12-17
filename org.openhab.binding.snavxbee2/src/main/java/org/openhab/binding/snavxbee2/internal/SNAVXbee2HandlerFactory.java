@@ -9,7 +9,6 @@ package org.openhab.binding.snavxbee2.internal;
 
 import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 
-import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -45,21 +44,19 @@ public class SNAVXbee2HandlerFactory extends BaseThingHandlerFactory {
 
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        Configuration configuration = thing.getConfiguration();
+        if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
 
-        // configuration.getProperties();
-
-        // if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {
-
-        if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {
             logger.debug("????????1    in {} for thing type uid : {}", THING_TYPE_SAMPLE, thing.getThingTypeUID());
             return new SNAVXbee2Handler(thing);
+
         }
 
-        if (thingTypeUID.equals(THING_TYPE_BRIDGE)) {
+        // if (thingTypeUID.equals(THING_TYPE_BRIDGE)) {
+        if (SUPPORTED_BRIDGE_THING_TYPES_UIDS.contains(thingTypeUID)) {
+
             logger.debug("!!!!!!!!!!!!!!!  in {} for thing type uid : {}", THING_TYPE_BRIDGE, thing.getThingTypeUID());
-            // return new SNAVXbee2Handler(thing);
             return new SNAVXbee2BridgeHandler((Bridge) thing);
+
         }
 
         return null;

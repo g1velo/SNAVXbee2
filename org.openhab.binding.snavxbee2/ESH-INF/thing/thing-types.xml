@@ -34,6 +34,7 @@
 		<description>Sample thing for SNAVXbee2 Binding</description>
 		<channels>
 			<channel id="channel1" typeId="channel1" />
+			<channel id="temperature" typeId="temperature" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -50,36 +51,82 @@
 		</config-description>
 	</thing-type>
 
-<thing-type id="temperature">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 Binding Things</label>
-        <description>Sample thing for SNAVXbee2 Binding</description>
-        <channels>
-            <channel id="channel1" typeId="channel1" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+	<thing-type id="tosr0xt">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 Binding Things</label>
+		<description>Sample thing for SNAVXbee2 Binding</description>
+		<channels>
+			<channel id="temperature" typeId="temperature" />
+			<channel id="relay1" typeId="relay1" />
+			<channel id="relay2" typeId="relay2" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit addrees Xbee64BitsAddress
                 </description>
-            </parameter>
-            <parameter name="IOChannel" type="text" required="true">
-                <context>IOChannel </context>
-                <label>Xbee IOChannel</label>
-                <description>The IOChannel of the Xbee Device </description>
-            </parameter>
-        </config-description>
-    </thing-type>
-    
-    
+			</parameter>
+			<parameter name="IOChannel" type="text" required="true">
+				<context>IOChannel </context>
+				<label>Xbee IOChannel</label>
+				<description>The IOChannel of the Xbee Device </description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+
 	<!-- Sample Channel Type -->
 	<channel-type id="channel1">
-		<item-type>snavxbee2Item</item-type>
-		<label>SNAVXbee2 Binding Channel</label>
+		<item-type>channel1</item-type>
+		<label>SNAVXbee2 Binding Channel  for testing Purpose</label>
 		<description>Sample channel for SNAVXbee2 Binding</description>
 	</channel-type>
-
-</thing:thing-descriptions>
+	<channel-type id="temperature">
+		<item-type>temperature</item-type>
+		<label>SNAVXbee2 Binding Channel for reading temperature</label>
+		<description>temperature channel for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay1">
+		<item-type>relay1</item-type>
+		<label>SNAVXbee2 Binding relay Number 1</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay2">
+		<item-type>relay2</item-type>
+		<label>SNAVXbee2 Binding relay Number 2</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay3">
+        <item-type>relay3</item-type>
+        <label>SNAVXbee2 Binding relay Number 3</label>
+        <description>Relay for SNAVXbee2 Binding</description>
+    </channel-type>
+    <channel-type id="relay4">
+        <item-type>relay4</item-type>
+        <label>SNAVXbee2 Binding relay Number 4</label>
+        <description>Relay for SNAVXbee2 Binding</description>
+    </channel-type>
+    <channel-type id="relay5">
+        <item-type>relay5</item-type>
+        <label>SNAVXbee2 Binding relay Number 5</label>
+        <description>Relay for SNAVXbee2 Binding</description>
+    </channel-type>
+    <channel-type id="relay6">
+        <item-type>relay6</item-type>
+        <label>SNAVXbee2 Binding relay Number 6</label>
+        <description>Relay for SNAVXbee2 Binding</description>
+    </channel-type>
+    <channel-type id="relay7">
+        <item-type>relay7</item-type>
+        <label>SNAVXbee2 Binding relay Number 7</label>
+        <description>Relay for SNAVXbee2 Binding</description>
+    </channel-type>
+    <channel-type id="relay8">
+        <item-type>relay8</item-type>
+        <label>SNAVXbee2 Binding relay Number 8</label>
+        <description>Relay for SNAVXbee2 Binding</description>
+    </channel-type>
+    </thing:thing-descriptions>

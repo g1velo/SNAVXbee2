@@ -28,21 +28,35 @@ public class SNAVXbee2BindingConstants {
     // List of all Thing Type UIDs
     public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
     public final static ThingTypeUID THING_TYPE_BRIDGE = new ThingTypeUID(BINDING_ID, "bridge");
+    public final static ThingTypeUID THING_TYPE_TOSR0XT = new ThingTypeUID(BINDING_ID, "tosr0xt");
 
     // List of all Channel ids
     public final static String CHANNEL_1 = "channel1";
     public final static String TEMPERATURE = "temperature";
+    public final static String RELAY1 = "relay1";
+    public final static String RELAY2 = "relay2";
+    public final static String RELAY3 = "relay3";
+    public final static String RELAY4 = "relay4";
+    public final static String RELAY5 = "relay5";
+    public final static String RELAY6 = "relay6";
+    public final static String RELAY7 = "relay7";
+    public final static String RELAY8 = "relay8";
 
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
 
+    // supported channels for tosr0xt devices;
+    public static final Set<String> SUPPORTED_TOSR0XT_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4, RELAY5,
+            RELAY6, RELAY7, RELAY8);
+
     /** Supported Things without bridge */
-    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE);
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
+            THING_TYPE_TOSR0XT);
 
     /** Supported bridges */
     public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BRIDGE);
 
     /** Supported devices (things + bridges) */
     public final static Collection<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = Lists.newArrayList(THING_TYPE_SAMPLE,
-            THING_TYPE_BRIDGE);
+            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT);
 
 }

@@ -40,7 +40,7 @@ public class MyDataReceiveListener implements IDataReceiveListener {
     @Override
     public void dataReceived(XBeeMessage xbeeMessage) {
 
-        logger.debug(" I Found ");
+        logger.debug(" I Found ? ???  ");
 
         // Thing anotherThing = new Th
 
@@ -50,6 +50,8 @@ public class MyDataReceiveListener implements IDataReceiveListener {
         // Collection<Thing> things = getAll();
 
         // Collection<Thing> things = thingRegistry.getAll();
+
+        logger.debug(" number of things in the collection : {}"); // , things.size());
 
         // logger.debug(" I Found : " + things.size() + " Things ");
 
