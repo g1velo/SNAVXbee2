@@ -7,13 +7,11 @@
  */
 package org.openhab.binding.snavxbee2;
 
-import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 
 /**
  * The {@link SNAVXbee2Binding} class defines common constants, which are
@@ -45,8 +43,8 @@ public class SNAVXbee2BindingConstants {
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
 
     // supported channels for tosr0xt devices;
-    public static final Set<String> SUPPORTED_TOSR0XT_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4, RELAY5,
-            RELAY6, RELAY7, RELAY8);
+    public static final Set<String> SUPPORTED_TOSR0XT_RELAY_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4,
+            RELAY5, RELAY6, RELAY7, RELAY8);
 
     /** Supported Things without bridge */
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
@@ -56,7 +54,7 @@ public class SNAVXbee2BindingConstants {
     public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BRIDGE);
 
     /** Supported devices (things + bridges) */
-    public final static Collection<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = Lists.newArrayList(THING_TYPE_SAMPLE,
+    public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
             THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT);
 
 }

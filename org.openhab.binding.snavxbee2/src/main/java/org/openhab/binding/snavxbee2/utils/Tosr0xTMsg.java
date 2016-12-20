@@ -14,6 +14,7 @@ public class Tosr0xTMsg {
     // private Tostemperature;
     private String temperature;
     private XBeeMessage payload;
+    private byte[] byteRelayState;
 
     // private static String allRelay = "d";
     private boolean relay1;
@@ -24,6 +25,29 @@ public class Tosr0xTMsg {
     private boolean relay6;
     private boolean relay7;
     private boolean relay8;
+
+    public Tosr0xTMsg(byte[] byteRelayState) {
+        super();
+        this.byteRelayState = byteRelayState;
+        // byte bytes = byteRelayState[1];
+        // logger.debug("relay0 : {} ", b);
+        // logger.debug("relay1 : SN " + byteRelayState.length);
+        // logger.debug("relay2 : {} ", byteRelayState[2]);
+
+        for (byte bit : byteRelayState) {
+            logger.debug(Integer.toBinaryString(bit & 255 | 256).substring(1));
+            boolean a = (bit & 0x1) != 0;
+            boolean b = (bit & 0x2) != 0;
+            boolean c = (bit & 0x4) != 0;
+            boolean d = (bit & 0x8) != 0;
+            boolean e = (bit & 0x10) != 0;
+            boolean f = (bit & 0x20) != 0;
+            boolean g = (bit & 0x40) != 0;
+            boolean h = (bit & 0x80) != 0;
+            logger.debug("bites : ", a, b, c, d, e, f, g, h);
+        }
+
+    }
 
     public Tosr0xTMsg(XBeeMessage payload) {
         super();

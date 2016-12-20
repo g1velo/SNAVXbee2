@@ -54,36 +54,41 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
 
-        logger.debug("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+        // logger.debug("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         this.xbeeCommand = null;
 
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
 
-            logger.debug("in {} method : handlecommand for channel {} ", this.getClass(), channelUID);
+            // logger.debug("in {} method : handlecommand for channel {} ", this.getClass(), channelUID);
 
             if (channelUID.getId().equals(TEMPERATURE)) {
                 // updatest
-                // this.xbeeCommand = "b";
+                this.xbeeCommand = "b";
             }
 
-            if (channelUID.getId().equals(CHANNEL_1)) {
+            if (SUPPORTED_TOSR0XT_RELAY_CHANNELS.contains(channelUID.getId())) {
+                // if (channelUID.getId().equals(CHANNEL_1)) {
 
-                logger.debug(" Coudl be handling command ----------------------------------");
-                logger.debug(getThing().getStatusInfo() + "  " + getThing().getUID() + getThing().getThingTypeUID()
-                        + " Could be handling command ----------------------------------");
+                // logger.debug(" Coudl be handling command ----------------------------------");
+                // logger.debug(getThing().getStatusInfo() + " " + getThing().getUID() + getThing().getThingTypeUID()
+                // + " Could be handling command ----------------------------------");
 
                 switch (command.toString()) {
                     case "ON":
-                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        // logger.debug("setting : " + channelUID.getId() + " to " + command);
                         this.xbeeCommand = "e";
                         break;
                     case "OFF":
-                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        // logger.debug("setting : " + channelUID.getId() + " to " + command);
                         this.xbeeCommand = "o";
                         break;
+                    case "REFRESH":
+                        // logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        this.xbeeCommand = "[";
+                        break;
                     default:
-                        logger.info("Don't know what to do with command : " + command);
-                        this.xbeeCommand = "b";
+                        // logger.info("Don't know what to do with command : " + command);
+                        // this.xbeeCommand = "[";
                         break;
 
                 }
@@ -111,10 +116,6 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
         // "Can not access device as username and/or password are invalid");
 
-        // updateStatus(ThingStatus.ONLINE);
-
-        // Collection<Thing> things = thingRegistry.getAll();
-
         thingConfig = thing.getConfiguration();
 
         Map<String, Object> m = thing.getConfiguration().getProperties();
@@ -123,10 +124,12 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         xbee64BitsAddress = (String) m.get("Xbee64BitsAddress");
 
-        for (String key : m.keySet()) {
-            logger.debug(" KKKEYS : {} ", key);
-            logger.debug(" VVVValues: {} ", m.get(key));
-        }
+        /*
+         * for (String key : m.keySet()) {
+         * logger.debug(" KKKEYS : {} ", key);
+         * logger.debug(" VVVValues: {} ", m.get(key));
+         * }
+         */
 
         updateStatus(ThingStatus.ONLINE);
 
@@ -135,15 +138,11 @@ public class SNAVXbee2Handler extends BaseThingHandler {
     }
 
     public synchronized SNAVXbee2BridgeHandler getBridgeHandler() {
-
         SNAVXbee2BridgeHandler myBridgeHandler = null;
-        logger.debug(" Bridge Status" + getBridge().getStatus());
-
+        // logger.debug(" Bridge Status" + getBridge().getStatus());
         Bridge bridge = getBridge();
         myBridgeHandler = (SNAVXbee2BridgeHandler) bridge.getHandler();
-
         return myBridgeHandler;
-
     }
 
     private void startAutomaticRefresh() {
@@ -156,11 +155,11 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             public void run() {
 
                 logger.debug("The scheduled thread is running ! ");
-                getBridgeHandler().sendCommandToDevice(xbee64BitsAddress, "a");
+                getBridgeHandler().sendCommandToDevice(xbee64BitsAddress, "b");
             }
         };
 
-        refreshJob = scheduler.scheduleAtFixedRate(runnable, 30, 15, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleAtFixedRate(runnable, 30, 60, TimeUnit.SECONDS);
 
     }
 

@@ -55,7 +55,7 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge" />
 		</supported-bridge-type-refs>
-		<label>SNAVXbee2 Binding Things</label>
+		<label>TOSR0XT relay can have form 1 to 8 relays and temperature sensor</label>
 		<description>Sample thing for SNAVXbee2 Binding</description>
 		<channels>
 			<channel id="temperature" typeId="temperature" />
