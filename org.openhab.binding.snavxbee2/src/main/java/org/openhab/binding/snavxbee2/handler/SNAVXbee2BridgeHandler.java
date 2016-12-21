@@ -1,6 +1,7 @@
 package org.openhab.binding.snavxbee2.handler;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.eclipse.smarthome.config.core.Configuration;
@@ -21,11 +22,11 @@ import org.slf4j.LoggerFactory;
 import com.digi.xbee.api.RemoteXBeeDevice;
 import com.digi.xbee.api.XBeeDevice;
 import com.digi.xbee.api.XBeeNetwork;
-import com.digi.xbee.api.discoverdevices.MyDiscoveryListener;
 import com.digi.xbee.api.exceptions.TimeoutException;
 import com.digi.xbee.api.exceptions.XBeeException;
 import com.digi.xbee.api.listeners.IDataReceiveListener;
 import com.digi.xbee.api.listeners.IDiscoveryListener;
+import com.digi.xbee.api.models.DiscoveryOptions;
 import com.digi.xbee.api.models.XBee64BitAddress;
 import com.digi.xbee.api.models.XBeeMessage;
 import com.digi.xbee.api.utils.HexUtils;
@@ -38,10 +39,11 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
     private static String PORT = "COM2";
     // TODO Replace with the baud rate of you receiver module.
     private static int BAUD_RATE = 9600;
+
     private Configuration config = this.getConfig();
-    public XBeeDevice myDevice = null;
-    public XBeeNetwork xbeeNetwork = null;
-    public List<RemoteXBeeDevice> remoteDeviceList = null;
+    private XBeeDevice myDevice = null;
+    private XBeeNetwork xbeeNetwork = null;
+    private List<RemoteXBeeDevice> remoteDeviceList;
 
     public SNAVXbee2BridgeHandler(Bridge bridge) {
         super(bridge);
@@ -49,37 +51,55 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         // logger.debug(" In the brige constructor , can handle commands");
     }
 
-    public synchronized List<RemoteXBeeDevice> startSearch(int timeout) {
-        logger.debug("StartSerach in Bridge Handler 1");
-        try {
-            logger.debug("Xbee discoverin running 0: {}", xbeeNetwork.isDiscoveryRunning());
-            xbeeNetwork.setDiscoveryTimeout(timeout);
-            xbeeNetwork.addDiscoveryListener(this);
-            logger.debug("Xbee discoverin running 1: {}", xbeeNetwork.isDiscoveryRunning());
-            xbeeNetwork.startDiscoveryProcess();
-            logger.debug("Xbee discoverin running 2: {}", xbeeNetwork.isDiscoveryRunning());
+    public List<RemoteXBeeDevice> startSearch(int timeout) {
 
-            while (xbeeNetwork.isDiscoveryRunning()) {
-                logger.debug("Xbee discoverin running 3: {}", xbeeNetwork.isDiscoveryRunning());
-                Thread.sleep(1000);
+        logger.debug("StartSerach in Bridge Handler 1");
+
+        if (!xbeeNetwork.isDiscoveryRunning()) {
+            try {
+                xbeeNetwork.setDiscoveryTimeout(timeout);
+                xbeeNetwork
+                        .setDiscoveryOptions(EnumSet.of(DiscoveryOptions.APPEND_DD, DiscoveryOptions.DISCOVER_MYSELF));
+                xbeeNetwork.addDiscoveryListener(this);
+                xbeeNetwork.startDiscoveryProcess();
+
+                while (xbeeNetwork.isDiscoveryRunning()) {
+                    logger.debug("Xbee discoverin running 3: {}", xbeeNetwork.isDiscoveryRunning());
+                    Thread.sleep(timeout + 1000);
+
+                    if (this.remoteDeviceList != null) {
+                        logger.debug(" remoteDeviceList.size {} ", this.remoteDeviceList.size());
+                    }
+
+                }
+            } catch (XBeeException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                e.getCause();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (XBeeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            e.getCause();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+            // logger.debug("Number of dev : {} {} ", xbeeNetwork.getNumberOfDevices(), xbeeNetwork.getDevices());
+
+            if (this.remoteDeviceList != null) {
+                logger.debug(" 1 remoteDeviceList.size {} ", this.remoteDeviceList.size());
+            } else {
+                logger.debug(" remoteDeviceList.size is empty ! ");
+
+            }
         }
 
-        return remoteDeviceList;
+        return xbeeNetwork.getDevices();
     }
 
     @Override
     public void deviceDiscovered(RemoteXBeeDevice discoveredDevice) {
-        // TODO Auto-generated method stub
-        logger.debug(" devices discoverered : {} ", discoveredDevice.getNodeID());
-        this.remoteDeviceList.add(discoveredDevice);
+
+        logger.debug(" devices discoverered  12 : {} {}", discoveredDevice.getNodeID(),
+                discoveredDevice.get64BitAddress());
+
     }
 
     @Override
@@ -114,13 +134,19 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         try {
             // logger.debug("0013A20040E31560 start getting RemoteXbeeDevice : {} with command {} ", xbee64BitsAddress,
             // xbeeCommmand);
-            RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(new XBee64BitAddress(xbee64BitsAddress));
-            // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
 
-            // logger.debug("start sending command : {} ", xbeeCommmand);
-            myDevice.sendData(remoteDevice, xbeeCommmand.getBytes());
-            // logger.debug("end sending command : {} ", xbeeCommmand);
+            XBee64BitAddress x64 = new XBee64BitAddress(HexUtils.hexStringToByteArray(xbee64BitsAddress));
+            RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(x64);
+            if (remoteDevice != null) {
 
+                logger.debug("device Name : {} ", remoteDevice.get64BitAddress());
+                // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
+
+                // logger.debug("start sending command : {} ", xbeeCommmand);
+                myDevice.sendData(remoteDevice, xbeeCommmand.getBytes());
+                // logger.debug("end sending command : {} ", xbeeCommmand);
+
+            }
         } catch (TimeoutException e) {
             e.printStackTrace();
             logger.debug("Is device open ? {} ", myDevice.isOpen());
@@ -138,28 +164,13 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         return false;
     }
 
-    public synchronized Collection<String> discoverDevices() {
-
-        try {
-            xbeeNetwork.setDiscoveryTimeout(15000);
-            MyDiscoveryListener discovery = new MyDiscoveryListener();
-            xbeeNetwork.addDiscoveryListener(discovery);
-        } catch (TimeoutException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (XBeeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
         logger.debug(" In the brige, Disposing config : " + portconfig.serialPort + " " + portconfig.baudRate);
+        if (xbeeNetwork.isDiscoveryRunning()) {
+            xbeeNetwork.removeDiscoveryListener(this);
+        }
         super.dispose();
     }
 
@@ -206,36 +217,49 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
             myDevice.addDataListener(this);
             this.xbeeNetwork = myDevice.getNetwork();
 
-            // Just for fun and testing !
-            // should be removed for production
-            long startTime = System.nanoTime();
-            RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
-            // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("0013A20040E31560");
-            long estimatedTime = System.nanoTime() - startTime;
+            // xbeeNetwork.setDiscoveryTimeout(15000);
+            // xbeeNetwork.addDiscoveryListener(this);
+            // xbeeNetwork.startDiscoveryProcess();
 
-            // logger.debug("xbee address : {} ", remoteDevice.get64BitAddress());
-            // logger.debug("getting remote devices took : {} ms", estimatedTime / 1000 / 1000);
+            while (xbeeNetwork.isDiscoveryRunning()) {
+                logger.debug("Xbee discoverin running 3: {}", xbeeNetwork.isDiscoveryRunning());
+                Thread.sleep(16000);
 
-            String xbeeCmd = "n";
-            myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
+                if (this.remoteDeviceList != null) {
+                    logger.debug(" remoteDeviceList.size {} ", this.remoteDeviceList.size());
+                }
 
-            Thread.sleep(500);
+                // Just for fun and testing !
+                // should be removed for production
+                // long startTime = System.nanoTime();
+                // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
+                // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("0013A20040E31560");
+                // long estimatedTime = System.nanoTime() - startTime;
 
-            xbeeCmd = "d";
-            myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
+                // logger.debug("xbee address : {} ", remoteDevice.get64BitAddress());
+                // logger.debug("getting remote devices took : {} ms", estimatedTime / 1000 / 1000);
 
-            Thread.sleep(500);
+                // String xbeeCmd = "n";
+                // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
 
-            xbeeCmd = "b";
-            myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
+                // Thread.sleep(500);
 
-            sendCommandToDevice(remoteDevice.get64BitAddress().toString(), xbeeCmd);
+                // xbeeCmd = "d";
+                // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
 
-            // if (remoteDevice == null) {
-            // logger.debug("Couldn't find the remote XBee device with '" + "LULUTEMP" + "' Node Identifier.");
-            // System.exit(1);
-            // }
+                // Thread.sleep(500);
 
+                // xbeeCmd = "b";
+                // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
+
+                // sendCommandToDevice(remoteDevice.get64BitAddress().toString(), xbeeCmd);
+
+                // if (remoteDevice == null) {
+                // logger.debug("Couldn't find the remote XBee device with '" + "LULUTEMP" + "' Node Identifier.");
+                // System.exit(1);
+                // }
+
+            }
         } catch (XBeeException e) {
             e.printStackTrace();
             // System.exit(1);

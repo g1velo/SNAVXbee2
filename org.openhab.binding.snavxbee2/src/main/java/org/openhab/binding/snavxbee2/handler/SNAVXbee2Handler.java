@@ -70,7 +70,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                 // if (channelUID.getId().equals(CHANNEL_1)) {
 
                 // logger.debug(" Coudl be handling command ----------------------------------");
-                // logger.debug(getThing().getStatusInfo() + " " + getThing().getUID() + getThing().getThingTypeUID()
+                /// logger.debug(getThing().getStatusInfo() + " " + getThing().getUID() + getThing().getThingTypeUID());
                 // + " Could be handling command ----------------------------------");
 
                 switch (command.toString()) {
@@ -122,19 +122,25 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         logger.debug(" Nummber of things in config : {} ", m.size());
 
-        xbee64BitsAddress = (String) m.get("Xbee64BitsAddress");
+        for (String key : m.keySet()) {
+            logger.debug(" KKKEYS : {} ", key);
+            logger.debug(" VVVValues: {} ", m.get(key));
+        }
 
-        /*
-         * for (String key : m.keySet()) {
-         * logger.debug(" KKKEYS : {} ", key);
-         * logger.debug(" VVVValues: {} ", m.get(key));
-         * }
-         */
+        // this.xbee64BitsAddress. m.get("Xbee64BitsAddress");
+
+        this.xbee64BitsAddress = (String) m.get("Xbee64BitsAddress");
 
         updateStatus(ThingStatus.ONLINE);
 
         startAutomaticRefresh();
 
+    }
+
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        super.dispose();
     }
 
     public synchronized SNAVXbee2BridgeHandler getBridgeHandler() {
@@ -159,7 +165,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             }
         };
 
-        refreshJob = scheduler.scheduleAtFixedRate(runnable, 30, 60, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleAtFixedRate(runnable, 0, 30, TimeUnit.SECONDS);
 
     }
 
