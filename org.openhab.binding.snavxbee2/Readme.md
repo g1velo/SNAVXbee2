@@ -1,10 +1,123 @@
 # SNAVXbee2 for OpenHAB 2.x Binding
 
-## ID Request
+## Configuring the XBee Devices 
+I configured the Xbees devices using XCTU ( Under Windows ) with the follwing parameters ! 
 
-ID Requests from sensors received via the serial gateway are answered, when the bridge/gateway is configured and working. The bridge/gateway will check for a free id in the list of things already configured and in a list of already answered id requests in the current runtime. To reduce the chance that two nodes get the same id, the response is a random id. The random id is between 1 and 254, while already used ids are spared. 
+Coordinator ( The one connected to OpenHab with serial connection ) 
+```
+ <setting command="ID">CAFE</setting>
+      <setting command="SC">FFFF</setting>
+      <setting command="SD">3</setting>
+      <setting command="ZS">0</setting>
+      <setting command="NJ">FF</setting>
+      <setting command="DH">0</setting>
+      <setting command="DL">FFFF</setting>
+      <setting command="NI">COORDINATOR</setting>
+      <setting command="NH">1E</setting>
+      <setting command="BH">0</setting>
+      <setting command="AR">FF</setting>
+      <setting command="DD">30000</setting>
+      <setting command="NT">96</setting>
+      <setting command="NO">3</setting>
+      <setting command="CR">3</setting>
+      <setting command="PL">4</setting>
+      <setting command="PM">1</setting>
+      <setting command="EE">0</setting>
+      <setting command="EO">0</setting>
+      <setting command="KY"></setting>
+      <setting command="NK"></setting>
+      <setting command="BD">7</setting>
+      <setting command="NB">0</setting>
+      <setting command="SB">0</setting>
+      <setting command="D7">1</setting>
+      <setting command="D6">0</setting>
+      <setting command="AP">1</setting>
+      <setting command="AO">0</setting>
+      <setting command="SP">20</setting>
+      <setting command="SN">1</setting>
+      <setting command="D0">1</setting>
+      <setting command="D1">0</setting>
+      <setting command="D2">0</setting>
+      <setting command="D3">0</setting>
+      <setting command="D4">0</setting>
+      <setting command="D5">1</setting>
+      <setting command="P0">1</setting>
+      <setting command="P1">0</setting>
+      <setting command="P2">0</setting>
+      <setting command="PR">1FFF</setting>
+      <setting command="LT">0</setting>
+      <setting command="RP">28</setting>
+      <setting command="DO">1</setting>
+      <setting command="IR">0</setting>
+      <setting command="IC">0</setting>
+      <setting command="V+">0</setting>
+```
 
-After receiving the id the node begins to represent itself and after that can be discovered.
+The end device : 
+```
+ <setting command="ID">CAFE</setting>
+      <setting command="SC">FFFF</setting>
+      <setting command="SD">3</setting>
+      <setting command="ZS">0</setting>
+      <setting command="NJ">FF</setting>
+      <setting command="JN">0</setting>
+      <setting command="DH">0</setting>
+      <setting command="DL">0</setting>
+      <setting command="NI">LULUTEMP</setting>
+      <setting command="NH">1E</setting>
+      <setting command="BH">0</setting>
+      <setting command="DD">CAFE0002</setting>
+      <setting command="NT">3C</setting>
+      <setting command="NO">0</setting>
+      <setting command="CR">3</setting>
+      <setting command="SE">E8</setting>
+      <setting command="DE">E8</setting>
+      <setting command="CI">11</setting>
+      <setting command="PL">4</setting>
+      <setting command="PM">1</setting>
+      <setting command="EE">0</setting>
+      <setting command="EO">0</setting>
+      <setting command="KY"></setting>
+      <setting command="BD">3</setting>
+      <setting command="NB">0</setting>
+      <setting command="SB">0</setting>
+      <setting command="RO">3</setting>
+      <setting command="D7">1</setting>
+      <setting command="D6">0</setting>
+      <setting command="CT">64</setting>
+      <setting command="GT">3E8</setting>
+      <setting command="CC">2B</setting>
+      <setting command="SM">4</setting>
+      <setting command="ST">1388</setting>
+      <setting command="SP">20</setting>
+      <setting command="SN">1</setting>
+      <setting command="SO">0</setting>
+      <setting command="PO">0</setting>
+      <setting command="D0">1</setting>
+      <setting command="D1">2</setting>
+      <setting command="D2">0</setting>
+      <setting command="D3">0</setting>
+      <setting command="D4">0</setting>
+      <setting command="D5">1</setting>
+      <setting command="P0">1</setting>
+      <setting command="P1">0</setting>
+      <setting command="P2">0</setting>
+      <setting command="PR">1FFF</setting>
+      <setting command="LT">0</setting>
+      <setting command="RP">28</setting>
+      <setting command="DO">1</setting>
+      <setting command="IR">0</setting>
+      <setting command="IC">0</setting>
+      <setting command="V+">0</setting>
+```
+
+In Our case the important parameters are : 
+Defining coordinator as coordinator
+defining End device as an end device ( Should work fine if defined as router ) 
+The DD parameter defines device type connected and will define how openHab will use it.
+The PANID has to be  indentical on all devices.  
+
+
 
 ## Configuring the gateway
 

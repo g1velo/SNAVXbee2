@@ -127,19 +127,20 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         return this.xbeeNetwork;
     }
 
-    public boolean sendCommandToDevice(String xbee64BitsAddress, String xbeeCommmand) {
+    public boolean sendCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
 
-        logger.debug("sending command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
+        logger.debug(" 111 sending command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
 
         try {
             // logger.debug("0013A20040E31560 start getting RemoteXbeeDevice : {} with command {} ", xbee64BitsAddress,
             // xbeeCommmand);
 
-            XBee64BitAddress x64 = new XBee64BitAddress(HexUtils.hexStringToByteArray(xbee64BitsAddress));
-            RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(x64);
+            // XBee64BitAddress x64 = new XBee64BitAddress(HexUtils.hexStringToByteArray(xbee64BitsAddress));
+            RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
+
             if (remoteDevice != null) {
 
-                logger.debug("device Name : {} ", remoteDevice.get64BitAddress());
+                logger.debug("222 device Name : {} ", remoteDevice.get64BitAddress());
                 // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
 
                 // logger.debug("start sending command : {} ", xbeeCommmand);
@@ -153,6 +154,9 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
             logger.debug("Is device receive timeout ? {}  / closing now ", myDevice.getReceiveTimeout());
             logger.debug("Exception cause ? {} ", e.getCause());
             logger.debug("Exception message ? {} ", e.getMessage());
+            if (!xbeeNetwork.isDiscoveryRunning()) {
+                xbeeNetwork.startDiscoveryProcess();
+            }
             // this.initialize();
         }
 
@@ -217,49 +221,38 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
             myDevice.addDataListener(this);
             this.xbeeNetwork = myDevice.getNetwork();
 
-            // xbeeNetwork.setDiscoveryTimeout(15000);
-            // xbeeNetwork.addDiscoveryListener(this);
-            // xbeeNetwork.startDiscoveryProcess();
+            xbeeNetwork.startDiscoveryProcess();
+            // Just for fun and testing !
+            // should be removed for production
+            // long startTime = System.nanoTime();
+            // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
+            // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("0013A20040E31560");
+            // long estimatedTime = System.nanoTime() - startTime;
 
-            while (xbeeNetwork.isDiscoveryRunning()) {
-                logger.debug("Xbee discoverin running 3: {}", xbeeNetwork.isDiscoveryRunning());
-                Thread.sleep(16000);
+            // logger.debug("xbee address : {} ", remoteDevice.get64BitAddress());
+            // logger.debug("getting remote devices took : {} ms", estimatedTime / 1000 / 1000);
 
-                if (this.remoteDeviceList != null) {
-                    logger.debug(" remoteDeviceList.size {} ", this.remoteDeviceList.size());
-                }
+            // String xbeeCmd = "n";
+            // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
 
-                // Just for fun and testing !
-                // should be removed for production
-                // long startTime = System.nanoTime();
-                // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
-                // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("0013A20040E31560");
-                // long estimatedTime = System.nanoTime() - startTime;
+            // Thread.sleep(500);
 
-                // logger.debug("xbee address : {} ", remoteDevice.get64BitAddress());
-                // logger.debug("getting remote devices took : {} ms", estimatedTime / 1000 / 1000);
+            // xbeeCmd = "d";
+            // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
 
-                // String xbeeCmd = "n";
-                // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
+            // Thread.sleep(500);
 
-                // Thread.sleep(500);
+            // xbeeCmd = "b";
+            // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
 
-                // xbeeCmd = "d";
-                // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
+            // sendCommandToDevice(remoteDevice.get64BitAddress().toString(), xbeeCmd);
 
-                // Thread.sleep(500);
+            // if (remoteDevice == null) {
+            // logger.debug("Couldn't find the remote XBee device with '" + "LULUTEMP" + "' Node Identifier.");
+            // System.exit(1);
+            // }
 
-                // xbeeCmd = "b";
-                // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
-
-                // sendCommandToDevice(remoteDevice.get64BitAddress().toString(), xbeeCmd);
-
-                // if (remoteDevice == null) {
-                // logger.debug("Couldn't find the remote XBee device with '" + "LULUTEMP" + "' Node Identifier.");
-                // System.exit(1);
-                // }
-
-            }
+            // }
         } catch (XBeeException e) {
             e.printStackTrace();
             // System.exit(1);
@@ -278,12 +271,14 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
     public void dataReceived(XBeeMessage xbeeMessage) {
         // TODO Auto-generated method stub
 
-        ThingUID thingToUpdate = null;
+        Thing thingToUpdate = null;
+        ThingUID thingUIDToUpdate = null;
         String channelToUpdate = null;
 
-        // logger.debug("Data Received ");
+        logger.debug("Data Received ");
 
         Collection<Thing> things = thingRegistry.getAll();
+        // Collection<Thing> things = thingRegistry.get;
 
         // logger.debug(" number of things in the collection : {} ", things.size());
 
@@ -294,70 +289,107 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         // Looking up for thing with the matching address
         for (Thing thing : things) {
 
-            // logger.debug(" tuid : {} ", thing.getThingTypeUID());
+            logger.debug(" tuid : {} ", thing.getThingTypeUID());
 
             if (thing.getConfiguration().containsKey("Xbee64BitsAddress")
                     && thing.getConfiguration().get("Xbee64BitsAddress").equals(xbeeAddressToLookup)) {
                 // logger.debug("we have to update {} ", thing.getUID());
-                thingToUpdate = thing.getUID();
+                thingUIDToUpdate = thing.getUID();
+                thingToUpdate = thing;
                 Collection<Channel> thingChannels = thing.getChannels();
                 for (Channel channel : thingChannels) {
                     // logger.debug(" channel : {} {}", thing.getThingTypeUID(), channel.getUID());
 
                 }
 
+                // logger.info("From 1 : " + xbeeMessage.getDevice().get64BitAddress() + " >> "
+                // + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())) + " | "
+                // + new String(xbeeMessage.getData()));
+
+                float temperature = 200;
+                // logger.debug("xbeemsg length : {} ", xbeeMessage.getData().length);
+
+                if (xbeeMessage.getData().length == 7 || xbeeMessage.getData().length == 2) {
+                    if (xbeeMessage.getData().length == 7) {
+
+                        channelToUpdate = thingUIDToUpdate + ":temperature";
+
+                        temperature = Float.valueOf(new String(xbeeMessage.getData()));
+                        // logger.info(" The temperature is : " + new String(xbeeMessage.getData()));
+                        // logger.debug("building the thing to update " + BINDING_ID);
+                        // logger.debug("building the thing to update " + xbeeMessage.getDevice().get64BitAddress());
+                    }
+
+                    if (xbeeMessage.getData().length == 2) {
+                        // MSB + LSB temp = ( MSB*256 + LSB ) /16
+
+                        Byte msb = xbeeMessage.getData()[0];
+                        Byte lsb = xbeeMessage.getData()[1];
+
+                        temperature = (msb.floatValue() * 256 + lsb.floatValue()) / 16;
+                        // logger.info(" The temperature is in Float : " + temperature);
+                        // logger.info(" The temperature msb is in Float : " + msb.floatValue());
+                        // logger.info(" The temperature lsb is in Float : " + lsb.floatValue());
+
+                        channelToUpdate = thingUIDToUpdate + ":temperature";
+
+                    }
+
+                    // logger.info(" The temperature ??????? : " + temperature);
+                    // logger.info(" The channel ??????? : " + channelToUpdate);
+
+                    // ChannelUID c = new ChannelUID(channelToUpdate);
+                    // logger.debug("updating : {} to {} ", channelToUpdate, temperature);
+                    updateState(new ChannelUID(channelToUpdate), new DecimalType(temperature));
+
+                }
+
+                if (xbeeMessage.getData().length == 1) {
+                    logger.info(" This is the relay State : "
+                            + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())));
+                    Tosr0xTMsg t = new Tosr0xTMsg(xbeeMessage.getData());
+
+                    // Collection<Channel> thingChannels = thing.getChannels();
+                    for (Channel channel : thingChannels) {
+
+                        if (channel.getUID().getId().contains("relay")) {
+                            // logger.debug("updating : {} ", channel.getUID().getId());
+                            channelToUpdate = thingUIDToUpdate + ":" + channel.getUID().getId();
+                            switch (channel.getUID().getId()) {
+                                case "relay1":
+                                    // logger.debug("sss updating : {} to {} ", channelToUpdate, t.getRelay1State());
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay1State());
+                                    break;
+                                case "relay2":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay2State());
+                                    break;
+                                case "relay3":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay3State());
+                                    break;
+                                case "relay4":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay4State());
+                                    break;
+                                case "relay5":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay5State());
+                                    break;
+                                case "relay6":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay6State());
+                                    break;
+                                case "relay7":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay7State());
+                                    break;
+                                case "relay8":
+                                    updateState(new ChannelUID(channelToUpdate), t.getRelay8State());
+                                    break;
+                            }
+
+                            logger.debug(" channel : {} {} ", thing.getThingTypeUID(), channel.getUID().getId());
+                        }
+
+                    }
+
+                }
             }
-
-        }
-
-        // logger.info("From 1 : " + xbeeMessage.getDevice().get64BitAddress() + " >> "
-        // + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())) + " | "
-        // + new String(xbeeMessage.getData()));
-
-        float temperature = 200;
-        // logger.debug("xbeemsg length : {} ", xbeeMessage.getData().length);
-
-        if (xbeeMessage.getData().length == 7 || xbeeMessage.getData().length == 2) {
-            if (xbeeMessage.getData().length == 7) {
-
-                channelToUpdate = thingToUpdate + ":temperature";
-
-                temperature = Float.valueOf(new String(xbeeMessage.getData()));
-                // logger.info(" The temperature is : " + new String(xbeeMessage.getData()));
-                // logger.debug("building the thing to update " + BINDING_ID);
-                // logger.debug("building the thing to update " + xbeeMessage.getDevice().get64BitAddress());
-
-            }
-
-            if (xbeeMessage.getData().length == 2) {
-                // MSB + LSB temp = ( MSB*256 + LSB ) /16
-                // logger.info(" The temperature is in HEXA : "
-                // + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())));
-
-                Byte msb = xbeeMessage.getData()[0];
-                Byte lsb = xbeeMessage.getData()[1];
-
-                temperature = (msb.floatValue() * 256 + lsb.floatValue()) / 16;
-                // logger.info(" The temperature is in Float : " + temperature);
-                // logger.info(" The temperature msb is in Float : " + msb.floatValue());
-                // logger.info(" The temperature lsb is in Float : " + lsb.floatValue());
-
-                channelToUpdate = thingToUpdate + ":temperature";
-
-            }
-
-            // logger.info(" The temperature ??????? : " + temperature);
-            // logger.info(" The channel ??????? : " + channelToUpdate);
-
-            // ChannelUID c = new ChannelUID(channelToUpdate);
-            // logger.debug("updating : {} to {} ", channelToUpdate, temperature);
-            updateState(new ChannelUID(channelToUpdate), new DecimalType(temperature));
-
-        }
-        if (xbeeMessage.getData().length == 1) {
-            logger.info(" This is the relay State : "
-                    + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())));
-            Tosr0xTMsg t = new Tosr0xTMsg(xbeeMessage.getData());
         }
 
     }

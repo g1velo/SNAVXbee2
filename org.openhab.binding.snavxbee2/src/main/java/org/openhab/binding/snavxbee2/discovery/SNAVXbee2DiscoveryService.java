@@ -42,7 +42,7 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
     @Override
     protected void startScan() {
         // TODO Auto-generated method stub
-        logger.debug("In StartScan 1 !!!!! ");
+        logger.debug("In StartScan ! !!!!! ");
 
         List<RemoteXBeeDevice> xbeeDeviceList = bridgeHandler.startSearch(15000);
 
@@ -87,6 +87,7 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                     if (uid != null) {
                         Map<String, Object> properties = new HashMap<>(2);
                         properties.put(PARAMETER_XBEE64BITSADDRESS, remote.get64BitAddress().toString());
+                        properties.put(PARAMETER_IOCHANNEL, "not used yet");
                         DiscoveryResult result = DiscoveryResultBuilder.create(uid).withProperties(properties)
                                 .withLabel("XbeeDevice Device (" + remote.getNodeID() + " "
                                         + remote.get64BitAddress().toString() + " " + deviceTypeIdentifier + ")")

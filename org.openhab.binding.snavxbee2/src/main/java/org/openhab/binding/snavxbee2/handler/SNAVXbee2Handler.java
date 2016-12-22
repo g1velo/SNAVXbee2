@@ -20,9 +20,11 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.snavxbee2.utils.ThingConfiguration;
+import org.openhab.binding.snavxbee2.utils.Tosr0xT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.digi.xbee.api.models.XBee64BitAddress;
 
 /**
  * The {@link SNAVXbee2Handler} is responsible for handling commands, which are
@@ -34,9 +36,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2Handler.class);
     private Configuration thingConfig;
-    private ThingConfiguration tc;
-    private String xbee64BitsAddress;
-    private String xbeeNodeID;
+    private XBee64BitAddress xbee64BitsAddress;
     private String xbeeCommand;
     private ScheduledFuture<?> refreshJob;
 
@@ -59,15 +59,12 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
 
-            // logger.debug("in {} method : handlecommand for channel {} ", this.getClass(), channelUID);
-
             if (channelUID.getId().equals(TEMPERATURE)) {
                 // updatest
                 this.xbeeCommand = "b";
             }
 
             if (SUPPORTED_TOSR0XT_RELAY_CHANNELS.contains(channelUID.getId())) {
-                // if (channelUID.getId().equals(CHANNEL_1)) {
 
                 // logger.debug(" Coudl be handling command ----------------------------------");
                 /// logger.debug(getThing().getStatusInfo() + " " + getThing().getUID() + getThing().getThingTypeUID());
@@ -75,16 +72,21 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
                 switch (command.toString()) {
                     case "ON":
-                        // logger.debug("setting : " + channelUID.getId() + " to " + command);
-                        this.xbeeCommand = "e";
+                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        // this.xbeeCommand = "e";
+                        this.xbeeCommand = Tosr0xT.getRelayCommandToSend(channelUID.getId(), command.toString());
                         break;
                     case "OFF":
-                        // logger.debug("setting : " + channelUID.getId() + " to " + command);
-                        this.xbeeCommand = "o";
+                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        // this.xbeeCommand = "o";
+                        this.xbeeCommand = Tosr0xT.getRelayCommandToSend(channelUID.getId(), command.toString());
                         break;
                     case "REFRESH":
-                        // logger.debug("setting : " + channelUID.getId() + " to " + command);
-                        this.xbeeCommand = "[";
+                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        this.xbeeCommand = Tosr0xT.getRelayCommandToSend("", command.toString());
+                        // logger.debug("setting : " + channelUID.getId() + " to {} with {}", command,
+                        // this.xbeeCommand);
+
                         break;
                     default:
                         // logger.info("Don't know what to do with command : " + command);
@@ -129,7 +131,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         // this.xbee64BitsAddress. m.get("Xbee64BitsAddress");
 
-        this.xbee64BitsAddress = (String) m.get("Xbee64BitsAddress");
+        this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
 
         updateStatus(ThingStatus.ONLINE);
 

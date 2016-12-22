@@ -41,6 +41,7 @@ public class SNAVXbee2BindingConstants {
     public final static String RELAY8 = "relay8";
 
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
+    public static final String PARAMETER_IOCHANNEL = "IOChannel";
 
     // supported channels for tosr0xt devices;
     public static final Set<String> SUPPORTED_TOSR0XT_RELAY_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4,
