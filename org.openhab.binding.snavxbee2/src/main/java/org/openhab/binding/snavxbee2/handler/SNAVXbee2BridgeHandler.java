@@ -1,20 +1,22 @@
 package org.openhab.binding.snavxbee2.handler;
 
+import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.THING_TYPE_TOSR0XT;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
-import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.snavxbee2.devices.Tosr0xTMsg;
+import org.openhab.binding.snavxbee2.devices.Tosr0xTparser;
+import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
 import org.openhab.binding.snavxbee2.utils.SerialPortConfigParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +31,6 @@ import com.digi.xbee.api.listeners.IDiscoveryListener;
 import com.digi.xbee.api.models.DiscoveryOptions;
 import com.digi.xbee.api.models.XBee64BitAddress;
 import com.digi.xbee.api.models.XBeeMessage;
-import com.digi.xbee.api.utils.HexUtils;
 
 public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataReceiveListener, IDiscoveryListener {
 
@@ -275,7 +276,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         ThingUID thingUIDToUpdate = null;
         String channelToUpdate = null;
 
-        logger.debug("Data Received ");
+        logger.debug("Data Received 1  ");
 
         Collection<Thing> things = thingRegistry.getAll();
         // Collection<Thing> things = thingRegistry.get;
@@ -293,101 +294,25 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
 
             if (thing.getConfiguration().containsKey("Xbee64BitsAddress")
                     && thing.getConfiguration().get("Xbee64BitsAddress").equals(xbeeAddressToLookup)) {
-                // logger.debug("we have to update {} ", thing.getUID());
-                thingUIDToUpdate = thing.getUID();
-                thingToUpdate = thing;
-                Collection<Channel> thingChannels = thing.getChannels();
-                for (Channel channel : thingChannels) {
-                    // logger.debug(" channel : {} {}", thing.getThingTypeUID(), channel.getUID());
 
-                }
+                if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
+                    logger.debug("we have to update {} {} ", thing.getUID(), thing.getThingTypeUID());
 
-                // logger.info("From 1 : " + xbeeMessage.getDevice().get64BitAddress() + " >> "
-                // + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())) + " | "
-                // + new String(xbeeMessage.getData()));
+                    thingUIDToUpdate = thing.getUID();
+                    thingToUpdate = thing;
 
-                float temperature = 200;
-                // logger.debug("xbeemsg length : {} ", xbeeMessage.getData().length);
+                    Tosr0xTparser tp = new Tosr0xTparser(thingToUpdate, xbeeMessage);
 
-                if (xbeeMessage.getData().length == 7 || xbeeMessage.getData().length == 2) {
-                    if (xbeeMessage.getData().length == 7) {
+                    ArrayList<ChannelActionToPerform> listOfActionToPerform = tp.getListOfChannelActionToPerform();
 
-                        channelToUpdate = thingUIDToUpdate + ":temperature";
-
-                        temperature = Float.valueOf(new String(xbeeMessage.getData()));
-                        // logger.info(" The temperature is : " + new String(xbeeMessage.getData()));
-                        // logger.debug("building the thing to update " + BINDING_ID);
-                        // logger.debug("building the thing to update " + xbeeMessage.getDevice().get64BitAddress());
-                    }
-
-                    if (xbeeMessage.getData().length == 2) {
-                        // MSB + LSB temp = ( MSB*256 + LSB ) /16
-
-                        Byte msb = xbeeMessage.getData()[0];
-                        Byte lsb = xbeeMessage.getData()[1];
-
-                        temperature = (msb.floatValue() * 256 + lsb.floatValue()) / 16;
-                        channelToUpdate = thingUIDToUpdate + ":temperature";
-
-                    }
-
-                    // logger.info(" The temperature ??????? : " + temperature);
-                    // logger.info(" The channel ??????? : " + channelToUpdate);
-
-                    // ChannelUID c = new ChannelUID(channelToUpdate);
-                    // logger.debug("updating : {} to {} ", channelToUpdate, temperature);
-                    updateState(new ChannelUID(channelToUpdate), new DecimalType(temperature));
-
-                }
-
-                if (xbeeMessage.getData().length == 1) {
-                    logger.info(" This is the relay State : "
-                            + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())));
-                    Tosr0xTMsg t = new Tosr0xTMsg(xbeeMessage.getData());
-
-                    // Collection<Channel> thingChannels = thing.getChannels();
-                    for (Channel channel : thingChannels) {
-
-                        if (channel.getUID().getId().contains("relay")) {
-                            // logger.debug("updating : {} ", channel.getUID().getId());
-                            channelToUpdate = thingUIDToUpdate + ":" + channel.getUID().getId();
-                            switch (channel.getUID().getId()) {
-                                case "relay1":
-                                    // logger.debug("sss updating : {} to {} ", channelToUpdate, t.getRelay1State());
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay1State());
-                                    break;
-                                case "relay2":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay2State());
-                                    break;
-                                case "relay3":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay3State());
-                                    break;
-                                case "relay4":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay4State());
-                                    break;
-                                case "relay5":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay5State());
-                                    break;
-                                case "relay6":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay6State());
-                                    break;
-                                case "relay7":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay7State());
-                                    break;
-                                case "relay8":
-                                    updateState(new ChannelUID(channelToUpdate), t.getRelay8State());
-                                    break;
-                            }
-
-                            logger.debug(" channel : {} {} ", thing.getThingTypeUID(), channel.getUID().getId());
-                        }
-
+                    for (ChannelActionToPerform actionToPerform : listOfActionToPerform) {
+                        updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
                     }
 
                 }
             }
-        }
 
+        }
     }
 
 }
