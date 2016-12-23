@@ -115,7 +115,7 @@ In Our case the important parameters are :
 Defining coordinator as coordinator
 defining End device as an end device ( Should work fine if defined as router ) 
 The DD parameter defines device type connected and will define how openHab will use it.
-The PANID has to be  indentical on all devices.  
+The PANID has to be  indentical on all dev 
 
 
 

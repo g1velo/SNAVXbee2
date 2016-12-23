@@ -14,8 +14,8 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.openhab.binding.snavxbee2.devices.Tosr0xTMsg;
 import org.openhab.binding.snavxbee2.utils.SerialPortConfigParameters;
-import org.openhab.binding.snavxbee2.utils.Tosr0xTMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -327,10 +327,6 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
                         Byte lsb = xbeeMessage.getData()[1];
 
                         temperature = (msb.floatValue() * 256 + lsb.floatValue()) / 16;
-                        // logger.info(" The temperature is in Float : " + temperature);
-                        // logger.info(" The temperature msb is in Float : " + msb.floatValue());
-                        // logger.info(" The temperature lsb is in Float : " + lsb.floatValue());
-
                         channelToUpdate = thingUIDToUpdate + ":temperature";
 
                     }

@@ -1,4 +1,4 @@
-package org.openhab.binding.snavxbee2.utils;
+package org.openhab.binding.snavxbee2.devices;
 
 import static org.eclipse.smarthome.core.library.types.OnOffType.*;
 

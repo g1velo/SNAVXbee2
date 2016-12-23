@@ -1,4 +1,4 @@
-package org.openhab.binding.snavxbee2.utils;
+package org.openhab.binding.snavxbee2.devices;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
