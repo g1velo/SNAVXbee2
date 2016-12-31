@@ -25,6 +25,7 @@ public class SNAVXbee2BindingConstants {
 
     // List of all Thing Type UIDs
     public final static ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
+    public final static ThingTypeUID THING_TYPE_XBEEAPI = new ThingTypeUID(BINDING_ID, "xbeeapi");
     public final static ThingTypeUID THING_TYPE_BRIDGE = new ThingTypeUID(BINDING_ID, "bridge");
     public final static ThingTypeUID THING_TYPE_TOSR0XT = new ThingTypeUID(BINDING_ID, "tosr0xt");
 
@@ -49,13 +50,13 @@ public class SNAVXbee2BindingConstants {
 
     /** Supported Things without bridge */
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
-            THING_TYPE_TOSR0XT);
+            THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI);
 
     /** Supported bridges */
     public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BRIDGE);
 
     /** Supported devices (things + bridges) */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
-            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT);
+            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI);
 
 }

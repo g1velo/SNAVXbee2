@@ -7,7 +7,7 @@
 
 	<bridge-type id="bridge">
 		<label>SNAV Xbee2 Serial Gateway</label>
-		<description>Xbee S2 connecteds with serial port
+		<description>Xbee S2 connected using serial port
         </description>
 		<config-description>
 			<parameter name="serialPort" type="text" required="true">
@@ -77,6 +77,31 @@
 		</config-description>
 	</thing-type>
 
+	<thing-type id="xbeeapi">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>XBee API mode 1</label>
+		<description>XBee Things using API mode 1</description>
+		<channels>
+			<channel id="channel1" typeId="channel1" />
+			<channel id="temperature" typeId="temperature" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit addrees Xbee64BitsAddress
+                </description>
+			</parameter>
+			<parameter name="IOChannel" type="text" required="true">
+				<context>IOChannel </context>
+				<label>Xbee IOChannel</label>
+				<description>The IOChannel of the Xbee Device </description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
 
 	<!-- Sample Channel Type -->
 	<channel-type id="channel1">
@@ -85,48 +110,78 @@
 		<description>Sample channel for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="temperature">
-		<item-type>temperature</item-type>
-		<label>SNAVXbee2 Binding Channel for reading temperature</label>
-		<description>temperature channel for SNAVXbee2 Binding</description>
+		<item-type>Number</item-type>
+		<label>TOSR0xT temperature DS18B20</label>
+		<description>temperature channel for SNAVXbee2 Binding using DS18B20 device</description>
+		<category>Temperature</category>
+		<state readOnly="true" />
 	</channel-type>
 	<channel-type id="relay1">
-		<item-type>relay1</item-type>
+		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding relay Number 1</label>
 		<description>Relay for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="relay2">
-		<item-type>relay2</item-type>
+		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding relay Number 2</label>
 		<description>Relay for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="relay3">
-        <item-type>relay3</item-type>
-        <label>SNAVXbee2 Binding relay Number 3</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay4">
-        <item-type>relay4</item-type>
-        <label>SNAVXbee2 Binding relay Number 4</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay5">
-        <item-type>relay5</item-type>
-        <label>SNAVXbee2 Binding relay Number 5</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay6">
-        <item-type>relay6</item-type>
-        <label>SNAVXbee2 Binding relay Number 6</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay7">
-        <item-type>relay7</item-type>
-        <label>SNAVXbee2 Binding relay Number 7</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay8">
-        <item-type>relay8</item-type>
-        <label>SNAVXbee2 Binding relay Number 8</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    </thing:thing-descriptions>
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 3</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay4">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 4</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay5">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 5</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay6">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 6</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay7">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 7</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay8">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD0DIO0">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+		
+		<tags>
+		<tag>weather</tag>
+	    </tags>
+
+
+	</channel-type>
+	<channel-type id="AD1DIO1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD2DIO2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD3DIO3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+
+
+</thing:thing-descriptions>

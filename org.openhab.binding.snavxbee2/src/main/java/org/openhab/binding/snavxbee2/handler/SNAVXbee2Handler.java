@@ -56,6 +56,14 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbeeCommand = null;
 
+        if (thing.getThingTypeUID().equals(THING_TYPE_XBEEAPI)) {
+            if (channelUID.getId().equals(TEMPERATURE)) {
+                // updatest
+                this.xbeeCommand = "b";
+            }
+
+        }
+
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
 
             if (channelUID.getId().equals(TEMPERATURE)) {
@@ -71,24 +79,24 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
                 switch (command.toString()) {
                     case "ON":
-                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        logger.debug("sending to : " + channelUID.getId() + " command " + command);
                         // this.xbeeCommand = "e";
                         this.xbeeCommand = Tosr0xT.getRelayCommandToSend(channelUID.getId(), command.toString());
                         break;
                     case "OFF":
-                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        logger.debug("sending to : " + channelUID.getId() + " command " + command);
                         // this.xbeeCommand = "o";
                         this.xbeeCommand = Tosr0xT.getRelayCommandToSend(channelUID.getId(), command.toString());
                         break;
                     case "REFRESH":
-                        logger.debug("setting : " + channelUID.getId() + " to " + command);
+                        logger.debug("sending to : " + channelUID.getId() + " command " + command);
                         this.xbeeCommand = Tosr0xT.getRelayCommandToSend("", command.toString());
                         // logger.debug("setting : " + channelUID.getId() + " to {} with {}", command,
                         // this.xbeeCommand);
 
                         break;
                     default:
-                        // logger.info("Don't know what to do with command : " + command);
+                        logger.info("Don't know what to do with command : " + command);
                         // this.xbeeCommand = "[";
                         break;
 
@@ -132,9 +140,9 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
 
-        updateStatus(ThingStatus.ONLINE);
-
         startAutomaticRefresh();
+
+        updateStatus(ThingStatus.ONLINE);
 
     }
 
