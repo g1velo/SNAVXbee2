@@ -12,11 +12,11 @@ import java.util.Set;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
+import org.eclipse.smarthome.config.discovery.DiscoveryServiceCallback;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.openhab.binding.snavxbee2.devices.IOLineXBeeDeviceConfig;
+import org.openhab.binding.snavxbee2.devices.XBeeConfig;
 import org.openhab.binding.snavxbee2.handler.SNAVXbee2BridgeHandler;
-import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +28,7 @@ import com.digi.xbee.api.utils.HexUtils;
 public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2DiscoveryService.class);
+    private DiscoveryServiceCallback discoveryServiceCallback;
     private SNAVXbee2BridgeHandler bridgeHandler;
     private boolean TRYIT = true;
     // private XBeeNetwork xbeeNetwork;
@@ -44,6 +45,9 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
     @Override
     protected void startScan() {
+        // First removing old results !
+        // removeOlderResults(0);
+
         // TODO Auto-generated method stub
         logger.debug("In StartScan ! !!!!! ");
 
@@ -88,6 +92,7 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
                 ThingUID uid = null;
                 ThingTypeUID tuid = null;
+
                 switch (deviceTypeIdentifier) {
                     case "CAFE0002":
                         tuid = THING_TYPE_TOSR0XT;
@@ -99,36 +104,18 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                         tuid = THING_TYPE_SAMPLE;
                         uid = new ThingUID(THING_TYPE_SAMPLE, bridgeHandler.getThing().getUID(),
                                 remote.get64BitAddress().toString());
-                        // bridgeHandler.sendAPICommandToDevice(remote.get64BitAddress(), IOLine.DIO2_AD2,
-                        // IOValue.HIGH);
-
                         break;
+
                 }
+
+                logger.debug("::::::::::::::::::: THingUID Discovered : {} ", uid);
 
                 if (uid != null) {
                     Map<String, Object> properties = new HashMap<>(2);
                     properties.put(PARAMETER_XBEE64BITSADDRESS, remote.get64BitAddress().toString());
                     properties.put(PARAMETER_IOCHANNEL, "not used yet");
 
-                    if (TRYIT) {
-
-                        List<IOLineIOModeMapping> xbeeConfig = new IOLineXBeeDeviceConfig(tuid).getIoLinesConfig();
-
-                        logger.debug("Trying it {} ", xbeeConfig.size());
-
-                        for (IOLineIOModeMapping ioLineIOModeMapping : xbeeConfig) {
-                            try {
-                                logger.debug(" setting device : {}\t IOLine : {}\t IOMode : {}",
-                                        remote.get64BitAddress(), ioLineIOModeMapping.getIoLine(),
-                                        ioLineIOModeMapping.getIoMode());
-                                remote.setIOConfiguration(ioLineIOModeMapping.getIoLine(),
-                                        ioLineIOModeMapping.getIoMode());
-                            } catch (XBeeException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+                    XBeeConfig xbeeCfg = new XBeeConfig(tuid, remote);
 
                     DiscoveryResult result = DiscoveryResultBuilder.create(uid).withProperties(properties)
                             .withLabel("XbeeDevice Device (" + remote.getNodeID() + " "

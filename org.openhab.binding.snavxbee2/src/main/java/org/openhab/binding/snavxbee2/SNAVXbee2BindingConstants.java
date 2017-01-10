@@ -40,13 +40,20 @@ public class SNAVXbee2BindingConstants {
     public final static String RELAY6 = "relay6";
     public final static String RELAY7 = "relay7";
     public final static String RELAY8 = "relay8";
+    public final static String HUMIDITY = "humidity";
+    public final static String LIGHT = "light";
+    public final static String ANALOG_TEMPERATURE = "analog_temperature";
 
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
     public static final String PARAMETER_IOCHANNEL = "IOChannel";
 
     // supported channels for tosr0xt devices;
+    public static final Set<String> SUPPORTED_TOSR0XT_CHANNELS = ImmutableSet.of(TEMPERATURE, RELAY1, RELAY2, RELAY3,
+            RELAY4, RELAY5, RELAY6, RELAY7, RELAY8);
     public static final Set<String> SUPPORTED_TOSR0XT_RELAY_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4,
             RELAY5, RELAY6, RELAY7, RELAY8);
+
+    // supported channels for CAFEdevices;
 
     /** Supported Things without bridge */
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,

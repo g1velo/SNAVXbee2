@@ -5,6 +5,8 @@ import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -26,13 +28,16 @@ import com.digi.xbee.api.XBeeNetwork;
 import com.digi.xbee.api.exceptions.TimeoutException;
 import com.digi.xbee.api.exceptions.XBeeException;
 import com.digi.xbee.api.io.IOLine;
+import com.digi.xbee.api.io.IOSample;
 import com.digi.xbee.api.io.IOValue;
 import com.digi.xbee.api.listeners.IDataReceiveListener;
 import com.digi.xbee.api.listeners.IDiscoveryListener;
+import com.digi.xbee.api.listeners.IIOSampleReceiveListener;
 import com.digi.xbee.api.models.XBee64BitAddress;
 import com.digi.xbee.api.models.XBeeMessage;
 
-public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataReceiveListener, IDiscoveryListener {
+public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
+        implements IDataReceiveListener, IDiscoveryListener, IIOSampleReceiveListener {
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2BridgeHandler.class);
     private SerialPortConfigParameters portconfig = new SerialPortConfigParameters();
@@ -45,6 +50,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
     private XBeeDevice myDevice = null;
     private XBeeNetwork xbeeNetwork = null;
     private List<RemoteXBeeDevice> remoteDeviceList;
+    private ScheduledFuture<?> refreshJob;
 
     public SNAVXbee2BridgeHandler(Bridge bridge) {
         super(bridge);
@@ -84,13 +90,6 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
                 e.printStackTrace();
             }
 
-            // logger.debug("Number of dev : {} {} ", xbeeNetwork.getNumberOfDevices(), xbeeNetwork.getDevices());
-
-            if (this.remoteDeviceList != null) {
-                logger.debug(" 1 remoteDeviceList.size {} ", this.remoteDeviceList.size());
-            } else {
-                logger.debug(" remoteDeviceList.size is empty ! ");
-            }
         }
 
         return xbeeNetwork.getDevices();
@@ -157,7 +156,8 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
                 // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
 
                 // logger.debug("start sending command : {} ", xbeeCommmand);
-                myDevice.sendData(remoteDevice, xbeeCommmand.getBytes());
+                // myDevice.sendData(remoteDevice, xbeeCommmand.getBytes());
+                myDevice.sendDataAsync(remoteDevice, xbeeCommmand.getBytes());
                 // logger.debug("end sending command : {} ", xbeeCommmand);
 
             }
@@ -205,22 +205,13 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
     public void dispose() {
         // TODO Auto-generated method stub
         logger.debug(" In the brige, Disposing config : " + portconfig.serialPort + " " + portconfig.baudRate);
+        // xbeeNetwork.lis
+        refreshJob.cancel(true);
+
         if (xbeeNetwork.isDiscoveryRunning()) {
             xbeeNetwork.removeDiscoveryListener(this);
         }
         super.dispose();
-    }
-
-    // public boolean unregisterLightStatusListener(LightStatusListener lightStatusListener) {
-    public boolean unregisterLightStatusListener() {
-        /*
-         * boolean result = lightStatusListeners.remove(lightStatusListener);
-         * if (result) {
-         * onUpdate();
-         * }
-         * return result;
-         */
-        return true;
     }
 
     @Override
@@ -252,40 +243,13 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
             // logger.debug(" Local Node ID : {} ", myDevice.getNodeID());
 
             myDevice.addDataListener(this);
+            myDevice.addIOSampleListener(this);
             this.xbeeNetwork = myDevice.getNetwork();
 
             xbeeNetwork.startDiscoveryProcess();
-            // Just for fun and testing !
-            // should be removed for production
-            // long startTime = System.nanoTime();
-            // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("LULUTEMP");
-            // RemoteXBeeDevice remoteDevice = xbeeNetwork.discoverDevice("0013A20040E31560");
-            // long estimatedTime = System.nanoTime() - startTime;
-
-            // logger.debug("xbee address : {} ", remoteDevice.get64BitAddress());
-            // logger.debug("getting remote devices took : {} ms", estimatedTime / 1000 / 1000);
-
-            // String xbeeCmd = "n";
-            // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
 
             Thread.sleep(500);
 
-            // xbeeCmd = "d";
-            // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
-
-            Thread.sleep(500);
-
-            // xbeeCmd = "b";
-            // myDevice.sendData(remoteDevice, xbeeCmd.getBytes());
-
-            // sendCommandToDevice(remoteDevice.get64BitAddress().toString(), xbeeCmd);
-
-            // if (remoteDevice == null) {
-            // logger.debug("Couldn't find the remote XBee device with '" + "LULUTEMP" + "' Node Identifier.");
-            // System.exit(1);
-            // }
-
-            // }
         } catch (XBeeException e) {
             e.printStackTrace();
             // System.exit(1);
@@ -295,9 +259,11 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
         }
 
         if (myDevice.isOpen()) {
-            // logger.debug("Port {} open, ", PORT);
+            logger.debug("Port {} open, ", PORT);
             updateStatus(ThingStatus.ONLINE);
         }
+
+        startAutomaticRefresh();
     }
 
     @Override
@@ -345,6 +311,57 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler implements IDataRe
                 }
             }
         }
+    }
+
+    @Override
+    public void ioSampleReceived(RemoteXBeeDevice remoteDevice, IOSample ioSample) {
+        // TODO Auto-generated method stub
+
+        logger.debug("New sample received from " + remoteDevice.get64BitAddress() + " - " + ioSample);
+        Collection<Thing> things = thingRegistry.getAll();
+
+        for (Thing thing : things) {
+
+            if (thing.getConfiguration().containsKey("Xbee64BitsAddress") && thing.getConfiguration()
+                    .get("Xbee64BitsAddress").equals(remoteDevice.get64BitAddress().toString())) {
+
+                logger.debug(" tuid : {} ", thing.getThingTypeUID());
+
+                if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
+
+                    logger.debug("we have to update {} {} ", thing.getUID(), thing.getThingTypeUID());
+
+                }
+                if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
+
+                    logger.debug("we have to update {} {} ", thing.getUID(), thing.getThingTypeUID());
+
+                }
+            }
+
+        }
+    }
+
+    private void startAutomaticRefresh() {
+
+        logger.debug("bridge startAutomaticRefresh()");
+
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                logger.debug("aumatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
+
+                if (!xbeeNetwork.isDiscoveryRunning()) {
+                    logger.debug(" Bridge Automatic running Discovery ");
+                    xbeeNetwork.startDiscoveryProcess();
+                }
+
+            }
+        };
+
+        refreshJob = scheduler.scheduleAtFixedRate(runnable, 60, 300, TimeUnit.SECONDS);
+
     }
 
 }

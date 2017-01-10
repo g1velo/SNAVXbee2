@@ -16,7 +16,7 @@
 				<description>The serial port the SNAVXbee2 Gateway is connected to
                 </description>
 			</parameter>
-			<parameter name="baudRate" type="integer" required="false" min="300" max="250000">
+			<parameter name="baudRate" type="integer" required="true" min="9600" max="115200">
 				<label>Baudrate</label>
 				<description>Baudrate for serial port
                 </description>
@@ -61,6 +61,7 @@
 			<channel id="temperature" typeId="temperature" />
 			<channel id="relay1" typeId="relay1" />
 			<channel id="relay2" typeId="relay2" />
+			<channel id="humidity" typeId="humidity" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -84,8 +85,9 @@
 		<label>XBee API mode 1</label>
 		<description>XBee Things using API mode 1</description>
 		<channels>
-			<channel id="channel1" typeId="channel1" />
 			<channel id="temperature" typeId="temperature" />
+			<channel id="humidity" typeId="humidity" />
+			<channel id="light" typeId="light" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -93,11 +95,6 @@
 				<label>Xbee64BitsAddress</label>
 				<description>The 64 bit addrees Xbee64BitsAddress
                 </description>
-			</parameter>
-			<parameter name="IOChannel" type="text" required="true">
-				<context>IOChannel </context>
-				<label>Xbee IOChannel</label>
-				<description>The IOChannel of the Xbee Device </description>
 			</parameter>
 		</config-description>
 	</thing-type>
@@ -109,6 +106,14 @@
 		<label>SNAVXbee2 Binding Channel  for testing Purpose</label>
 		<description>Sample channel for SNAVXbee2 Binding</description>
 	</channel-type>
+	<channel-type id="humidity" advanced="true">
+        <item-type>Number</item-type>
+        <label>Test humidity</label>
+        <description>Test</description>
+        <category>humidity</category>
+        <state readOnly="true" />
+    </channel-type>
+    
 	<channel-type id="temperature">
 		<item-type>Number</item-type>
 		<label>TOSR0xT temperature DS18B20</label>
@@ -160,27 +165,9 @@
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding relay Number 8</label>
 		<description>Relay for SNAVXbee2 Binding</description>
-		
 		<tags>
-		<tag>weather</tag>
-	    </tags>
-
-
-	</channel-type>
-	<channel-type id="AD1DIO1">
-		<item-type>SwitchItem</item-type>
-		<label>SNAVXbee2 Binding relay Number 8</label>
-		<description>Relay for SNAVXbee2 Binding</description>
-	</channel-type>
-	<channel-type id="AD2DIO2">
-		<item-type>SwitchItem</item-type>
-		<label>SNAVXbee2 Binding relay Number 8</label>
-		<description>Relay for SNAVXbee2 Binding</description>
-	</channel-type>
-	<channel-type id="AD3DIO3">
-		<item-type>SwitchItem</item-type>
-		<label>SNAVXbee2 Binding relay Number 8</label>
-		<description>Relay for SNAVXbee2 Binding</description>
+			<tag>weather</tag>
+		</tags>
 	</channel-type>
 
 
