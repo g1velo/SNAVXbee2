@@ -23,7 +23,6 @@ import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.snavxbee2.discovery.SNAVXbee2DiscoveryService;
 import org.openhab.binding.snavxbee2.handler.SNAVXbee2BridgeHandler;
 import org.openhab.binding.snavxbee2.handler.SNAVXbee2Handler;
-import org.openhab.binding.snavxbee2.handler.SNAVXbee2SampleHandler;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,12 +55,12 @@ public class SNAVXbee2HandlerFactory extends BaseThingHandlerFactory {
 
         if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
             // logger.debug("????????1 in {} for thing type uid : {}", THING_TYPE_SAMPLE, thing.getThingTypeUID());
-            if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
-                return new SNAVXbee2Handler(thing);
-            }
-            if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {
-                return new SNAVXbee2SampleHandler(thing);
-            }
+            // if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
+            return new SNAVXbee2Handler(thing);
+            // }
+            // if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {
+            // return new SNAVXbee2SampleHandler(thing);
+            // }
         }
 
         if (SUPPORTED_BRIDGE_THING_TYPES_UIDS.contains(thingTypeUID)) {

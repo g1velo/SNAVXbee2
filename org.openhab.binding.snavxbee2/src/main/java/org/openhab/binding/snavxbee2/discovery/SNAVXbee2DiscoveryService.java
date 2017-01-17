@@ -92,18 +92,20 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
                 ThingUID uid = null;
                 ThingTypeUID tuid = null;
-
+                String thingLabel = "learn from XBee";
                 switch (deviceTypeIdentifier) {
                     case "CAFE0002":
                         tuid = THING_TYPE_TOSR0XT;
                         uid = new ThingUID(THING_TYPE_TOSR0XT, bridgeHandler.getThing().getUID(),
                                 remote.get64BitAddress().toString());
+                        thingLabel = "XBee with TosR0xT";
                         break;
 
                     default:
                         tuid = THING_TYPE_SAMPLE;
                         uid = new ThingUID(THING_TYPE_SAMPLE, bridgeHandler.getThing().getUID(),
                                 remote.get64BitAddress().toString());
+                        thingLabel = "default XBee";
                         break;
 
                 }
@@ -118,8 +120,8 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                     XBeeConfig xbeeCfg = new XBeeConfig(tuid, remote);
 
                     DiscoveryResult result = DiscoveryResultBuilder.create(uid).withProperties(properties)
-                            .withLabel("XbeeDevice Device (" + remote.getNodeID() + " "
-                                    + remote.get64BitAddress().toString() + " " + deviceTypeIdentifier + ")")
+                            .withLabel(thingLabel + " " + remote.getNodeID() + " " + remote.get64BitAddress().toString()
+                                    + " " + deviceTypeIdentifier + ")")
                             .withBridge(bridgeHandler.getThing().getUID()).build();
                     thingDiscovered(result);
 

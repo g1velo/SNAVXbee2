@@ -140,8 +140,9 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
 
-        startAutomaticRefresh();
-
+        if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
+            startAutomaticRefresh();
+        }
         updateStatus(ThingStatus.ONLINE);
 
     }
@@ -175,7 +176,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             }
         };
 
-        refreshJob = scheduler.scheduleAtFixedRate(runnable, 0, 30, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleAtFixedRate(runnable, 0, 450, TimeUnit.SECONDS);
 
     }
 

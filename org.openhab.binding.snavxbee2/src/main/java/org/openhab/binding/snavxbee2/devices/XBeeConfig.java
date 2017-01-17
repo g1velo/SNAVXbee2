@@ -30,24 +30,32 @@ public class XBeeConfig {
         try {
 
             if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
-                logger.debug("Setting timeout for to 3001 for {} tuid : {} ", remoteDevice.get64BitAddress(),
+                logger.debug("Setting timeout for to 30000 for {} tuid : {} ", remoteDevice.get64BitAddress(),
                         thingTypeUID);
-                remoteDevice.setIOSamplingRate(30001);
+                remoteDevice.setIOSamplingRate(60000);
+                // remoteDevice.setParameter("IC", ByteUtils.stringToByteArray(("0012")));
+                // remoteDevice.applyChanges();
+
+                for (IOLineIOModeMapping ioLineIOModeMapping : IOLinesxbeeConfig) {
+
+                    logger.debug(" setting device : {}\t IOLine : {}\t IOMode : {}", remoteDevice.get64BitAddress(),
+                            ioLineIOModeMapping.getIoLine(), ioLineIOModeMapping.getIoMode());
+                    remoteDevice.setIOConfiguration(ioLineIOModeMapping.getIoLine(), ioLineIOModeMapping.getIoMode());
+
+                }
+                remoteDevice.applyChanges();
+                remoteDevice.writeChanges();
+                logger.debug(" Config Changes : {} ", remoteDevice.isApplyConfigurationChangesEnabled());
             }
 
             if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {
-                logger.debug("Setting timeout for to 3000 for {} tuid : {} ", remoteDevice.get64BitAddress(),
-                        thingTypeUID);
-                remoteDevice.setIOSamplingRate(30000);
+                logger.debug(" Thung UID : {}  no config change , has to be done manually", thingTypeUID);
+                // logger.debug("Setting timeout for to 3000 for {} tuid : {} ", remoteDevice.get64BitAddress(),
+                // thingTypeUID);
+                // remoteDevice.setIOSamplingRate(60000);
+                // logger.debug("Setting timeout for {} tuid : {} ", remoteDevice.getIOSamplingRate(), thingTypeUID);
+                // remoteDevice.applyChanges();
             }
-
-            for (IOLineIOModeMapping ioLineIOModeMapping : IOLinesxbeeConfig) {
-
-                logger.debug(" setting device : {}\t IOLine : {}\t IOMode : {}", remoteDevice.get64BitAddress(),
-                        ioLineIOModeMapping.getIoLine(), ioLineIOModeMapping.getIoMode());
-                remoteDevice.setIOConfiguration(ioLineIOModeMapping.getIoLine(), ioLineIOModeMapping.getIoMode());
-            }
-            remoteDevice.applyChanges();
 
         } catch (XBeeException e) {
             // TODO Auto-generated catch block
