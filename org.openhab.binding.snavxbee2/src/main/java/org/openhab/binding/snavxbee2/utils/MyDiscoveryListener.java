@@ -9,7 +9,7 @@
  * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
  * =======================================================================
  */
-package org.openhab.binding.snavxbee.util;
+package org.openhab.binding.snavxbee2.utils;
 
 import com.digi.xbee.api.RemoteXBeeDevice;
 import com.digi.xbee.api.listeners.IDiscoveryListener;

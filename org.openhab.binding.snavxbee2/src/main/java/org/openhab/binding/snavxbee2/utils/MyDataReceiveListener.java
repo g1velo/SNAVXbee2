@@ -1,4 +1,4 @@
-package org.openhab.binding.snavxbee.util;
+package org.openhab.binding.snavxbee2.utils;
 
 import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 

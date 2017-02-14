@@ -9,6 +9,8 @@ package org.openhab.binding.snavxbee2.handler;
 
 import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +23,7 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xT;
+import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +42,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
     private XBee64BitAddress xbee64BitsAddress;
     private String xbeeCommand;
     private ScheduledFuture<?> refreshJob;
+    private List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
 
     public SNAVXbee2Handler(Thing thing) {
         super(thing);
@@ -129,10 +133,10 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         Map<String, Object> m = thing.getConfiguration().getProperties();
 
-        logger.debug(" Nummber of things in config : {} ", m.size());
+        logger.debug(" Number of things in config : {} ", m.size());
 
         for (String key : m.keySet()) {
-            logger.debug(" KKKEYS : {} ", key);
+            logger.debug(" SN KKKEYS : {} ", key);
             logger.debug(" VVVValues: {} ", m.get(key));
         }
 
@@ -140,9 +144,19 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
 
+        logger.debug("thing : {} compared : {} ", thing, THING_TYPE_TOSR0XT);
+
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
             startAutomaticRefresh();
+        } else {
+            logger.debug("getting IOLine config for device : {} ", this.xbee64BitsAddress);
+            this.IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(this.xbee64BitsAddress);
+            for (IOLineIOModeMapping map : this.IOsMapping) {
+                logger.debug("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
+            }
+
         }
+
         updateStatus(ThingStatus.ONLINE);
 
     }

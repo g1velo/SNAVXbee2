@@ -19,6 +19,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xTparser;
 import org.openhab.binding.snavxbee2.devices.XbeeIOSampleParser;
 import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
+import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.openhab.binding.snavxbee2.utils.SerialPortConfigParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,6 +130,27 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         return this.xbeeNetwork;
     }
 
+    public List<IOLineIOModeMapping> getXBeeDeviceIOLineConfig(XBee64BitAddress xbee64BitsAddress) {
+        List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
+        RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
+        logger.debug("getting config for device : {} ", remoteDevice.get64BitAddress());
+
+        for (IOLine ioLine : IOLine.values()) {
+            try {
+                IOLineIOModeMapping mapping = new IOLineIOModeMapping(ioLine, remoteDevice.getIOConfiguration(ioLine));
+                IOsMapping.add(mapping);
+            } catch (TimeoutException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (XBeeException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+        return IOsMapping;
+    }
+
     public void resetXBeeDevice(XBee64BitAddress xbee64BitsAddress) {
         RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
         logger.debug("reseting device !! : {} ", remoteDevice.get64BitAddress());
@@ -142,7 +164,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     public synchronized void sendCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
 
-        logger.trace(" 111 Synced  sending command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
+        logger.debug(" 111 Synced  sending command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
 
         try {
             RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
@@ -221,6 +243,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         PORT = portconfig.serialPort;
         BAUD_RATE = Integer.valueOf(portconfig.baudRate);
 
+        logger.warn(" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ");
         logger.trace(" In the brige, Initialising config : " + portconfig.serialPort + " " + portconfig.baudRate);
 
         try {

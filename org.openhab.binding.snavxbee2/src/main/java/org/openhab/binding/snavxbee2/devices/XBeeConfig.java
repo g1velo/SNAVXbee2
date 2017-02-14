@@ -30,8 +30,8 @@ public class XBeeConfig {
         try {
 
             if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
-                logger.debug("Setting timeout for to 30000 for {} tuid : {} ", remoteDevice.get64BitAddress(),
-                        thingTypeUID);
+                logger.debug("Setting timeout for to 30000 for {} tuid : {} compared to : {} ",
+                        remoteDevice.get64BitAddress(), thingTypeUID, THING_TYPE_TOSR0XT);
                 remoteDevice.setIOSamplingRate(60000);
                 // remoteDevice.setParameter("IC", ByteUtils.stringToByteArray(("0012")));
                 // remoteDevice.applyChanges();
