@@ -232,8 +232,6 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         // to remove
         // updateStatus(ThingStatus.ONLINE);
 
-        // config = this.getConfig();
-
         String port = (String) config.get("serialPort");
         String baud = config.get("baudRate").toString();
 
@@ -243,7 +241,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         PORT = portconfig.serialPort;
         BAUD_RATE = Integer.valueOf(portconfig.baudRate);
 
-        logger.warn(" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ");
+        logger.trace(" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ");
         logger.trace(" In the brige, Initialising config : " + portconfig.serialPort + " " + portconfig.baudRate);
 
         try {
@@ -363,7 +361,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             public void run() {
                 logger.trace("automatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
                 if (!xbeeNetwork.isDiscoveryRunning()) {
-                    logger.debug(" Bridge Automatic running Discovery ");
+                    logger.debug(" Bridge Automatic running Discovery 1");
                     xbeeNetwork.startDiscoveryProcess();
                 }
             }

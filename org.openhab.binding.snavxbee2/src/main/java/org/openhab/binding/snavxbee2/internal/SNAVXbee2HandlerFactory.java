@@ -49,7 +49,7 @@ public class SNAVXbee2HandlerFactory extends BaseThingHandlerFactory {
     @Override
     protected ThingHandler createHandler(Thing thing) {
 
-        logger.debug("Creating SNAV HANDLER ------------------------------------------------------------");
+        logger.debug("Creating SNA1V HANDLER ------------------------------------------------------------");
 
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
