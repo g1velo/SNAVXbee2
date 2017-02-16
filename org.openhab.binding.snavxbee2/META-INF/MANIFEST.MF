@@ -12,6 +12,7 @@ Import-Package:
  org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.config.discovery,
  org.eclipse.smarthome.core.common.registry,
+ org.eclipse.smarthome.core.items,
  org.eclipse.smarthome.core.library.types,
  org.eclipse.smarthome.core.thing,
  org.eclipse.smarthome.core.thing.binding,
@@ -21,6 +22,7 @@ Import-Package:
  org.jupnp.model.meta,
  org.openhab.binding.snavxbee2,
  org.openhab.binding.snavxbee2.handler,
+ org.openhab.core.items,
  org.osgi.framework;version="1.8.0",
  org.slf4j
 Service-Component: OSGI-INF/*.xml

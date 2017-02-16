@@ -71,13 +71,10 @@ public class XbeeIOSampleParser {
 
                         channelActionToPerform.setState(new DecimalType(Double.valueOf(mentry.getValue())));
                         logger.trace("existing channels fr thing : {} : {} ", thingUIDToUpdate, channel.getUID());
-
                         listOfChannelActionToPerform.add(channelActionToPerform);
                     }
                 }
-
             }
-
         }
 
         if (ioSample.hasDigitalValues()) {

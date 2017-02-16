@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.digi.xbee.api.RemoteXBeeDevice;
 import com.digi.xbee.api.XBeeDevice;
 import com.digi.xbee.api.XBeeNetwork;
+import com.digi.xbee.api.exceptions.ATCommandException;
 import com.digi.xbee.api.exceptions.TimeoutException;
 import com.digi.xbee.api.exceptions.XBeeException;
 import com.digi.xbee.api.io.IOLine;
@@ -132,17 +133,41 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     public List<IOLineIOModeMapping> getXBeeDeviceIOLineConfig(XBee64BitAddress xbee64BitsAddress) {
         List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
+
+        while (xbeeNetwork.isDiscoveryRunning()) {
+            logger.trace("Xbee discoverin running 3: {}", xbeeNetwork.isDiscoveryRunning());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            if (this.remoteDeviceList != null) {
+                logger.trace(" remoteDeviceList.size {} ", this.remoteDeviceList.size());
+            }
+        }
+
         RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
-        logger.debug("getting config for device : {} ", remoteDevice.get64BitAddress());
 
         for (IOLine ioLine : IOLine.values()) {
+
+            logger.trace("getting IOLine : {} for device : {} ", ioLine, remoteDevice.get64BitAddress());
+
             try {
                 IOLineIOModeMapping mapping = new IOLineIOModeMapping(ioLine, remoteDevice.getIOConfiguration(ioLine));
                 IOsMapping.add(mapping);
+            } catch (ATCommandException e) {
+                // TODO Auto-generated catch block
+                // e.printStackTrace();
+                logger.trace("IOLine : {} is not supported on device {} ", ioLine, xbee64BitsAddress);
             } catch (TimeoutException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (XBeeException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -316,7 +341,6 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                         updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
                     }
                 }
-
                 if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
                 }
             }

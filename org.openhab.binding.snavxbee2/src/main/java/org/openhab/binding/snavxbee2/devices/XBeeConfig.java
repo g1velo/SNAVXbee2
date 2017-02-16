@@ -52,9 +52,10 @@ public class XBeeConfig {
                 logger.debug(" Thung UID : {}  no config change , has to be done manually", thingTypeUID);
                 // logger.debug("Setting timeout for to 3000 for {} tuid : {} ", remoteDevice.get64BitAddress(),
                 // thingTypeUID);
-                // remoteDevice.setIOSamplingRate(60000);
+                remoteDevice.setIOSamplingRate(60000);
                 // logger.debug("Setting timeout for {} tuid : {} ", remoteDevice.getIOSamplingRate(), thingTypeUID);
-                // remoteDevice.applyChanges();
+                remoteDevice.applyChanges();
+                remoteDevice.writeChanges();
             }
 
         } catch (XBeeException e) {

@@ -154,11 +154,34 @@ you will have to use XCTU to configure the Xbee Device.
 
 
 
+## Configuring OH2 channels in the items file : 
+
+here is how to reference Xbee Port in the item file.  
+So if you want to reference XBee Port DIO10/PWM0 you should put in the items file something like : 
+
+    Switch  XbeeDIO11switch  "XbeeDIO11switch  "  (All)   { channel = "snavxbee2:sample:gateway:0013A20040E31560:PWM1DIO11" }
+    
+In order to update a XBee Port  it has to be configured as IOMode.DIGITAL_OUT_HIGH or IOMode.DIGITAL_OUT_LOW
+
+XBee port       OH2 channels
+DIO0/AD0        AD0DIO0 
+DIO1/AD1        AD1DIO1
+DIO2/AD2        AD2DIO2
+DIO3/AD3        AD3DIO3
+DIO4/AD4        AD4DIO4
+DIO5/AD5        AD5DIO5
+DIO6            DIO6    
+DIO7            DIO7
+DIO10/PWM0      PWM0DIO10
+DIO11/PWM1      PWM1DIO11
+DIO12           DIO12
+
+
 ## Supported gateways
 
 - SerialGateway
 
 ## Supported sensors
 
-- TOSR02-T as tosr0xT 
+- TOSR02-T as tosr0xT using DD 'CAFE0002' 
 - More to come.   

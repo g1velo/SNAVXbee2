@@ -119,9 +119,9 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
                     XBeeConfig xbeeCfg = new XBeeConfig(tuid, remote);
 
-                    DiscoveryResult result = DiscoveryResultBuilder.create(uid).withProperties(properties)
-                            .withLabel(thingLabel + " " + remote.getNodeID() + " " + remote.get64BitAddress().toString()
-                                    + " " + deviceTypeIdentifier + ")")
+                    DiscoveryResult result = DiscoveryResultBuilder.create(uid)
+                            .withProperties(properties).withLabel(thingLabel + " " + remote.getNodeID() + " "
+                                    + remote.get64BitAddress().toString() + " " + deviceTypeIdentifier)
                             .withBridge(bridgeHandler.getThing().getUID()).build();
                     thingDiscovered(result);
 

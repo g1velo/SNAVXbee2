@@ -23,10 +23,13 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xT;
+import org.openhab.binding.snavxbee2.utils.ChannelToXBeePort;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.digi.xbee.api.io.IOMode;
+import com.digi.xbee.api.io.IOValue;
 import com.digi.xbee.api.models.XBee64BitAddress;
 
 /**
@@ -60,12 +63,43 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbeeCommand = null;
 
-        if (thing.getThingTypeUID().equals(THING_TYPE_XBEEAPI)) {
-            if (channelUID.getId().equals(TEMPERATURE)) {
-                // updatest
-                this.xbeeCommand = "b";
-            }
+        if (thing.getThingTypeUID().equals(THING_TYPE_XBEEAPI) || thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
+            logger.debug("IOmaps : {} Channel to update : {}  port : {} ", IOsMapping.size(), channelUID,
+                    channelUID.getId());
 
+            if (IOsMapping != null) {
+                for (IOLineIOModeMapping map : IOsMapping) {
+                    logger.trace("IOLine : {}", map.getIoLine());
+
+                    // if (map.getIoLine().toString().equals(channelUID.getId())
+                    if (ChannelToXBeePort.xBeePortToChannel(map.getIoLine()).equals(channelUID.getId())
+                            && (map.getIoMode().equals(IOMode.DIGITAL_OUT_HIGH)
+                                    || map.getIoMode().equals(IOMode.DIGITAL_OUT_LOW))) {
+
+                        logger.trace("Channel to update : {}  port : {} ", channelUID, channelUID.getId());
+
+                        switch (command.toString()) {
+                            case "ON":
+                                getBridgeHandler().sendAPICommandToDevice(xbee64BitsAddress, map.getIoLine(),
+                                        IOValue.HIGH);
+                                break;
+                            case "OFF":
+                                getBridgeHandler().sendAPICommandToDevice(xbee64BitsAddress, map.getIoLine(),
+                                        IOValue.LOW);
+                                break;
+                            case "REFRESH":
+                                break;
+                            default:
+                                logger.debug("don't know what to do with command : {}", command.toString());
+                                break;
+                        }
+
+                    }
+                }
+
+            } else {
+                logger.debug("IOsMapping was not found");
+            }
         }
 
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
