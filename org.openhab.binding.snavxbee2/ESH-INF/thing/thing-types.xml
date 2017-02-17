@@ -33,15 +33,17 @@
 		<label>SNAVXbee2 ID : 30000</label>
 		<description>Sample thing for SNAVXbee2 Binding ID : 30000</description>
 		<channels>
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="DIO4" typeId="DIO4" />
-            <channel id="DIO5" typeId="DIO5" />
-            <channel id="DIO10" typeId="DIO10" />
-            <channel id="DIO11" typeId="DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -72,11 +74,14 @@
 			<channel id="AD1DIO1" typeId="AD1DIO1" />
 			<channel id="AD2DIO2" typeId="AD2DIO2" />
 			<channel id="AD3DIO3" typeId="AD3DIO3" />
-			<channel id="DIO4" typeId="DIO4" />
-			<channel id="DIO5" typeId="DIO5" />
-			<channel id="DIO10" typeId="DIO10" />
-			<channel id="DIO11" typeId="DIO11" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
 			<channel id="DIO12" typeId="DIO12" />
+
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -113,112 +118,112 @@
 			</parameter>
 		</config-description>
 	</thing-type>
-   
-   <!-- Sample Channel Type -->
-    <channel-type id="channel1">
-        <item-type>channel1</item-type>
-        <label>SNAVXbee2 Binding Channel  for testing Purpose</label>
-        <description>Sample channel for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="humidity" advanced="true">
-        <item-type>Number</item-type>
-        <label>Test humidity</label>
-        <description>Test</description>
-        <category>humidity</category>
-        <state readOnly="true" />
-    </channel-type>
 
-    <channel-type id="temperature">
-        <item-type>Number</item-type>
-        <label>TOSR0xT temperature DS18B20</label>
-        <description>temperature channel for SNAVXbee2 Binding using DS18B20 device</description>
-        <category>Temperature</category>
-        <state readOnly="true" />
-    </channel-type>
-    <channel-type id="relay1">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 1</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay2">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 2</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay3">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 3</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay4">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 4</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay5">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 5</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay6">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 6</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay7">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 7</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay8">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 8</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD0DIO0">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding AD0DIO0 port </label>
-        <description>port AD0DIO0 SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD1DIO1">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding AD1DIO1 port </label>
-        <description>AD1DIO1 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD2DIO2">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding AD2DIO2 port </label>
-        <description> AD2DIO2 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD3DIO3">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding  AD3DIO3 port </label>
-        <description> AD2DIO2 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO4">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO4 port </label>
-        <description>DIO4 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO5">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO5 port </label>
-        <description>DIO5 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO10">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO10 port</label>
-        <description>DIO10 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO11">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO11 port</label>
-        <description>DIO10 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO12">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO12 port </label>
-        <description>DIO12 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    
+	<!-- Sample Channel Type -->
+	<channel-type id="channel1">
+		<item-type>channel1</item-type>
+		<label>SNAVXbee2 Binding Channel  for testing Purpose</label>
+		<description>Sample channel for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="humidity" advanced="true">
+		<item-type>Number</item-type>
+		<label>Test humidity</label>
+		<description>Test</description>
+		<category>humidity</category>
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="temperature">
+		<item-type>Number</item-type>
+		<label>TOSR0xT temperature DS18B20</label>
+		<description>temperature channel for SNAVXbee2 Binding using DS18B20 device</description>
+		<category>Temperature</category>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="relay1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 1</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 2</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 3</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay4">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 4</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay5">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 5</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay6">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 6</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay7">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 7</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay8">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD0DIO0">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding AD0DIO0 port </label>
+		<description>port AD0DIO0 SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD1DIO1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding AD1DIO1 port </label>
+		<description>AD1DIO1 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD2DIO2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding AD2DIO2 port </label>
+		<description> AD2DIO2 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD3DIO3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding  AD3DIO3 port </label>
+		<description> AD2DIO2 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO4">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO4 port </label>
+		<description>DIO4 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO5">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO5 port </label>
+		<description>DIO5 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO10">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO10 port</label>
+		<description>DIO10 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO11">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO11 port</label>
+		<description>DIO10 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO12">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO12 port </label>
+		<description>DIO12 port for SNAVXbee2 Binding</description>
+	</channel-type>
+
 </thing:thing-descriptions>
