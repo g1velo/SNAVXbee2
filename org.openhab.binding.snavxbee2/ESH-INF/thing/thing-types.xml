@@ -183,7 +183,7 @@
 	<channel-type id="AD0DIO0">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding AD0DIO0 port </label>
-		<description>port AD0DIO0 SNAVXbee2 Binding</description>
+		<description>AD0DIO0 port for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="AD1DIO1">
 		<item-type>SwitchItem</item-type>
@@ -193,18 +193,23 @@
 	<channel-type id="AD2DIO2">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding AD2DIO2 port </label>
-		<description> AD2DIO2 port for SNAVXbee2 Binding</description>
+		<description>AD2DIO2 port for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="AD3DIO3">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding  AD3DIO3 port </label>
-		<description> AD2DIO2 port for SNAVXbee2 Binding</description>
+		<description>AD3DIO3 port for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="AD4DIO4">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO4 port </label>
 		<description>DIO4 port for SNAVXbee2 Binding</description>
 	</channel-type>
+    <channel-type id="AD5DIO5">
+        <item-type>SwitchItem</item-type>
+        <label>SNAVXbee2 Binding DIO5 port </label>
+        <description>AD5DIO5 port for SNAVXbee2 Binding</description>
+    </channel-type>
 	<channel-type id="DIO6">
         <item-type>SwitchItem</item-type>
         <label>SNAVXbee2 Binding DIO6 port </label>
@@ -215,11 +220,6 @@
         <label>SNAVXbee2 Binding DIO7 port </label>
         <description>DIO7 port for SNAVXbee2 Binding</description>
     </channel-type>
-	<channel-type id="AD5DIO5">
-		<item-type>SwitchItem</item-type>
-		<label>SNAVXbee2 Binding DIO5 port </label>
-		<description>DIO5 port for SNAVXbee2 Binding</description>
-	</channel-type>
 	<channel-type id="PWM0DIO10">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO10 port</label>
@@ -228,12 +228,11 @@
 	<channel-type id="PWM1DIO11">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO11 port</label>
-		<description>DIO10 port for SNAVXbee2 Binding</description>
+		<description>DIO11 port for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="DIO12">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO12 port </label>
 		<description>DIO12 port for SNAVXbee2 Binding</description>
 	</channel-type>
-
 </thing:thing-descriptions>

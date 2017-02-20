@@ -13,6 +13,7 @@ import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
+import org.openhab.binding.snavxbee2.utils.ChannelToXBeePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,10 +55,9 @@ public class XbeeIOSampleParser {
 
             while (iterator.hasNext()) {
                 Entry<IOLine, Integer> mentry = iterator.next();
-                String formattedKey[] = mentry.getKey().toString().split("/");
-                logger.trace("key is : {} & Value is : {}", formattedKey[1] + formattedKey[0], mentry.getValue());
                 logger.trace("key is : {} & Value is : {}", mentry.getKey(), mentry.getValue());
                 for (Channel channel : thingChannels) {
+                    // logger.debug(" channel list : {} ", channel.getUID());
                     // logger.debug("comparing : {} to : {}", channel.getUID().getId(), formattedKey[1] +
                     // formattedKey[0]);
 
@@ -65,7 +65,9 @@ public class XbeeIOSampleParser {
                     // To the ones in the message.
                     // formatting the key from : DIO0/AD0 to AD0DOI0 for comparing
 
-                    if (channel.getUID().getId().toString().equals(formattedKey[1] + formattedKey[0])) {
+                    // if (channel.getUID().getId().toString().equals(formattedKey[1] + formattedKey[0])) {
+                    if (channel.getUID().getId().toString()
+                            .equals(ChannelToXBeePort.xBeePortToChannel(mentry.getKey()))) {
                         ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
                         channelActionToPerform.setChannelUIDToUpdate(channel.getUID());
 
@@ -88,12 +90,14 @@ public class XbeeIOSampleParser {
                 // logger.debug("key is : {} & Value is : {}", mentry.getKey(), mentry.getValue());
                 for (Channel channel : thingChannels) {
 
-                    // logger.debug("comparing : {} to : {}", mentry.getKey(), channel.getUID().getId().toString());
+                    // logger.debug("comparing : {} to : {}", ChannelToXBeePort.xBeePortToChannel(mentry.getKey()),
+                    // channel.getUID().getId());
 
-                    String formattedKey[] = mentry.getKey().toString().split("/");
+                    if (channel.getUID().getId().toString()
+                            .equals(ChannelToXBeePort.xBeePortToChannel(mentry.getKey()))) {
 
-                    if (channel.getUID().getId().toString().equals(mentry.getKey().toString())) {
-
+                        logger.trace("matched : {} to : {}", ChannelToXBeePort.xBeePortToChannel(mentry.getKey()),
+                                channel.getUID().getId().toString());
                         ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
                         channelActionToPerform.setChannelUIDToUpdate(channel.getUID());
 

@@ -44,10 +44,12 @@ public class SNAVXbee2BindingConstants {
     public final static String AD1DIO1 = "AD1DIO1";
     public final static String AD2DIO2 = "AD2DIO2";
     public final static String AD3DIO3 = "AD3DIO3";
-    public final static String DIO4 = "DIO4";
-    public final static String DIO5 = "DIO5";
-    public final static String DIO10 = "DIO10";
-    public final static String DIO11 = "DIO11";
+    public final static String AD4DIO4 = "AD4DIO4";
+    public final static String AD5DIO5 = "AD5DIO5";
+    public final static String DIO6 = "DIO6";
+    public final static String DIO7 = "DIO7";
+    public final static String PWM0DIO10 = "PWM0DIO10";
+    public final static String PWM1DIO11 = "PWM1DIO11";
     public final static String DIO12 = "DIO12";
 
     public final static String HUMIDITY = "humidity";
@@ -60,16 +62,15 @@ public class SNAVXbee2BindingConstants {
     // supported channels for tosr0xt devices;
     // Not really sure that it is usefull
     public static final Set<String> SUPPORTED_TOSR0XT_CHANNELS = ImmutableSet.of(TEMPERATURE, RELAY1, RELAY2, RELAY3,
-            RELAY4, RELAY5, RELAY6, RELAY7, RELAY8, AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3, DIO4, DIO5, DIO10, DIO11,
-            DIO12);
+            RELAY4, RELAY5, RELAY6, RELAY7, RELAY8, AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3, AD4DIO4, AD5DIO5, PWM0DIO10,
+            PWM1DIO11, DIO12);
     public static final Set<String> SUPPORTED_TOSR0XT_RELAY_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4,
             RELAY5, RELAY6, RELAY7, RELAY8);
 
     // supported channels for generic devices;
     // Not really sure that it is usefull
-
-    public static final Set<String> SUPPORTED_SAMPLE_CHANNELS = ImmutableSet.of(AD1DIO1, AD2DIO2, AD3DIO3, DIO4, DIO5,
-            DIO10, DIO11, DIO12);
+    public static final Set<String> SUPPORTED_SAMPLE_CHANNELS = ImmutableSet.of(AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3,
+            AD4DIO4, AD5DIO5, PWM0DIO10, PWM1DIO11, DIO12);
 
     // supported channels for CAFEdevices;
 
