@@ -52,7 +52,7 @@
 				<description>The 64 bit addrees Xbee64BitsAddress
                 </description>
 			</parameter>
-			<parameter name="IOChannel" type="text" required="true">
+			<parameter name="IOChannel" type="text" required="false">
 				<context>IOChannel </context>
 				<label>Xbee IOChannel</label>
 				<description>The IOChannel of the Xbee Device </description>
@@ -90,7 +90,7 @@
 				<description>The 64 bit addrees Xbee64BitsAddress
                 </description>
 			</parameter>
-			<parameter name="IOChannel" type="text" required="true">
+			<parameter name="IOChannel" type="text" required="false">
 				<context>IOChannel </context>
 				<label>Xbee IOChannel</label>
 				<description>The IOChannel of the Xbee Device </description>
@@ -200,22 +200,32 @@
 		<label>SNAVXbee2 Binding  AD3DIO3 port </label>
 		<description> AD2DIO2 port for SNAVXbee2 Binding</description>
 	</channel-type>
-	<channel-type id="DIO4">
+	<channel-type id="AD4DIO4">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO4 port </label>
 		<description>DIO4 port for SNAVXbee2 Binding</description>
 	</channel-type>
-	<channel-type id="DIO5">
+	<channel-type id="DIO6">
+        <item-type>SwitchItem</item-type>
+        <label>SNAVXbee2 Binding DIO6 port </label>
+        <description>DIO6 port for SNAVXbee2 Binding</description>
+    </channel-type>
+    <channel-type id="DIO7">
+        <item-type>SwitchItem</item-type>
+        <label>SNAVXbee2 Binding DIO7 port </label>
+        <description>DIO7 port for SNAVXbee2 Binding</description>
+    </channel-type>
+	<channel-type id="AD5DIO5">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO5 port </label>
 		<description>DIO5 port for SNAVXbee2 Binding</description>
 	</channel-type>
-	<channel-type id="DIO10">
+	<channel-type id="PWM0DIO10">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO10 port</label>
 		<description>DIO10 port for SNAVXbee2 Binding</description>
 	</channel-type>
-	<channel-type id="DIO11">
+	<channel-type id="PWM1DIO11">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO11 port</label>
 		<description>DIO10 port for SNAVXbee2 Binding</description>
