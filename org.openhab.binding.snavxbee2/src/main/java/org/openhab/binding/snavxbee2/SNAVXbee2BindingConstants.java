@@ -48,9 +48,18 @@ public class SNAVXbee2BindingConstants {
     public final static String AD5DIO5 = "AD5DIO5";
     public final static String DIO6 = "DIO6";
     public final static String DIO7 = "DIO7";
+    public final static String DIO8 = "DIO8";
+    public final static String DIO9 = "DIO9";
     public final static String PWM0DIO10 = "PWM0DIO10";
     public final static String PWM1DIO11 = "PWM1DIO11";
     public final static String DIO12 = "DIO12";
+    public final static String DIO13 = "DIO13";
+    public final static String DIO14 = "DIO14";
+    public final static String DIO15 = "DIO15";
+    public final static String DIO16 = "DIO16";
+    public final static String DIO17 = "DIO17";
+    public final static String DIO18 = "DIO18";
+    public final static String DIO19 = "DIO19";
 
     public final static String HUMIDITY = "humidity";
     public final static String LIGHT = "light";
@@ -70,7 +79,8 @@ public class SNAVXbee2BindingConstants {
     // supported channels for generic devices;
     // Not really sure that it is usefull
     public static final Set<String> SUPPORTED_SAMPLE_CHANNELS = ImmutableSet.of(AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3,
-            AD4DIO4, AD5DIO5, PWM0DIO10, PWM1DIO11, DIO12);
+            AD4DIO4, AD5DIO5, DIO6, DIO7, DIO8, DIO9, PWM0DIO10, PWM1DIO11, DIO12, DIO13, DIO14, DIO15, DIO16, DIO17,
+            DIO18, DIO19);
 
     // supported channels for CAFEdevices;
 
@@ -84,5 +94,4 @@ public class SNAVXbee2BindingConstants {
     /** Supported devices (things + bridges) */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
             THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI);
-
 }

@@ -1,4 +1,4 @@
-package org.openhab.binding.snavxbee2.devices;
+package org.openhab.binding.snavxbee2.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +12,6 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
-import org.openhab.binding.snavxbee2.utils.ChannelToXBeePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

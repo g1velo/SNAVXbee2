@@ -10,6 +10,7 @@ package org.openhab.binding.snavxbee2.handler;
 import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -25,6 +27,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xT;
 import org.openhab.binding.snavxbee2.utils.ChannelToXBeePort;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
+import org.openhab.binding.snavxbee2.utils.RCAndIOValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,6 +91,21 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                                         IOValue.LOW);
                                 break;
                             case "REFRESH":
+                                RCAndIOValue rcvalue = getBridgeHandler().getIOLineValue(xbee64BitsAddress,
+                                        map.getIoLine());
+                                if (rcvalue.isRc()) {
+                                    Collection<Channel> thingChannels = this.getThing().getChannels();
+                                    for (Channel channel : thingChannels) {
+                                        if (channel.getUID().getId().toString().equals(channelUID.getId())) {
+                                            // Channel matching found updatin to value
+                                            updateState(channelUID, rcvalue.getState());
+                                        }
+                                    }
+
+                                } else {
+                                    logger.info("An error occured get ioline : {}  from device  : {} ", map.getIoLine(),
+                                            xbee64BitsAddress);
+                                }
                                 break;
                             default:
                                 logger.debug("don't know what to do with command : {}", command.toString());

@@ -173,9 +173,19 @@ DIO4/AD4      |   AD4DIO4
 DIO5/AD5      |   AD5DIO5
 DIO6          |   DIO6    
 DIO7          |   DIO7
+DIO8          |   DIO8    
+DIO9          |   DIO9
 DIO10/PWM0    |   PWM0DIO10
 DIO11/PWM1    |   PWM1DIO11
 DIO12         |   DIO12
+DIO13         |   DIO13
+DIO14         |   DIO14
+DIO15         |   DIO15
+DIO16         |   DIO16
+DIO17         |   DIO17
+DIO18         |   DIO18
+DIO19         |   DIO19
+
 
 
 ## Supported gateways
@@ -186,3 +196,17 @@ DIO12         |   DIO12
 
 - TOSR02-T as tosr0xT using DD 'CAFE0002' 
 - More to come.   
+
+
+## debug / trace mode
+in karaf : 
+
+```
+log:set DEBUG  org.openhab.binding.snavxbee2
+```
+ 
+ or trace ( very verbose ) 
+ 
+ ```
+log:set TRACE org.openhab.binding.snavxbee2
+```

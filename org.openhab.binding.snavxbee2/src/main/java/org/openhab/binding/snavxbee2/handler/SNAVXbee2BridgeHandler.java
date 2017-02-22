@@ -17,10 +17,11 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xTparser;
-import org.openhab.binding.snavxbee2.devices.XbeeIOSampleParser;
 import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
+import org.openhab.binding.snavxbee2.utils.RCAndIOValue;
 import org.openhab.binding.snavxbee2.utils.SerialPortConfigParameters;
+import org.openhab.binding.snavxbee2.utils.XbeeIOSampleParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,6 +130,23 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     public XBeeNetwork getXbeeNetwork() {
         return this.xbeeNetwork;
+    }
+
+    public RCAndIOValue getIOLineValue(XBee64BitAddress xbee64BitsAddress, IOLine ioLine) {
+
+        RCAndIOValue rcValue = new RCAndIOValue();
+
+        RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
+        try {
+            rcValue.setIovalue(remoteDevice.getDIOValue(ioLine));
+            rcValue.setRc(true);
+        } catch (XBeeException e) {
+            // TODO Auto-generated catch block
+            rcValue.setRc(false);
+            e.printStackTrace();
+        }
+
+        return rcValue;
     }
 
     public List<IOLineIOModeMapping> getXBeeDeviceIOLineConfig(XBee64BitAddress xbee64BitsAddress) {

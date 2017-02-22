@@ -24,7 +24,6 @@
 			</parameter>
 		</config-description>
 	</bridge-type>
-
 	<!-- Sample Thing Type -->
 	<thing-type id="sample">
 		<supported-bridge-type-refs>
@@ -33,17 +32,26 @@
 		<label>SNAVXbee2 ID : 30000</label>
 		<description>Sample thing for SNAVXbee2 Binding ID : 30000</description>
 		<channels>
-			<channel id="AD0DIO0" typeId="AD0DIO0" />
-			<channel id="AD1DIO1" typeId="AD1DIO1" />
-			<channel id="AD2DIO2" typeId="AD2DIO2" />
-			<channel id="AD3DIO3" typeId="AD3DIO3" />
-			<channel id="AD4DIO4" typeId="AD4DIO4" />
-			<channel id="AD5DIO5" typeId="AD5DIO5" />
-			<channel id="DIO6" typeId="DIO6" />
-			<channel id="DIO7" typeId="DIO7" />
-			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
-			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
-			<channel id="DIO12" typeId="DIO12" />
+            <channel id="AD0DIO0" typeId="AD0DIO0" />
+            <channel id="AD1DIO1" typeId="AD1DIO1" />
+            <channel id="AD2DIO2" typeId="AD2DIO2" />
+            <channel id="AD3DIO3" typeId="AD3DIO3" />
+            <channel id="AD4DIO4" typeId="AD4DIO4" />
+            <channel id="AD5DIO5" typeId="AD5DIO5" />
+            <channel id="DIO6" typeId="DIO6" />
+            <channel id="DIO7" typeId="DIO7" />
+            <channel id="DIO8" typeId="DIO8" />
+            <channel id="DIO9" typeId="DIO9" />
+            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
+            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
+            <channel id="DIO12" typeId="DIO12" />
+            <channel id="DIO13" typeId="DIO13" />
+            <channel id="DIO14" typeId="DIO14" />
+            <channel id="DIO15" typeId="DIO15" />
+            <channel id="DIO16" typeId="DIO16" />
+            <channel id="DIO17" typeId="DIO17" />
+            <channel id="DIO18" typeId="DIO18" />
+            <channel id="DIO19" typeId="DIO19" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -70,18 +78,26 @@
 			<channel id="temperature" typeId="temperature" />
 			<channel id="relay1" typeId="relay1" />
 			<channel id="relay2" typeId="relay2" />
-			<channel id="AD0DIO0" typeId="AD0DIO0" />
-			<channel id="AD1DIO1" typeId="AD1DIO1" />
-			<channel id="AD2DIO2" typeId="AD2DIO2" />
-			<channel id="AD3DIO3" typeId="AD3DIO3" />
-			<channel id="AD4DIO4" typeId="AD4DIO4" />
-			<channel id="AD5DIO5" typeId="AD5DIO5" />
-			<channel id="DIO6" typeId="DIO6" />
-			<channel id="DIO7" typeId="DIO7" />
-			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
-			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
-			<channel id="DIO12" typeId="DIO12" />
-
+            <channel id="AD0DIO0" typeId="AD0DIO0" />
+            <channel id="AD1DIO1" typeId="AD1DIO1" />
+            <channel id="AD2DIO2" typeId="AD2DIO2" />
+            <channel id="AD3DIO3" typeId="AD3DIO3" />
+            <channel id="AD4DIO4" typeId="AD4DIO4" />
+            <channel id="AD5DIO5" typeId="AD5DIO5" />
+            <channel id="DIO6" typeId="DIO6" />
+            <channel id="DIO7" typeId="DIO7" />
+            <channel id="DIO8" typeId="DIO8" />
+            <channel id="DIO9" typeId="DIO9" />
+            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
+            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
+            <channel id="DIO12" typeId="DIO12" />
+            <channel id="DIO13" typeId="DIO13" />
+            <channel id="DIO14" typeId="DIO14" />
+            <channel id="DIO15" typeId="DIO15" />
+            <channel id="DIO16" typeId="DIO16" />
+            <channel id="DIO17" typeId="DIO17" />
+            <channel id="DIO18" typeId="DIO18" />
+            <channel id="DIO19" typeId="DIO19" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -205,21 +221,31 @@
 		<label>SNAVXbee2 Binding DIO4 port </label>
 		<description>DIO4 port for SNAVXbee2 Binding</description>
 	</channel-type>
-    <channel-type id="AD5DIO5">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO5 port </label>
-        <description>AD5DIO5 port for SNAVXbee2 Binding</description>
-    </channel-type>
+	<channel-type id="AD5DIO5">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO5 port </label>
+		<description>AD5DIO5 port for SNAVXbee2 Binding</description>
+	</channel-type>
 	<channel-type id="DIO6">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO6 port </label>
-        <description>DIO6 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO7">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO7 port </label>
-        <description>DIO7 port for SNAVXbee2 Binding</description>
-    </channel-type>
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO6 port </label>
+		<description>DIO6 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO7">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO7 port </label>
+		<description>DIO7 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO8">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO8 port </label>
+		<description>DIO8 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO9">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO9 port </label>
+		<description>DIO9 port for SNAVXbee2 Binding</description>
+	</channel-type>
 	<channel-type id="PWM0DIO10">
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO10 port</label>
@@ -234,5 +260,40 @@
 		<item-type>SwitchItem</item-type>
 		<label>SNAVXbee2 Binding DIO12 port </label>
 		<description>DIO12 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO13">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO13 port </label>
+		<description>DIO12 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO14">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO14 port </label>
+		<description>DIO14 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO15">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO15 port </label>
+		<description>DIO15 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO16">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO16 port </label>
+		<description>DIO16 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO17">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO17 port </label>
+		<description>DIO17 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO18">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO18 port </label>
+		<description>DIO18 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO19">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO19 port </label>
+		<description>DIO19 port for SNAVXbee2 Binding</description>
 	</channel-type>
 </thing:thing-descriptions>
