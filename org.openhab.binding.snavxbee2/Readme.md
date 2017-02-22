@@ -192,6 +192,7 @@ DIO19         |   DIO19
 
 - SerialGateway
 
+
 ## Supported sensors
 
 - TOSR02-T as tosr0xT using DD 'CAFE0002' 
