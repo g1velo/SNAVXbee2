@@ -71,7 +71,6 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             try {
                 xbeeNetwork.setDiscoveryTimeout(timeout);
                 // xbeeNetwork.setDiscoveryOptions(EnumSet.of(DiscoveryOptions.APPEND_DD));
-
                 // .setDiscoveryOptions(EnumSet.of(DiscoveryOptions.APPEND_DD, DiscoveryOptions.DISCOVER_MYSELF));
                 xbeeNetwork.addDiscoveryListener(this);
                 xbeeNetwork.startDiscoveryProcess();
@@ -361,6 +360,9 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 }
                 if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
                 }
+                if (thing.getThingTypeUID().equals(THING_TYPE_CAFE1000)) {
+
+                }
             }
         }
     }
@@ -408,6 +410,8 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 }
             }
         };
-        refreshJob = scheduler.scheduleAtFixedRate(runnable, 60, 300, TimeUnit.SECONDS);
+
+        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 60, 300, TimeUnit.SECONDS);
+
     }
 }
