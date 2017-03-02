@@ -45,11 +45,10 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
     @Override
     protected void startScan() {
+
         // First removing old results !
         // removeOlderResults(0);
-
-        // TODO Auto-generated method stub
-        logger.debug("In StartScan ! !!!!! ");
+        logger.info("Starting Xbee Device Discovery");
 
         List<RemoteXBeeDevice> xbeeDeviceList = bridgeHandler.startSearch(15000);
 
@@ -93,6 +92,7 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                 ThingUID uid = null;
                 ThingTypeUID tuid = null;
                 String thingLabel = "learn from XBee";
+
                 switch (deviceTypeIdentifier) {
                     case "CAFE0002":
                         tuid = THING_TYPE_TOSR0XT;
@@ -100,14 +100,18 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                                 remote.get64BitAddress().toString());
                         thingLabel = "XBee with TosR0xT";
                         break;
-
+                    case "CAFE1000":
+                        tuid = THING_TYPE_CAFE1000;
+                        uid = new ThingUID(THING_TYPE_CAFE1000, bridgeHandler.getThing().getUID(),
+                                remote.get64BitAddress().toString());
+                        thingLabel = "XBee with CAFE1000 controller attached";
+                        break;
                     default:
                         tuid = THING_TYPE_SAMPLE;
                         uid = new ThingUID(THING_TYPE_SAMPLE, bridgeHandler.getThing().getUID(),
                                 remote.get64BitAddress().toString());
                         thingLabel = "default XBee";
                         break;
-
                 }
 
                 logger.debug("::::::::::::::::::: THingUID Discovered : {} ", uid);
@@ -132,7 +136,7 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
             }
 
         } else {
-            logger.debug("Device List is empty");
+            logger.info("Device List is empty");
         }
     }
 

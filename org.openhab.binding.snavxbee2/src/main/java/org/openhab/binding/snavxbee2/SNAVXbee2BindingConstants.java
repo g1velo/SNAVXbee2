@@ -28,6 +28,7 @@ public class SNAVXbee2BindingConstants {
     public final static ThingTypeUID THING_TYPE_XBEEAPI = new ThingTypeUID(BINDING_ID, "xbeeapi");
     public final static ThingTypeUID THING_TYPE_BRIDGE = new ThingTypeUID(BINDING_ID, "bridge");
     public final static ThingTypeUID THING_TYPE_TOSR0XT = new ThingTypeUID(BINDING_ID, "tosr0xt");
+    public final static ThingTypeUID THING_TYPE_CAFE1000 = new ThingTypeUID(BINDING_ID, "cafe1000");
 
     // List of all Channel ids
     public final static String CHANNEL_1 = "channel1";
@@ -60,6 +61,9 @@ public class SNAVXbee2BindingConstants {
     public final static String DIO17 = "DIO17";
     public final static String DIO18 = "DIO18";
     public final static String DIO19 = "DIO19";
+    public final static String S1 = "S1";
+    public final static String S2 = "S2";
+    public final static String S3 = "S3";
 
     public final static String HUMIDITY = "humidity";
     public final static String LIGHT = "light";
@@ -83,15 +87,20 @@ public class SNAVXbee2BindingConstants {
             DIO18, DIO19);
 
     // supported channels for CAFEdevices;
+    // CAFE1000 / cafe1000
+    public static final Set<String> SUPPORTED_CAFE1000_CHANNELS = ImmutableSet.of(AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3,
+            AD4DIO4, AD5DIO5, DIO6, DIO7, DIO8, DIO9, PWM0DIO10, PWM1DIO11, DIO12, DIO13, DIO14, DIO15, DIO16, DIO17,
+            DIO18, DIO19, S1, S2, S3);
 
     /** Supported Things without bridge */
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
-            THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI);
+            THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000);
 
     /** Supported bridges */
     public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BRIDGE);
 
     /** Supported devices (things + bridges) */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
-            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI);
+            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000);
+
 }

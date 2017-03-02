@@ -192,11 +192,14 @@ DIO19         |   DIO19
 
 - SerialGateway
 
-
-## Supported sensors
+## Supported sensors using Xbee Serial Port 
 
 - TOSR02-T as tosr0xT using DD 'CAFE0002' 
 - More to come.   
+
+Device        | Xbee Device indentifier ( DD ) 
+------------- | -------------
+TOSR02-T      |   CAFE0002
 
 
 ## debug / trace mode

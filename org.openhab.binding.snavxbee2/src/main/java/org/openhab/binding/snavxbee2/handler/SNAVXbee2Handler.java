@@ -66,6 +66,19 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbeeCommand = null;
 
+        if (thing.getThingTypeUID().equals(THING_TYPE_CAFE1000)) {
+
+            logger.debug("sending to : " + channelUID.getId() + " command " + command);
+            // this.xbeeCommand = "e";
+            this.xbeeCommand = channelUID.getId() + "=" + command.toString();
+
+            if (this.xbeeCommand != null) {
+                logger.debug(" handler xbee64BitsAddress : {}  this.xbeeCommand : {} ", this.xbee64BitsAddress,
+                        this.xbeeCommand);
+                getBridgeHandler().sendCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
+            }
+        }
+
         if (thing.getThingTypeUID().equals(THING_TYPE_XBEEAPI) || thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
             logger.debug("IOmaps : {} Channel to update : {}  port : {} ", IOsMapping.size(), channelUID,
                     channelUID.getId());
@@ -192,21 +205,19 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             logger.debug(" VVVValues: {} ", m.get(key));
         }
 
-        // this.xbee64BitsAddress. m.get("Xbee64BitsAddress");
-
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
 
-        logger.debug("thing : {} compared : {} ", thing, THING_TYPE_TOSR0XT);
-
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
+            // starting automatic refresh for this device
             startAutomaticRefresh();
-        } else {
-            logger.debug("getting IOLine config for device : {} ", this.xbee64BitsAddress);
-            this.IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(this.xbee64BitsAddress);
-            for (IOLineIOModeMapping map : this.IOsMapping) {
-                logger.debug("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
-            }
+        }
 
+        // Getting IOline configuration
+
+        logger.debug("getting IOLine config for device : {} ", this.xbee64BitsAddress);
+        this.IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(this.xbee64BitsAddress);
+        for (IOLineIOModeMapping map : this.IOsMapping) {
+            logger.debug("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
         }
 
         updateStatus(ThingStatus.ONLINE);
@@ -241,9 +252,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                 getBridgeHandler().sendCommandToDevice(xbee64BitsAddress, "b");
             }
         };
-
-        refreshJob = scheduler.scheduleAtFixedRate(runnable, 0, 450, TimeUnit.SECONDS);
-
+        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 30, 450, TimeUnit.SECONDS);
     }
 
 }
