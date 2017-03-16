@@ -20,7 +20,7 @@ import com.digi.xbee.api.io.IOSample;
 import com.digi.xbee.api.io.IOValue;
 
 /**
- * {@link XbeeIOSampleParser} provides can parse message coming from Xbee devices.
+ * {@link XbeeIOSampleParser} class can parse message coming from Xbee devices.
  * <p>
  * Arguments should be ( The thing to update , and the XBee iosample.
  * XbeeIOSampleParser will send back channel to update ( If exists in the OH registry and State

@@ -12,7 +12,6 @@ import java.util.Set;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
-import org.eclipse.smarthome.config.discovery.DiscoveryServiceCallback;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.snavxbee2.devices.XBeeConfig;
@@ -25,12 +24,20 @@ import com.digi.xbee.api.exceptions.TimeoutException;
 import com.digi.xbee.api.exceptions.XBeeException;
 import com.digi.xbee.api.utils.HexUtils;
 
+/**
+ * The {@link SNAVXbee2DiscoveryService } class launch Xbee discovery service and put
+ * list of device in the INBOX
+ * Some devices can be recognized using Xbee Device identifier ( DD )
+ *
+ * @author Stephan NAVARRO - Initial contribution
+ */
+
 public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2DiscoveryService.class);
-    private DiscoveryServiceCallback discoveryServiceCallback;
+    // private DiscoveryServiceCallback discoveryServiceCallback;
     private SNAVXbee2BridgeHandler bridgeHandler;
-    private boolean TRYIT = true;
+    // private boolean TRYIT = true;
     // private XBeeNetwork xbeeNetwork;
 
     public SNAVXbee2DiscoveryService(SNAVXbee2BridgeHandler bridgeHandler) {
@@ -96,24 +103,31 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                 switch (deviceTypeIdentifier) {
                     case "CAFE0002":
                         tuid = THING_TYPE_TOSR0XT;
-                        uid = new ThingUID(THING_TYPE_TOSR0XT, bridgeHandler.getThing().getUID(),
-                                remote.get64BitAddress().toString());
+                        // uid = new ThingUID(THING_TYPE_TOSR0XT, bridgeHandler.getThing().getUID(),
+                        // remote.get64BitAddress().toString());
                         thingLabel = "XBee with TosR0xT";
                         break;
                     case "CAFE1000":
                         tuid = THING_TYPE_CAFE1000;
-                        uid = new ThingUID(THING_TYPE_CAFE1000, bridgeHandler.getThing().getUID(),
-                                remote.get64BitAddress().toString());
+                        // uid = new ThingUID(THING_TYPE_CAFE1000, bridgeHandler.getThing().getUID(),
+                        // remote.get64BitAddress().toString());
                         thingLabel = "XBee with CAFE1000 controller attached";
+                        break;
+                    case "CAFE1001":
+                        tuid = THING_TYPE_CAFE1001;
+                        // uid = new ThingUID(THING_TYPE_CAFE1001, bridgeHandler.getThing().getUID(),
+                        // remote.get64BitAddress().toString());
+                        thingLabel = "XBee with CAFE1001 controller attached";
                         break;
                     default:
                         tuid = THING_TYPE_SAMPLE;
-                        uid = new ThingUID(THING_TYPE_SAMPLE, bridgeHandler.getThing().getUID(),
-                                remote.get64BitAddress().toString());
+                        // uid = new ThingUID(THING_TYPE_SAMPLE, bridgeHandler.getThing().getUID(),
+                        // remote.get64BitAddress().toString());
                         thingLabel = "default XBee";
                         break;
                 }
 
+                uid = new ThingUID(tuid, bridgeHandler.getThing().getUID(), remote.get64BitAddress().toString());
                 logger.debug("::::::::::::::::::: THingUID Discovered : {} ", uid);
 
                 if (uid != null) {

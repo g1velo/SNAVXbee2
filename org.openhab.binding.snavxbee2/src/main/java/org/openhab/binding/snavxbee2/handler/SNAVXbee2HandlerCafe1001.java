@@ -23,6 +23,7 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
+import org.eclipse.smarthome.core.transform.actions.Transformation;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xT;
 import org.openhab.binding.snavxbee2.utils.ChannelToXBeePort;
@@ -36,21 +37,22 @@ import com.digi.xbee.api.io.IOValue;
 import com.digi.xbee.api.models.XBee64BitAddress;
 
 /**
- * The {@link SNAVXbee2Handler} is responsible for handling commands, which are
- * sent to one of the thing.
+ * The {@link SNAVXbee2HandlerCafe1001} is responsible for handling commands, which are
+ * sent to one of the thing for device identifier CAFE1001
  *
  * @author Stephan NAVARRO - Initial contribution
  */
-public class SNAVXbee2Handler extends BaseThingHandler {
+public class SNAVXbee2HandlerCafe1001 extends BaseThingHandler {
 
-    private Logger logger = LoggerFactory.getLogger(SNAVXbee2Handler.class);
+    private Logger logger = LoggerFactory.getLogger(SNAVXbee2HandlerCafe1001.class);
     private Configuration thingConfig;
     private XBee64BitAddress xbee64BitsAddress;
     private String xbeeCommand;
     private ScheduledFuture<?> refreshJob;
     private List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
+    private Transformation transform = new Transformation();
 
-    public SNAVXbee2Handler(Thing thing) {
+    public SNAVXbee2HandlerCafe1001(Thing thing) {
         super(thing);
         logger.debug("in {} method : contructor(Thing) ", this.getClass());
 
@@ -77,7 +79,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             if (this.xbeeCommand != null) {
                 logger.debug(" handler xbee64BitsAddress : {}  this.xbeeCommand : {} ", this.xbee64BitsAddress,
                         this.xbeeCommand);
-                // getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
+                getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
             }
         }
 
@@ -212,7 +214,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
 
-        if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
+        if (thing.getThingTypeUID().equals(THING_TYPE_CAFE1001)) {
             // starting automatic refresh for this device
             startAutomaticRefresh();
         }

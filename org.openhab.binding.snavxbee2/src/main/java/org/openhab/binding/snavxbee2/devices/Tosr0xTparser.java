@@ -44,14 +44,7 @@ public class Tosr0xTparser {
             ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
             channelActionToPerform.setChannelUIDToUpdate(new ChannelUID(thingUIDToUpdate + ":temperature"));
             channelActionToPerform.setState(new DecimalType(Double.valueOf(new String(xbeeMessage.getData()))));
-
-            // DecimalFormat twoDForm = new DecimalFormat("#.##");
-            // logger.debug(" Temp ::::: {} ", Double.valueOf(twoDForm.format(new String(xbeeMessage.getData()))));
-            // channelActionToPerform
-            // .setState(new DecimalType(Double.valueOf(twoDForm.format(new String(xbeeMessage.getData())))));
-
             this.listOfChannelActionToPerform.add(channelActionToPerform);
-
         }
 
         if (xbeeMessage.getData().length == 2) {

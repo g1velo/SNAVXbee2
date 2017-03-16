@@ -32,26 +32,26 @@
 		<label>SNAVXbee2 ID : 30000</label>
 		<description>Sample thing for SNAVXbee2 Binding ID : 30000</description>
 		<channels>
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -78,26 +78,26 @@
 			<channel id="temperature" typeId="temperature" />
 			<channel id="relay1" typeId="relay1" />
 			<channel id="relay2" typeId="relay2" />
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
 		</channels>
 		<config-description>
 			<parameter name="Xbee64BitsAddress" type="text" required="true">
@@ -113,47 +113,86 @@
 			</parameter>
 		</config-description>
 	</thing-type>
-
-    <thing-type id="cafe1000">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 ID : CAFE1000</label>
-        <description>Sample thing for SNAVXbee2 Binding ID : CAFE1000</description>
-        <channels>
-            <channel id="S1" typeId="S1" />
-            <channel id="S2" typeId="S2" />
-            <channel id="S3" typeId="S3" />
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+	<thing-type id="cafe1001">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : CAFE1001</label>
+		<description>Sample thing for SNAVXbee2 Binding ID : CAFE1001</description>
+		<channels>
+			<channel id="S1" typeId="S1" />
+			<channel id="S2" typeId="S2" />
+			<channel id="S3" typeId="S3" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit addrees Xbee64BitsAddress
                 </description>
-            </parameter>
-        </config-description>
-    </thing-type>
+			</parameter>
+		</config-description>
+	</thing-type>
+	<thing-type id="cafe1000">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : CAFE1000</label>
+		<description>Sample thing for SNAVXbee2 Binding ID : CAFE1000</description>
+		<channels>
+			<channel id="S1" typeId="S1" />
+			<channel id="S2" typeId="S2" />
+			<channel id="S3" typeId="S3" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit addrees Xbee64BitsAddress
+                </description>
+			</parameter>
+		</config-description>
+	</thing-type>
 
 	<thing-type id="xbeeapi">
 		<supported-bridge-type-refs>
@@ -336,19 +375,19 @@
 		<label>SNAVXbee2 Binding DIO19 port </label>
 		<description>DIO19 port for SNAVXbee2 Binding</description>
 	</channel-type>
-    <channel-type id="S1">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding switch Number 1</label>
-        <description>switch for SNAVXbee2 Binding</description>
-    </channel-type>
-<channel-type id="S2">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding switch Number 2</label>
-        <description>switch for SNAVXbee2 Binding</description>
-    </channel-type>
-<channel-type id="S3">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding switch Number 3</label>
-        <description>switch for SNAVXbee2 Binding</description>
-    </channel-type>
+	<channel-type id="S1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding switch Number 1</label>
+		<description>switch for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="S2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding switch Number 2</label>
+		<description>switch for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="S3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding switch Number 3</label>
+		<description>switch for SNAVXbee2 Binding</description>
+	</channel-type>
 </thing:thing-descriptions>

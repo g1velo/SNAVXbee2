@@ -29,6 +29,7 @@ public class SNAVXbee2BindingConstants {
     public final static ThingTypeUID THING_TYPE_BRIDGE = new ThingTypeUID(BINDING_ID, "bridge");
     public final static ThingTypeUID THING_TYPE_TOSR0XT = new ThingTypeUID(BINDING_ID, "tosr0xt");
     public final static ThingTypeUID THING_TYPE_CAFE1000 = new ThingTypeUID(BINDING_ID, "cafe1000");
+    public final static ThingTypeUID THING_TYPE_CAFE1001 = new ThingTypeUID(BINDING_ID, "cafe1001");
 
     // List of all Channel ids
     public final static String CHANNEL_1 = "channel1";
@@ -92,8 +93,13 @@ public class SNAVXbee2BindingConstants {
             AD4DIO4, AD5DIO5, DIO6, DIO7, DIO8, DIO9, PWM0DIO10, PWM1DIO11, DIO12, DIO13, DIO14, DIO15, DIO16, DIO17,
             DIO18, DIO19, S1, S2, S3);
 
-    /** Supported Things without bridge */
+    /** ALL Supported Things without bridge */
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
+            THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000, THING_TYPE_CAFE1001);
+
+    /** Per handler supported type */
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_CAFE1001 = ImmutableSet.of(THING_TYPE_CAFE1001);
+    public final static Set<ThingTypeUID> FIRST_SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
             THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000);
 
     /** Supported bridges */
@@ -101,6 +107,6 @@ public class SNAVXbee2BindingConstants {
 
     /** Supported devices (things + bridges) */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
-            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000);
+            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000, THING_TYPE_CAFE1001);
 
 }

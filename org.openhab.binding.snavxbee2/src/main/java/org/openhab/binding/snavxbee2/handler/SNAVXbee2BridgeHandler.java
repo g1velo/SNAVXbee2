@@ -40,6 +40,14 @@ import com.digi.xbee.api.listeners.IIOSampleReceiveListener;
 import com.digi.xbee.api.models.XBee64BitAddress;
 import com.digi.xbee.api.models.XBeeMessage;
 
+/**
+ * The {@link SNAVXbee2BridgeHandler} class is handling communication to the XBee world
+ * using serial port, each SNAVXbee2Handler will pass commands to the bridge to reach the
+ * Xbee device in the network
+ *
+ * @author Stephan NAVARRO - Initial contribution
+ */
+
 public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         implements IDataReceiveListener, IDiscoveryListener, IIOSampleReceiveListener {
 
@@ -206,7 +214,46 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     public synchronized void sendCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
 
-        logger.debug(" 111 Synced  sending command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
+        logger.debug("Sending Sync command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
+
+        try {
+            RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
+            if (remoteDevice != null) {
+                myDevice.sendData(remoteDevice, xbeeCommmand.getBytes());
+            }
+
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            logger.trace("Is device open ? {} ", myDevice.isOpen());
+            logger.trace("Is device receive timeout ? {}  ", myDevice.getReceiveTimeout());
+            logger.trace("Exception cause ? {} ", e.getCause());
+            logger.trace("Exception message ? {} ", e.getMessage());
+            logger.trace("Discovery running ? ? {} ", xbeeNetwork.isDiscoveryRunning());
+            logger.trace("resetting ");
+            resetXBeeDevice(xbee64BitsAddress);
+            if (!xbeeNetwork.isDiscoveryRunning()) {
+                logger.trace("running Discovery {} ");
+                xbeeNetwork.startDiscoveryProcess();
+            }
+        } catch (XBeeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method is used to change Xbee device IOLine Value
+     * the IOLine has to be configured as DIGITAL_OUT.
+     *
+     * @param xbee64BitsAddress is XBee Device XBee64BitAddress to update
+     * @param String is the IOLine to update
+     * @param iovalue is the IOValue
+     * @return Nothing.
+     */
+
+    public synchronized void sendAsyncCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
+
+        logger.debug(" sending Async command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
 
         try {
             RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
@@ -235,9 +282,17 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             e.printStackTrace();
         }
 
-        // return false;
     }
 
+    /**
+     * This method is used to change Xbee device IOLine Value
+     * the IOLine has to be configured as DIGITAL_OUT.
+     *
+     * @param xbee64BitsAddress is XBee Device XBee64BitAddress to update
+     * @param ioline is the IOLine to update
+     * @param iovalue is the IOValue
+     * @return Nothing.
+     */
     public void sendAPICommandToDevice(XBee64BitAddress xbee64BitsAddress, IOLine ioline, IOValue iovalue) {
 
         RemoteXBeeDevice remoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
@@ -318,6 +373,14 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         }
     }
 
+    /**
+     * This method is listening data coming from the Xbee Coordinator
+     * serial port.
+     * Parse it to update the right item.
+     *
+     * @param xbeeMessage is the message received on the serial port
+     * @return Nothing.
+     */
     @Override
     public void dataReceived(XBeeMessage xbeeMessage) {
         // TODO Auto-generated method stub
@@ -342,11 +405,13 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             if (thing.getConfiguration().containsKey("Xbee64BitsAddress")
                     && thing.getConfiguration().get("Xbee64BitsAddress").equals(xbeeAddressToLookup)) {
 
+                thingUIDToUpdate = thing.getUID();
+                thingToUpdate = thing;
+
+                // per ThingType action
+
                 if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
                     logger.trace("we have to update {} {} ", thing.getUID(), thing.getThingTypeUID());
-
-                    thingUIDToUpdate = thing.getUID();
-                    thingToUpdate = thing;
 
                     Tosr0xTparser tp = new Tosr0xTparser(thingToUpdate, xbeeMessage);
 
@@ -357,12 +422,15 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                                 actionToPerform.getState());
                         updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
                     }
-                }
-                if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
-                }
-                if (thing.getThingTypeUID().equals(THING_TYPE_CAFE1000)) {
 
                 }
+
+                if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
+                }
+
+                if (thing.getThingTypeUID().equals(THING_TYPE_CAFE1000)) {
+                }
+
             }
         }
     }
@@ -371,7 +439,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     public void ioSampleReceived(RemoteXBeeDevice remoteDevice, IOSample ioSample) {
         // TODO Auto-generated method stub
 
-        logger.debug("New sample received from " + remoteDevice.get64BitAddress() + " - " + ioSample);
+        logger.trace("New sample received from " + remoteDevice.get64BitAddress() + " - " + ioSample);
         Collection<Thing> things = thingRegistry.getAll();
 
         for (Thing thing : things) {
@@ -397,7 +465,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     private void startAutomaticRefresh() {
 
-        logger.trace("bridge startAutomaticRefresh()");
+        logger.debug("bridge startAutomaticRefresh()");
 
         Runnable runnable = new Runnable() {
 
@@ -405,7 +473,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             public void run() {
                 logger.trace("automatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
                 if (!xbeeNetwork.isDiscoveryRunning()) {
-                    logger.debug(" Bridge Automatic running Discovery 1");
+                    logger.trace(" Bridge Automatic running Discovery 1");
                     xbeeNetwork.startDiscoveryProcess();
                 }
             }
