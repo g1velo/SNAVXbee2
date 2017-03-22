@@ -257,7 +257,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                 getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, "b");
             }
         };
-        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 30, 450, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 30, 60, TimeUnit.SECONDS);
     }
 
 }

@@ -78,6 +78,12 @@
 			<channel id="temperature" typeId="temperature" />
 			<channel id="relay1" typeId="relay1" />
 			<channel id="relay2" typeId="relay2" />
+			<channel id="relay1" typeId="relay3" />
+            <channel id="relay2" typeId="relay4" />
+            <channel id="relay1" typeId="relay5" />
+            <channel id="relay2" typeId="relay6" />
+            <channel id="relay1" typeId="relay7" />
+            <channel id="relay2" typeId="relay8" />
 			<channel id="AD0DIO0" typeId="AD0DIO0" />
 			<channel id="AD1DIO1" typeId="AD1DIO1" />
 			<channel id="AD2DIO2" typeId="AD2DIO2" />
