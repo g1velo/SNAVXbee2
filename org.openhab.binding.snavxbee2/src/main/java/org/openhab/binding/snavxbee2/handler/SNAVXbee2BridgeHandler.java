@@ -338,7 +338,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         PORT = portconfig.serialPort;
         BAUD_RATE = Integer.valueOf(portconfig.baudRate);
 
-        logger.trace(" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ");
+        // logger.trace(" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ");
         logger.trace(" In the brige, Initialising config : " + portconfig.serialPort + " " + portconfig.baudRate);
 
         try {
@@ -353,6 +353,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             myDevice.addDataListener(this);
             myDevice.addIOSampleListener(this);
             this.xbeeNetwork = myDevice.getNetwork();
+            myDevice.setReceiveTimeout(10000);
 
             xbeeNetwork.startDiscoveryProcess();
 
@@ -389,18 +390,20 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         ThingUID thingUIDToUpdate = null;
         String channelToUpdate = null;
 
-        logger.trace("dataReceived bridge method");
+        logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
+
+        // if (xbeeMessage.getDevice().get64BitAddress().toString().equals("0013A20041472E56")) {
+        logger.trace("dataReceived : {} ", xbeeMessage.getData());
+        // }
 
         Collection<Thing> things = thingRegistry.getAll();
 
-        logger.trace(" number of things in the collection : {} ", things.size());
+        // logger.trace(" number of things in the collection : {} ", things.size());
 
         String xbeeAddressToLookup = xbeeMessage.getDevice().get64BitAddress().toString();
 
         // Looking up for thing with the matching address
         for (Thing thing : things) {
-
-            logger.trace(" tuid found in thing registry : {} ", thing.getThingTypeUID());
 
             if (thing.getConfiguration().containsKey("Xbee64BitsAddress")
                     && thing.getConfiguration().get("Xbee64BitsAddress").equals(xbeeAddressToLookup)) {
@@ -409,17 +412,16 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 thingToUpdate = thing;
 
                 // per ThingType action
-
                 if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
-                    logger.trace("we have to update {} {} ", thing.getUID(), thing.getThingTypeUID());
+                    // logger.trace("we have to update {} {} ", thing.getUID(), thing.getThingTypeUID());
 
                     Tosr0xTparser tp = new Tosr0xTparser(thingToUpdate, xbeeMessage);
-
                     ArrayList<ChannelActionToPerform> listOfActionToPerform = tp.getListOfChannelActionToPerform();
 
                     for (ChannelActionToPerform actionToPerform : listOfActionToPerform) {
-                        logger.trace("channel to update : {} to value : {} ", actionToPerform.getChannelUIDToUpdate(),
-                                actionToPerform.getState());
+                        // logger.trace("channel to update : {} to value : {} ",
+                        // actionToPerform.getChannelUIDToUpdate(),
+                        // actionToPerform.getState());
                         updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
                     }
 

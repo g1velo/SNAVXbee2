@@ -1,5 +1,6 @@
 package org.openhab.binding.snavxbee2.devices;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -41,9 +42,16 @@ public class Tosr0xTparser {
 
         if (xbeeMessage.getData().length == 7) {
 
+            // rounding temperature value to 2 decimal
+            double temp = Double.valueOf(new String(xbeeMessage.getData()));
+            BigDecimal decimal_temp = new BigDecimal(temp);
+
             ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
             channelActionToPerform.setChannelUIDToUpdate(new ChannelUID(thingUIDToUpdate + ":temperature"));
-            channelActionToPerform.setState(new DecimalType(Double.valueOf(new String(xbeeMessage.getData()))));
+
+            // channelActionToPerform.setState(new DecimalType(Double.valueOf(new String(xbeeMessage.getData()))));
+            channelActionToPerform.setState(new DecimalType(decimal_temp.setScale(1, BigDecimal.ROUND_HALF_EVEN)));
+
             this.listOfChannelActionToPerform.add(channelActionToPerform);
         }
 
@@ -53,10 +61,12 @@ public class Tosr0xTparser {
             Byte msb = xbeeMessage.getData()[0];
             Byte lsb = xbeeMessage.getData()[1];
 
-            float temperature = (msb.floatValue() * 256 + lsb.floatValue()) / 16;
+            double temperature = (msb.floatValue() * 256 + lsb.floatValue()) / 16;
+            BigDecimal decimal_temp = new BigDecimal(temperature);
+
             ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
             channelActionToPerform.setChannelUIDToUpdate(new ChannelUID(thingUIDToUpdate + ":temperature"));
-            channelActionToPerform.setState(new DecimalType(temperature));
+            channelActionToPerform.setState(new DecimalType(decimal_temp.setScale(1, BigDecimal.ROUND_HALF_EVEN)));
             listOfChannelActionToPerform.add(channelActionToPerform);
         }
 

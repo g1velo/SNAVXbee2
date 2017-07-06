@@ -30,6 +30,7 @@ public class SNAVXbee2BindingConstants {
     public final static ThingTypeUID THING_TYPE_TOSR0XT = new ThingTypeUID(BINDING_ID, "tosr0xt");
     public final static ThingTypeUID THING_TYPE_CAFE1000 = new ThingTypeUID(BINDING_ID, "cafe1000");
     public final static ThingTypeUID THING_TYPE_CAFE1001 = new ThingTypeUID(BINDING_ID, "cafe1001");
+    public final static ThingTypeUID THING_TYPE_CAFE0EDF = new ThingTypeUID(BINDING_ID, "cafe0EDF");
 
     // List of all Channel ids
     public final static String CHANNEL_1 = "channel1";
@@ -66,6 +67,32 @@ public class SNAVXbee2BindingConstants {
     public final static String S2 = "S2";
     public final static String S3 = "S3";
 
+    public final static String ADCO = "ADC0";
+    public final static String OPTARIF = "OPTARIF ";
+    public final static String ISOUSC = "ISOUSC";
+    public final static String BASE = "BASE";
+    public final static String HCHC = "HCHC";
+    public final static String HCHP = "HCHP";
+    public final static String EJPHN = "EJPHN";
+    public final static String EJPHPM = "EJPHPM";
+    public final static String BBRHCJB = "BBRHCJB ";
+    public final static String BBRHPJB = "BBRHPJB";
+    public final static String BBRHCJW = "BBRHCJW";
+    public final static String BBRHPJW = "BBRHPJW";
+    public final static String BBRHCJR = "BBRHCJR";
+    public final static String BBRHPJR = "BBRHPJR";
+    public final static String PEJP = "PEJP";
+    public final static String PTEC = "PTEC";
+    public final static String DEMAIN = "DEMAIN";
+    public final static String IINST = "IINST";
+    public final static String ADPS = "ADPS";
+    public final static String IMAX = "IMAX";
+    public final static String HHPHC = "HHPHC";
+    public final static String PMAX = "PMAX";
+    public final static String MOTDETAT = "MOTDETAT";
+    public final static String PAPP = "PAPP";
+    public final static String PPOT = "PPOT";
+
     public final static String HUMIDITY = "humidity";
     public final static String LIGHT = "light";
     public final static String ANALOG_TEMPERATURE = "analog_temperature";
@@ -75,14 +102,13 @@ public class SNAVXbee2BindingConstants {
 
     // supported channels for tosr0xt devices;
     // Not really sure that it is usefull
+
     public static final Set<String> SUPPORTED_TOSR0XT_CHANNELS = ImmutableSet.of(TEMPERATURE, RELAY1, RELAY2, RELAY3,
             RELAY4, RELAY5, RELAY6, RELAY7, RELAY8, AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3, AD4DIO4, AD5DIO5, PWM0DIO10,
             PWM1DIO11, DIO12);
     public static final Set<String> SUPPORTED_TOSR0XT_RELAY_CHANNELS = ImmutableSet.of(RELAY1, RELAY2, RELAY3, RELAY4,
             RELAY5, RELAY6, RELAY7, RELAY8);
 
-    // supported channels for generic devices;
-    // Not really sure that it is usefull
     public static final Set<String> SUPPORTED_SAMPLE_CHANNELS = ImmutableSet.of(AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3,
             AD4DIO4, AD5DIO5, DIO6, DIO7, DIO8, DIO9, PWM0DIO10, PWM1DIO11, DIO12, DIO13, DIO14, DIO15, DIO16, DIO17,
             DIO18, DIO19);
@@ -90,6 +116,11 @@ public class SNAVXbee2BindingConstants {
     // supported channels for CAFEdevices;
     // CAFE1000 / cafe1000
     public static final Set<String> SUPPORTED_CAFE1000_CHANNELS = ImmutableSet.of(AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3,
+            AD4DIO4, AD5DIO5, DIO6, DIO7, DIO8, DIO9, PWM0DIO10, PWM1DIO11, DIO12, DIO13, DIO14, DIO15, DIO16, DIO17,
+            DIO18, DIO19, S1, S2, S3);
+
+    // supported channels for CAFE0EDF devices ( Teleinformation EDF France);
+    public static final Set<String> SUPPORTED_CAFE0EDF_CHANNELS = ImmutableSet.of(AD0DIO0, AD1DIO1, AD2DIO2, AD3DIO3,
             AD4DIO4, AD5DIO5, DIO6, DIO7, DIO8, DIO9, PWM0DIO10, PWM1DIO11, DIO12, DIO13, DIO14, DIO15, DIO16, DIO17,
             DIO18, DIO19, S1, S2, S3);
 
@@ -101,12 +132,14 @@ public class SNAVXbee2BindingConstants {
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_CAFE1001 = ImmutableSet.of(THING_TYPE_CAFE1001);
     public final static Set<ThingTypeUID> FIRST_SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
             THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000);
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_CAFE0EDF = ImmutableSet.of(THING_TYPE_CAFE0EDF);
 
     /** Supported bridges */
     public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_BRIDGE);
 
     /** Supported devices (things + bridges) */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
-            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000, THING_TYPE_CAFE1001);
+            THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000, THING_TYPE_CAFE1001,
+            THING_TYPE_CAFE0EDF);
 
 }

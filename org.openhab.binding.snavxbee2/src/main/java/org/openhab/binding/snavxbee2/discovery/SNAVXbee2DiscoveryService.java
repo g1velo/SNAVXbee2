@@ -72,7 +72,7 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
             while (xbeeDeviceListIterator.hasNext()) {
 
                 RemoteXBeeDevice remote = xbeeDeviceListIterator.next();
-                String deviceTypeIdentifier = "X";
+                remote.String deviceTypeIdentifier = "X";
 
                 try {
 
