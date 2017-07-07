@@ -72,7 +72,8 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
             while (xbeeDeviceListIterator.hasNext()) {
 
                 RemoteXBeeDevice remote = xbeeDeviceListIterator.next();
-                remote.String deviceTypeIdentifier = "X";
+
+                String deviceTypeIdentifier = "X";
 
                 try {
 
@@ -118,6 +119,12 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                         // uid = new ThingUID(THING_TYPE_CAFE1001, bridgeHandler.getThing().getUID(),
                         // remote.get64BitAddress().toString());
                         thingLabel = "XBee with CAFE1001 controller attached";
+                        break;
+                    case "CAFE0EDF":
+                        tuid = THING_TYPE_CAFE0EDF;
+                        // uid = new ThingUID(THING_TYPE_CAFE1001, bridgeHandler.getThing().getUID(),
+                        // remote.get64BitAddress().toString());
+                        thingLabel = "XBee controller attached To teleinfo EDF";
                         break;
                     default:
                         tuid = THING_TYPE_SAMPLE;

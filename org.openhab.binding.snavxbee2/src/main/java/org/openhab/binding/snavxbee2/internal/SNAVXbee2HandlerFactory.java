@@ -23,6 +23,7 @@ import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.snavxbee2.discovery.SNAVXbee2DiscoveryService;
 import org.openhab.binding.snavxbee2.handler.SNAVXbee2BridgeHandler;
 import org.openhab.binding.snavxbee2.handler.SNAVXbee2Handler;
+import org.openhab.binding.snavxbee2.handler.SNAVXbee2HandlerCafe0EDF;
 import org.openhab.binding.snavxbee2.handler.SNAVXbee2HandlerCafe1001;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
@@ -41,9 +42,6 @@ public class SNAVXbee2HandlerFactory extends BaseThingHandlerFactory {
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
-
-        // logger.debug("!! thingTypeUID : {} SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID) : {} ", thingTypeUID,
-        // SUPPORTED_DEVICE_TYPES_UIDS.contains(thingTypeUID));
         return SUPPORTED_DEVICE_TYPES_UIDS.contains(thingTypeUID);
     }
 
@@ -57,8 +55,12 @@ public class SNAVXbee2HandlerFactory extends BaseThingHandlerFactory {
         if (FIRST_SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
             return new SNAVXbee2Handler(thing);
         }
+
         if (SUPPORTED_THING_TYPES_CAFE1001.contains(thingTypeUID)) {
             return new SNAVXbee2HandlerCafe1001(thing);
+        }
+        if (SUPPORTED_THING_TYPES_CAFE0EDF.contains(thingTypeUID)) {
+            return new SNAVXbee2HandlerCafe0EDF(thing);
         }
 
         if (SUPPORTED_BRIDGE_THING_TYPES_UIDS.contains(thingTypeUID)) {

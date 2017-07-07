@@ -390,13 +390,15 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         ThingUID thingUIDToUpdate = null;
         String channelToUpdate = null;
 
-        logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
+        // logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
 
         // if (xbeeMessage.getDevice().get64BitAddress().toString().equals("0013A20041472E56")) {
-        logger.trace("dataReceived : {} ", xbeeMessage.getData());
+        logger.debug("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
+                xbeeMessage.getData());
         // }
 
         Collection<Thing> things = thingRegistry.getAll();
+        // thingRegistry.
 
         // logger.trace(" number of things in the collection : {} ", things.size());
 
@@ -430,7 +432,9 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
                 }
 
-                if (thing.getThingTypeUID().equals(THING_TYPE_CAFE1000)) {
+                if (thing.getThingTypeUID().equals(THING_TYPE_CAFE0EDF)) {
+                    // logger.debug("thing.getUID() : {} ", thing.getUID());
+                    // String msg = new String(xbeeMessage.getData(), "UTF-8");
                 }
 
             }
