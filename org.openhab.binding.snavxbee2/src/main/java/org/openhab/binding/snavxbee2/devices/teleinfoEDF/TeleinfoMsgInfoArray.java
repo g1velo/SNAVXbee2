@@ -1,13 +1,16 @@
 package org.openhab.binding.snavxbee2.devices.teleinfoEDF;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TeleinfoMsgInfoArray {
 
     private List<TeleinfoMsgInfo> teleInfoMsgList = new ArrayList<TeleinfoMsgInfo>();
     public TeleinfoMsgInfo timsg = new TeleinfoMsgInfo();
+    private Logger logger = LoggerFactory.getLogger(TeleinfoMsgInfoArray.class);
 
     private static String ADCO = "Adresse du compteur";
     private static String OPTARIF = "Option tarifaire choisie";
@@ -84,7 +87,6 @@ public class TeleinfoMsgInfoArray {
     public int getLength(String messageID) {
         // TODO Auto-generated method stub
         // return super.toString();
-        Iterator<TeleinfoMsgInfo> iterator = this.teleInfoMsgList.iterator();
         int l = 0;
 
         for (TeleinfoMsgInfo msg : this.teleInfoMsgList) {
@@ -102,6 +104,34 @@ public class TeleinfoMsgInfoArray {
         }
 
         return l;
+    }
+
+    public boolean match(String messageID) {
+        boolean found = false;
+
+        for (TeleinfoMsgInfo msg : this.teleInfoMsgList) {
+            if (msg.getMessageID().equals(messageID)) {
+                found = true;
+            }
+        }
+
+        if (!found) {
+            logger.debug("Could not find message : {}", messageID);
+        }
+
+        return found;
+    }
+
+    public TeleinfoMsgInfo messageIDLookup(String messageID) {
+        TeleinfoMsgInfo tim = new TeleinfoMsgInfo();
+
+        for (TeleinfoMsgInfo msg : this.teleInfoMsgList) {
+            if (msg.getMessageID().equals(messageID)) {
+                tim = msg;
+            }
+        }
+
+        return tim;
     }
 
 }

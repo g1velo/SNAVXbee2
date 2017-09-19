@@ -9,6 +9,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.core.Configuration;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -17,6 +18,7 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xTparser;
+import org.openhab.binding.snavxbee2.devices.teleinfoEDF.TeleinfoEDFParser;
 import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.openhab.binding.snavxbee2.utils.RCAndIOValue;
@@ -63,6 +65,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     private XBeeNetwork xbeeNetwork = null;
     private List<RemoteXBeeDevice> remoteDeviceList;
     private ScheduledFuture<?> refreshJob;
+    private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
 
     public SNAVXbee2BridgeHandler(Bridge bridge) {
         super(bridge);
@@ -393,14 +396,11 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         // logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
 
         // if (xbeeMessage.getDevice().get64BitAddress().toString().equals("0013A20041472E56")) {
-        logger.debug("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
+        logger.trace("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
                 xbeeMessage.getData());
         // }
 
-        Collection<Thing> things = thingRegistry.getAll();
-        // thingRegistry.
-
-        // logger.trace(" number of things in the collection : {} ", things.size());
+        Collection<Thing> things = getThing().getThings();
 
         String xbeeAddressToLookup = xbeeMessage.getDevice().get64BitAddress().toString();
 
@@ -434,7 +434,19 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
                 if (thing.getThingTypeUID().equals(THING_TYPE_CAFE0EDF)) {
                     // logger.debug("thing.getUID() : {} ", thing.getUID());
-                    // String msg = new String(xbeeMessage.getData(), "UTF-8");
+
+                    // thingToUpdate.getHandler(). // .handleUpdate(new ChannelUID(thingUIDToUpdate + ":ADCO"),
+                    // new StringType(msg));
+                    // if (xbeeMessage.getDevice().get64BitAddress()toString().equals("))
+                    // SNAVXbee2HandlerCafe0EDF tedf = (SNAVXbee2HandlerCafe0EDF) thingToUpdate.getHandler();
+                    // tedf.sendMessage(xbeeMessage.getData());
+                    // teleinfoParser.putMessage(xbeeMessage.getData());
+                    // logger.debug("MSG : {} ", Thread.currentThread().getName().split("-")[1]);
+                    logger.debug("MSG : {} ", thingUIDToUpdate + ":ADCO");
+
+                    updateState(thingUIDToUpdate + ":ADCO",
+                            new DecimalType(Integer.valueOf(Thread.currentThread().getName().split("-")[1])));
+
                 }
 
             }

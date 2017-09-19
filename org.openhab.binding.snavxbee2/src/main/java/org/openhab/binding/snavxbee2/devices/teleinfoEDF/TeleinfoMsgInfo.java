@@ -6,6 +6,7 @@ public class TeleinfoMsgInfo {
     public int length;
     public String unit;
     public String messageID;
+    public String value;
 
     public TeleinfoMsgInfo() {
         super();
@@ -52,6 +53,14 @@ public class TeleinfoMsgInfo {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
 }

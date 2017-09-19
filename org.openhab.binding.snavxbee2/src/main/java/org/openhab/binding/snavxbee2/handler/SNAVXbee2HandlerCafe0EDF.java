@@ -9,6 +9,7 @@ package org.openhab.binding.snavxbee2.handler;
 
 import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.THING_TYPE_CAFE0EDF;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,8 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.transform.actions.Transformation;
 import org.eclipse.smarthome.core.types.Command;
+import org.openhab.binding.snavxbee2.devices.teleinfoEDF.TeleinfoEDFParser;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class SNAVXbee2HandlerCafe0EDF extends BaseThingHandler {
     private String xbeeCommand;
     private ScheduledFuture<?> refreshJob;
     private List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
-    private Transformation transform = new Transformation();
+    private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
 
     public SNAVXbee2HandlerCafe0EDF(Thing thing) {
         super(thing);
@@ -58,8 +59,9 @@ public class SNAVXbee2HandlerCafe0EDF extends BaseThingHandler {
         // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
         // "Could not control device at IP address x.x.x.x");
 
-        if (thing.getThingTypeUID().equals(THING_TYPE_CAFE0EDF)) {
+        logger.debug("This channel  : {}  received command : {} ", channelUID.getId(), command);
 
+        if (thing.getThingTypeUID().equals(THING_TYPE_CAFE0EDF)) {
             logger.debug("This channel  : " + channelUID.getId() + " is readonly");
         }
 
@@ -77,17 +79,11 @@ public class SNAVXbee2HandlerCafe0EDF extends BaseThingHandler {
         // "Can not access device as username and/or password are invalid");
 
         thingConfig = thing.getConfiguration();
-
         Map<String, Object> m = thing.getConfiguration().getProperties();
-
         logger.debug(" Number of things in config : {} ", m.size());
-
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
-
         // Getting IOline configuration
-
         updateStatus(ThingStatus.ONLINE);
-
     }
 
     @Override
@@ -95,6 +91,19 @@ public class SNAVXbee2HandlerCafe0EDF extends BaseThingHandler {
         // TODO Auto-generated method stub
         // refreshJob.cancel(true);
         super.dispose();
+    }
+
+    public void sendMessage(byte[] message) {
+
+        long startTime = System.nanoTime();
+        try {
+            logger.trace("here : {} ", new String(message, "UTF-8"));
+            teleinfoParser.putMessage(message);
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        logger.debug("ellapsed : {} ", (System.nanoTime() - startTime) / 1000);
     }
 
     public synchronized SNAVXbee2BridgeHandler getBridgeHandler() {

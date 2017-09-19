@@ -433,17 +433,17 @@
         <description>switch for SNAVXbee2 Binding</description>
     </channel-type>
     <channel-type id="ADCO">
-        <item-type>SwitchItem</item-type>
+        <item-type>Decimal</item-type>
         <label> Identifiant du compteur</label>
         <description> Identifiant du compteur</description>
     </channel-type>
     <channel-type id="OPTARIF">
-        <item-type>SwitchItem</item-type>
+        <item-type>String</item-type>
         <label> Option tarifaire (type d’abonnement)</label>
         <description> Option tarifaire (type d’abonnement)</description>
     </channel-type>
     <channel-type id="ISOUSC">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Intensité souscrite</label>
         <description> Intensité souscrite</description>
     </channel-type>
@@ -468,37 +468,37 @@
         <description> Index heures normales si option = EJP (en Wh)</description>
     </channel-type>
     <channel-type id="EJP_HPM">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures de pointe mobile si option = EJP (en Wh)</label>
         <description> Index heures de pointe mobile si option = EJP (en Wh)</description>
     </channel-type>
     <channel-type id="BBR_HC_JB">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures creuses jours bleus si option = tempo (en Wh)</label>
         <description> Index heures creuses jours bleus si option = tempo (en Wh)</description>
     </channel-type>
     <channel-type id="BBR_HP_JB">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures pleines jours bleus si option = tempo (en Wh)</label>
         <description> Index heures pleines jours bleus si option = tempo (en Wh)</description>
     </channel-type>
     <channel-type id="BBR_HC_JW">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures creuses jours blancs si option = tempo (en Wh)</label>
         <description> Index heures creuses jours blancs si option = tempo (en Wh)</description>
     </channel-type>
     <channel-type id="BBR_HP_JW">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures pleines jours blancs si option = tempo (en Wh)</label>
         <description> Index heures pleines jours blancs si option = tempo (en Wh)</description>
     </channel-type>
     <channel-type id="BBR_HC_JR">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures creuses jours rouges si option = tempo  (en Wh)</label>
         <description> Index heures creuses jours rouges si option = tempo  (en Wh)</description>
     </channel-type>
     <channel-type id="BBR_HP_JR">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Index heures pleines jours rouges si option = tempo (en Wh)</label>
         <description> Index heures pleines jours rouges si option = tempo (en Wh)</description>
     </channel-type>
@@ -518,7 +518,7 @@
         <description> Couleur du lendemain si option = tempo</description>
     </channel-type>
     <channel-type id="IINST">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Intensité instantanée (en ampères)</label>
         <description> Intensité instantanée (en ampères)</description>
     </channel-type>
@@ -528,12 +528,12 @@
         <description> Avertissement de dépassement de puissance souscrite (en ampères)</description>
     </channel-type>
     <channel-type id="IMAX">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Intensité maximale (en ampères)</label>
         <description> Intensité maximale (en ampères)</description>
     </channel-type>
     <channel-type id="PAPP">
-        <item-type>SwitchItem</item-type>
+        <item-type>Number</item-type>
         <label> Puissance apparente (en Volt.ampères)</label>
         <description> Puissance apparente (en Volt.ampères)</description>
     </channel-type>
