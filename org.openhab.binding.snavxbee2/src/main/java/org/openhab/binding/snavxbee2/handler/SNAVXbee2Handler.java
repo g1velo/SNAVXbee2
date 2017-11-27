@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -203,7 +204,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         Map<String, Object> m = thing.getConfiguration().getProperties();
 
-        logger.debug(" Number of things in config : {} ", m.size());
+        logger.trace(" Number of things in config : {} ", m.size());
 
         for (String key : m.keySet()) {
             logger.debug(" SN KKKEYS : {} ", key);
@@ -258,6 +259,25 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             }
         };
         refreshJob = scheduler.scheduleWithFixedDelay(runnable, 30, 60, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void handleConfigurationUpdate(Map<String, Object> configurationParmeters) {
+        // can be overridden by subclasses
+        logger.info("handle ConfigurationUpdate ");
+        Configuration configuration = editConfiguration();
+        for (Entry<String, Object> configurationParmeter : configurationParmeters.entrySet()) {
+            logger.info("updating : {} with : {} ", configurationParmeter.getKey(), configurationParmeter.getValue());
+            configuration.put(configurationParmeter.getKey(), configurationParmeter.getValue());
+            if (configurationParmeter.getKey().equals("Reset")) {
+                logger.info("doing something to Reset DS11");
+            }
+        }
+
+        // reinitialize with new configuration and persist changes
+        dispose();
+        updateConfiguration(configuration);
+        initialize();
     }
 
 }

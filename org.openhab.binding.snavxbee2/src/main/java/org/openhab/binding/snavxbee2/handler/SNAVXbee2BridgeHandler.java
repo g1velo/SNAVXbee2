@@ -75,7 +75,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     public List<RemoteXBeeDevice> startSearch(int timeout) {
 
-        logger.trace("StartSerach in Bridge Handler 1");
+        logger.trace("Start Search in Bridge Handler");
 
         if (!xbeeNetwork.isDiscoveryRunning()) {
 
@@ -112,7 +112,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     @Override
     public void deviceDiscovered(RemoteXBeeDevice discoveredDevice) {
 
-        logger.trace(" devices discoverered  12 : {} {}", discoveredDevice.getNodeID(),
+        logger.debug(" devices discoverered  12 : {} {}", discoveredDevice.getNodeID(),
                 discoveredDevice.get64BitAddress());
 
     }
@@ -396,7 +396,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         // logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
 
         // if (xbeeMessage.getDevice().get64BitAddress().toString().equals("0013A20041472E56")) {
-        logger.trace("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
+        logger.debug("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
                 xbeeMessage.getData());
         // }
 
@@ -457,7 +457,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     public void ioSampleReceived(RemoteXBeeDevice remoteDevice, IOSample ioSample) {
         // TODO Auto-generated method stub
 
-        logger.trace("New sample received from " + remoteDevice.get64BitAddress() + " - " + ioSample);
+        logger.debug("New Sample received from " + remoteDevice.get64BitAddress() + " - " + ioSample);
         Collection<Thing> things = thingRegistry.getAll();
 
         for (Thing thing : things) {

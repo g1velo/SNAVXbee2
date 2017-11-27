@@ -65,6 +65,12 @@
                 <label>Xbee IOChannel</label>
                 <description>The IOChannel of the Xbee Device </description>
             </parameter>
+            <parameter name="Reset" type="boolean" required="true">
+                <context>ResetContext</context>
+                <label>ResetLabel</label>
+                <description>In Case Thing is offline and should not try to set to true</description>
+                <default>false</default>
+            </parameter>
         </config-description>
     </thing-type>
 
