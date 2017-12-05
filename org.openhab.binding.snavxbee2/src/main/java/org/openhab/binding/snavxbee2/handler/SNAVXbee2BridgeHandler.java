@@ -369,7 +369,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         }
 
         if (myDevice.isOpen()) {
-            logger.debug("Port {} open, ", PORT);
+            logger.info("Port {} open, ", PORT);
             updateStatus(ThingStatus.ONLINE);
             startAutomaticRefresh();
         } else {
@@ -391,7 +391,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
         Thing thingToUpdate = null;
         ThingUID thingUIDToUpdate = null;
-        String channelToUpdate = null;
+        // String channelToUpdate = null;
 
         // logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
 
@@ -489,7 +489,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
             @Override
             public void run() {
-                logger.trace("automatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
+                logger.debug("automatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
                 if (!xbeeNetwork.isDiscoveryRunning()) {
                     logger.trace(" Bridge Automatic running Discovery 1");
                     xbeeNetwork.startDiscoveryProcess();
@@ -497,7 +497,31 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             }
         };
 
+        Runnable checkXBeeNetwork = new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                logger.debug("checking Network: {} ", xbeeNetwork.getDevices().size());
+                for (RemoteXBeeDevice xBeeDev : xbeeNetwork.getDevices()) {
+
+                    try {
+                        logger.info(" readDeviceInfo for : {} ", xBeeDev.get64BitAddress().toString());
+                        xBeeDev.readDeviceInfo();
+                    } catch (TimeoutException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (XBeeException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        };
+
         refreshJob = scheduler.scheduleWithFixedDelay(runnable, 60, 300, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleWithFixedDelay(checkXBeeNetwork, 10, 10, TimeUnit.SECONDS);
 
     }
 }
