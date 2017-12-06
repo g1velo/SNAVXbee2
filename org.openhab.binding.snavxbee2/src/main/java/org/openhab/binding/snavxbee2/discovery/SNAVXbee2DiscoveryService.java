@@ -140,13 +140,13 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                 if (uid != null) {
                     Map<String, Object> properties = new HashMap<>(2);
                     properties.put(PARAMETER_XBEE64BITSADDRESS, remote.get64BitAddress().toString());
-                    properties.put(PARAMETER_IOCHANNEL, "not used yet");
+                    properties.put(PARAMETER_RESETXBEE, false);
 
                     XBeeConfig xbeeCfg = new XBeeConfig(tuid, remote);
 
-                    DiscoveryResult result = DiscoveryResultBuilder.create(uid)
-                            .withProperties(properties).withLabel(thingLabel + " " + remote.getNodeID() + " "
-                                    + remote.get64BitAddress().toString() + " " + deviceTypeIdentifier)
+                    DiscoveryResult result = DiscoveryResultBuilder
+                            .create(uid).withProperties(properties).withLabel(thingLabel + " " + remote.getNodeID()
+                                    + " " + remote.get64BitAddress().toString() + " " + deviceTypeIdentifier)
                             .withBridge(bridgeHandler.getThing().getUID()).build();
                     thingDiscovered(result);
 

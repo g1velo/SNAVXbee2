@@ -1,15 +1,21 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api;
+
+import java.net.Inet6Address;
 
 import com.digi.xbee.api.exceptions.TimeoutException;
 import com.digi.xbee.api.exceptions.XBeeException;
@@ -21,13 +27,17 @@ import com.digi.xbee.api.models.XBeeProtocol;
 /**
  * This class represents a remote ZigBee device.
  * 
- * @see RemoteXBeeDevice
  * @see RemoteDigiMeshDevice
  * @see RemoteDigiPointDevice
  * @see RemoteRaw802Device
+ * @see RemoteThreadDevice
+ * @see RemoteXBeeDevice
  */
 public class RemoteZigBeeDevice extends RemoteXBeeDevice {
 
+	// Constants
+	private static final String OPERATION_EXCEPTION = "Operation not supported in ZigBee protocol.";
+	
 	/**
 	 * Class constructor. Instantiates a new {@code RemoteZigBeeDevice} object 
 	 * with the given local {@code ZigBeeDevice} which contains the connection 
@@ -129,5 +139,36 @@ public class RemoteZigBeeDevice extends RemoteXBeeDevice {
 	@Override
 	public void forceDisassociate() throws TimeoutException, XBeeException {
 		super.forceDisassociate();
+	}
+	
+	/**
+	 * @deprecated ZigBee protocol does not have an associated IPv6 address.
+	 */
+	@Override
+	public Inet6Address getIPv6Address() {
+		// ZigBee protocol does not have IPv6 address.
+		return null;
+	}
+	
+	/**
+	 * @deprecated Operation not supported in ZigBee protocol. This method
+	 *             will raise an {@link UnsupportedOperationException}.
+	 */
+	@Override
+	public Inet6Address getIPv6DestinationAddress()
+			throws TimeoutException, XBeeException {
+		// Not supported in ZigBee.
+		throw new UnsupportedOperationException(OPERATION_EXCEPTION);
+	}
+	
+	/**
+	 * @deprecated Operation not supported in ZigBee protocol. This method
+	 *             will raise an {@link UnsupportedOperationException}.
+	 */
+	@Override
+	public void setIPv6DestinationAddress(Inet6Address ipv6Address)
+			throws TimeoutException, XBeeException {
+		// Not supported in ZigBee.
+		throw new UnsupportedOperationException(OPERATION_EXCEPTION);
 	}
 }

@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api.packet.common;
 
@@ -26,7 +30,6 @@ import com.digi.xbee.api.models.XBee16BitAddress;
 import com.digi.xbee.api.models.XBee64BitAddress;
 import com.digi.xbee.api.packet.APIFrameType;
 import com.digi.xbee.api.packet.XBeeAPIPacket;
-import com.digi.xbee.api.packet.raw.RX64Packet;
 import com.digi.xbee.api.utils.ByteUtils;
 import com.digi.xbee.api.utils.HexUtils;
 
@@ -69,7 +72,7 @@ public class IODataSampleRxIndicatorPacket extends XBeeAPIPacket {
 	 *                corresponding to a IO Data Sample RX Indicator packet ({@code 0x92}).
 	 *                The byte array must be in {@code OperatingMode.API} mode.
 	 * 
-	 * @return Parsed ZigBee Receive packet.
+	 * @return Parsed IO Data Sample Rx Indicator packet.
 	 * 
 	 * @throws IllegalArgumentException if {@code payload[0] != APIFrameType.IO_DATA_SAMPLE_RX_INDICATOR.getValue()} or
 	 *                                  if {@code payload.length < }{@value #MIN_API_PAYLOAD_LENGTH} or
@@ -147,7 +150,7 @@ public class IODataSampleRxIndicatorPacket extends XBeeAPIPacket {
 			ioSample = new IOSample(rfData);
 		else
 			ioSample = null;
-		this.logger = LoggerFactory.getLogger(RX64Packet.class);
+		this.logger = LoggerFactory.getLogger(IODataSampleRxIndicatorPacket.class);
 	}
 	
 	/*

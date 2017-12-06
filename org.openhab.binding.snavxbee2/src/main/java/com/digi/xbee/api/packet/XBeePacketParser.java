@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api.packet;
 
@@ -19,6 +23,8 @@ import java.util.Date;
 import com.digi.xbee.api.exceptions.InvalidPacketException;
 import com.digi.xbee.api.models.SpecialByte;
 import com.digi.xbee.api.models.OperatingMode;
+import com.digi.xbee.api.packet.cellular.RXSMSPacket;
+import com.digi.xbee.api.packet.cellular.TXSMSPacket;
 import com.digi.xbee.api.packet.common.ATCommandPacket;
 import com.digi.xbee.api.packet.common.ATCommandQueuePacket;
 import com.digi.xbee.api.packet.common.ATCommandResponsePacket;
@@ -31,6 +37,14 @@ import com.digi.xbee.api.packet.common.RemoteATCommandPacket;
 import com.digi.xbee.api.packet.common.RemoteATCommandResponsePacket;
 import com.digi.xbee.api.packet.common.TransmitPacket;
 import com.digi.xbee.api.packet.common.TransmitStatusPacket;
+import com.digi.xbee.api.packet.devicecloud.DeviceRequestPacket;
+import com.digi.xbee.api.packet.devicecloud.DeviceResponsePacket;
+import com.digi.xbee.api.packet.devicecloud.DeviceResponseStatusPacket;
+import com.digi.xbee.api.packet.devicecloud.FrameErrorPacket;
+import com.digi.xbee.api.packet.devicecloud.SendDataRequestPacket;
+import com.digi.xbee.api.packet.devicecloud.SendDataResponsePacket;
+import com.digi.xbee.api.packet.ip.RXIPv4Packet;
+import com.digi.xbee.api.packet.ip.TXIPv4Packet;
 import com.digi.xbee.api.packet.raw.RX16IOPacket;
 import com.digi.xbee.api.packet.raw.RX16Packet;
 import com.digi.xbee.api.packet.raw.RX64IOPacket;
@@ -38,6 +52,16 @@ import com.digi.xbee.api.packet.raw.RX64Packet;
 import com.digi.xbee.api.packet.raw.TX16Packet;
 import com.digi.xbee.api.packet.raw.TX64Packet;
 import com.digi.xbee.api.packet.raw.TXStatusPacket;
+import com.digi.xbee.api.packet.thread.CoAPRxResponsePacket;
+import com.digi.xbee.api.packet.thread.CoAPTxRequestPacket;
+import com.digi.xbee.api.packet.thread.IPv6IODataSampleRxIndicator;
+import com.digi.xbee.api.packet.thread.IPv6RemoteATCommandRequestPacket;
+import com.digi.xbee.api.packet.thread.IPv6RemoteATCommandResponsePacket;
+import com.digi.xbee.api.packet.thread.RXIPv6Packet;
+import com.digi.xbee.api.packet.thread.TXIPv6Packet;
+import com.digi.xbee.api.packet.wifi.IODataSampleRxIndicatorWifiPacket;
+import com.digi.xbee.api.packet.wifi.RemoteATCommandResponseWifiPacket;
+import com.digi.xbee.api.packet.wifi.RemoteATCommandWifiPacket;
 import com.digi.xbee.api.utils.HexUtils;
 
 /**
@@ -277,6 +301,9 @@ public class XBeePacketParser {
 		case TX_16:
 			packet = TX16Packet.createPacket(payload);
 			break;
+		case REMOTE_AT_COMMAND_REQUEST_WIFI:
+			packet = RemoteATCommandWifiPacket.createPacket(payload);
+			break;
 		case AT_COMMAND:
 			packet = ATCommandPacket.createPacket(payload);
 			break;
@@ -292,17 +319,41 @@ public class XBeePacketParser {
 		case REMOTE_AT_COMMAND_REQUEST:
 			packet = RemoteATCommandPacket.createPacket(payload);
 			break;
+		case IPV6_REMOTE_AT_COMMAND_REQUEST:
+			packet = IPv6RemoteATCommandRequestPacket.createPacket(payload);
+			break;
+		case TX_SMS:
+			packet = TXSMSPacket.createPacket(payload);
+			break;
+		case TX_IPV4:
+			packet = TXIPv4Packet.createPacket(payload);
+			break;
+		case TX_IPV6:
+			packet = TXIPv6Packet.createPacket(payload);
+			break;
+		case SEND_DATA_REQUEST:
+			packet = SendDataRequestPacket.createPacket(payload);
+			break;
+		case DEVICE_RESPONSE:
+			packet = DeviceResponsePacket.createPacket(payload);
+			break;
 		case RX_64:
 			packet = RX64Packet.createPacket(payload);
 			break;
 		case RX_16:
 			packet = RX16Packet.createPacket(payload);
 			break;
+		case RX_IPV6:
+			packet = RXIPv6Packet.createPacket(payload);
+			break;
 		case RX_IO_64:
 			packet = RX64IOPacket.createPacket(payload);
 			break;
 		case RX_IO_16:
 			packet = RX16IOPacket.createPacket(payload);
+			break;
+		case REMOTE_AT_COMMAND_RESPONSE_WIFI:
+			packet = RemoteATCommandResponseWifiPacket.createPacket(payload);
 			break;
 		case AT_COMMAND_RESPONSE:
 			packet = ATCommandResponsePacket.createPacket(payload);
@@ -316,6 +367,9 @@ public class XBeePacketParser {
 		case TRANSMIT_STATUS:
 			packet = TransmitStatusPacket.createPacket(payload);
 			break;
+		case IO_DATA_SAMPLE_RX_INDICATOR_WIFI:
+			packet = IODataSampleRxIndicatorWifiPacket.createPacket(payload);
+			break;
 		case RECEIVE_PACKET:
 			packet = ReceivePacket.createPacket(payload);
 			break;
@@ -325,8 +379,38 @@ public class XBeePacketParser {
 		case IO_DATA_SAMPLE_RX_INDICATOR:
 			packet = IODataSampleRxIndicatorPacket.createPacket(payload);
 			break;
+		case IPV6_IO_DATA_SAMPLE_RX_INDICATOR:
+			packet = IPv6IODataSampleRxIndicator.createPacket(payload);
+			break;
 		case REMOTE_AT_COMMAND_RESPONSE:
 			packet = RemoteATCommandResponsePacket.createPacket(payload);
+			break;
+		case IPV6_REMOTE_AT_COMMAND_RESPONSE:
+			packet = IPv6RemoteATCommandResponsePacket.createPacket(payload);
+			break;
+		case RX_SMS:
+			packet = RXSMSPacket.createPacket(payload);
+			break;
+		case RX_IPV4:
+			packet = RXIPv4Packet.createPacket(payload);
+			break;
+		case SEND_DATA_RESPONSE:
+			packet = SendDataResponsePacket.createPacket(payload);
+			break;
+		case DEVICE_REQUEST:
+			packet = DeviceRequestPacket.createPacket(payload);
+			break;
+		case DEVICE_RESPONSE_STATUS:
+			packet = DeviceResponseStatusPacket.createPacket(payload);
+			break;
+		case COAP_TX_REQUEST:
+			packet = CoAPTxRequestPacket.createPacket(payload);
+			break;
+		case COAP_RX_RESPONSE:
+			packet = CoAPRxResponsePacket.createPacket(payload);
+			break;
+		case FRAME_ERROR:
+			packet = FrameErrorPacket.createPacket(payload);
 			break;
 		case GENERIC:
 			packet = GenericXBeePacket.createPacket(payload);

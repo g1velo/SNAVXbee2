@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api.models;
 
@@ -67,7 +71,27 @@ public enum HardwareVersionEnum {
 	XB24C_TH_DIP(0x2E, "XB24C (TH-DIP): XBee DIP"),
 	XLR_BASEBOARD(0x2F, "XLR Baseboard"),
 	XBP24C_S2C_SMT(0x30, "XBee PRO SMT"),
-	XTEND_GEN3(0x31, "XTend Gen 3");
+	SX_PRO(0x31, "SX Pro"),
+	S2D_SMT_PRO(0x32, "XBP24D: S2D SMT PRO"),
+	S2D_SMT_REG(0x33, "XB24D: S2D SMT Reg"),
+	S2D_TH_PRO(0x34, "XBP24D: S2D TH PRO"),
+	S2D_TH_REG(0x35, "XB24D: S2D TH Reg"),
+	SX(0x3E, "SX"),
+	XTR(0x3F, "XTR"),
+	/** 
+	 * @deprecated Use {@link #CELLULAR_CAT1_LTE_VERIZON} instead.
+	 * @since 1.2.0 */
+	CELLULAR(0x40, "CELLULAR"),
+	/** @since 1.2.1 */
+	CELLULAR_CAT1_LTE_VERIZON(0x40, "XBee Cellular Cat 1 LTE Verizon"),
+	/** @since 1.2.1 */
+	CELLULAR_3G(0x44, "XBee Cellular 3G"),
+	/** @since 1.2.1 */
+	CELLULAR_LTE_VERIZON(0x46, "XBee Cellular LTE-M Verizon"),
+	/** @since 1.2.1 */
+	CELLULAR_LTE_ATT(0x47, "XBee Cellular LTE-M AT&T"),
+	/** @since 1.2.1 */
+	CELLULAR_NBIOT_EUROPE(0x48, "XBee Cellular NBIoT Europe");
 	
 	// Variables
 	private final int value;

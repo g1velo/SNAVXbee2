@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api;
 
@@ -316,12 +320,14 @@ class NodeDiscovery {
 			
 			// In 802.15.4 devices, the discovery finishes when the 'end' command 
 			// is received, so it's not necessary to calculate the timeout.
-			if (xbeeDevice.getXBeeProtocol() != XBeeProtocol.RAW_802_15_4)
+			// This also applies to S1B devices working in compatibility mode.
+			boolean is802Compatible = is802Compatible(); 
+			if (!is802Compatible)
 				deadLine += calculateTimeout(listeners);
 			
 			sendNodeDiscoverCommand(id);
 			
-			if (xbeeDevice.getXBeeProtocol() != XBeeProtocol.RAW_802_15_4) {
+			if (!is802Compatible) {
 				// Wait for scan timeout.
 				while (discovering) {
 					if (System.currentTimeMillis() < deadLine)
@@ -476,6 +482,7 @@ class NodeDiscovery {
 		// TODO [XLR_DM] The next version of the XLR will add DigiMesh support.
 		// For the moment only point-to-multipoint is supported in this kind of devices.
 		case XLR_DM:
+		case SX:
 			// Read node identifier.
 			id = ByteUtils.readString(inputStream);
 			// Read parent address.
@@ -624,5 +631,25 @@ class NodeDiscovery {
 	public String toString() {
 		return getClass().getName() + " [" + xbeeDevice.toString() + "] @" + 
 				Integer.toHexString(hashCode());
+	}
+	
+	/**
+	 * Checks whether the device performing the node discovery is a legacy 
+	 * 802.15.4 device or a S1B device working compatibility mode.
+	 * 
+	 * @return {@code true} if the device performing the node discovery is a
+	 *         legacy 802.15.4 device or S1B in compatibility mode, {@code false}
+	 *         otherwise.
+	 */
+	private boolean is802Compatible() {
+		if (xbeeDevice.getXBeeProtocol() != XBeeProtocol.RAW_802_15_4)
+			return false;
+		byte[] param = null;
+		try {
+			param = xbeeDevice.getParameter("C8");
+		} catch (Exception e) { }
+		if (param == null || ((param[0] & 0x2) == 2 ))
+			return true;
+		return false;
 	}
 }

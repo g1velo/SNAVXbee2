@@ -1,558 +1,548 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="snavxbee2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-    <!-- Bridge definition -->
+	<!-- Bridge definition -->
 
-    <bridge-type id="bridge">
-        <label>SNAV Xbee2 Serial Gateway</label>
-        <description>Xbee S2 connected using serial port
+	<bridge-type id="bridge">
+		<label>SNAV Xbee2 Serial Gateway</label>
+		<description>Xbee S2 connected using serial port
         </description>
-        <config-description>
-            <parameter name="serialPort" type="text" required="true">
-                <context>serial-port</context>
-                <label>Serial Port</label>
-                <description>The serial port the SNAVXbee2 Gateway is connected to
+		<config-description>
+			<parameter name="ResetXBee" type="boolean" required="true">
+				<context>ResetContext</context>
+				<label>Send Reset() to this XBee Device</label>
+				<description>In Case Thing is offline and should not try to set to true</description>
+				<default>false</default>
+			</parameter>
+		</config-description>
+	</bridge-type>
+	<!-- Sample Thing Type -->
+	<thing-type id="sample">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : 30000</label>
+		<description>Sample thing for SNAVXbee2 Binding ID : 30000</description>
+		<channels>
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-            <parameter name="baudRate" type="integer" required="true" min="9600" max="115200">
-                <label>Baudrate</label>
-                <description>Baudrate for serial port
-                </description>
-                <default>9600</default>
-            </parameter>
-        </config-description>
-    </bridge-type>
-    <!-- Sample Thing Type -->
-    <thing-type id="sample">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 ID : 30000</label>
-        <description>Sample thing for SNAVXbee2 Binding ID : 30000</description>
-        <channels>
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
+			</parameter>
+			<parameter name="ResetXBee" type="boolean" required="true">
+				<context>ResetContext</context>
+				<label>Send Reset() to this XBee Device</label>
+				<description>In Case Thing is offline and should not try to set to true</description>
+				<default>false</default>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<thing-type id="tosr0xt">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>TOSR0XT relay can have form 1 to 8 relays and temperature sensor</label>
+		<description>Sample thing for SNAVXbee2 Binding ID : CAFE0002</description>
+		<channels>
+			<channel id="temperature" typeId="temperature" />
+			<channel id="relay1" typeId="relay1" />
+			<channel id="relay2" typeId="relay2" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
+		</channels>
+		<config-description>
+            <parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
                 <context>Xbee64BitsAddress</context>
                 <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+                <description>The 64 bit address Xbee64BitsAddress
                 </description>
             </parameter>
-            <parameter name="IOChannel" type="text" required="false">
-                <context>IOChannel </context>
-                <label>Xbee IOChannel</label>
-                <description>The IOChannel of the Xbee Device </description>
-            </parameter>
-            <parameter name="Reset" type="boolean" required="true">
+            <parameter name="ResetXBee" type="boolean" required="true">
                 <context>ResetContext</context>
-                <label>ResetLabel</label>
+                <label>Send Reset() to this XBee Device</label>
                 <description>In Case Thing is offline and should not try to set to true</description>
                 <default>false</default>
             </parameter>
-        </config-description>
-    </thing-type>
-
-    <thing-type id="tosr0xt">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>TOSR0XT relay can have form 1 to 8 relays and temperature sensor</label>
-        <description>Sample thing for SNAVXbee2 Binding ID : CAFE0002</description>
-        <channels>
-            <channel id="temperature" typeId="temperature" />
-            <channel id="relay1" typeId="relay1" />
-            <channel id="relay2" typeId="relay2" />
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+		</config-description>
+	</thing-type>
+	<thing-type id="cafe1001">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : CAFE1001</label>
+		<description>Sample thing for SNAVXbee2 Binding ID : CAFE1001</description>
+		<channels>
+			<channel id="S1" typeId="S1" />
+			<channel id="S2" typeId="S2" />
+			<channel id="S3" typeId="S3" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-            <parameter name="IOChannel" type="text" required="false">
-                <context>IOChannel </context>
-                <label>Xbee IOChannel</label>
-                <description>The IOChannel of the Xbee Device </description>
-            </parameter>
-        </config-description>
-    </thing-type>
-    <thing-type id="cafe1001">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 ID : CAFE1001</label>
-        <description>Sample thing for SNAVXbee2 Binding ID : CAFE1001</description>
-        <channels>
-            <channel id="S1" typeId="S1" />
-            <channel id="S2" typeId="S2" />
-            <channel id="S3" typeId="S3" />
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+			</parameter>
+		</config-description>
+	</thing-type>
+	<thing-type id="cafe1000">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : CAFE1000</label>
+		<description>Sample thing for SNAVXbee2 Binding ID : CAFE1000</description>
+		<channels>
+			<channel id="S1" typeId="S1" />
+			<channel id="S2" typeId="S2" />
+			<channel id="S3" typeId="S3" />
+			<channel id="AD0DIO0" typeId="AD0DIO0" />
+			<channel id="AD1DIO1" typeId="AD1DIO1" />
+			<channel id="AD2DIO2" typeId="AD2DIO2" />
+			<channel id="AD3DIO3" typeId="AD3DIO3" />
+			<channel id="AD4DIO4" typeId="AD4DIO4" />
+			<channel id="AD5DIO5" typeId="AD5DIO5" />
+			<channel id="DIO6" typeId="DIO6" />
+			<channel id="DIO7" typeId="DIO7" />
+			<channel id="DIO8" typeId="DIO8" />
+			<channel id="DIO9" typeId="DIO9" />
+			<channel id="PWM0DIO10" typeId="PWM0DIO10" />
+			<channel id="PWM1DIO11" typeId="PWM1DIO11" />
+			<channel id="DIO12" typeId="DIO12" />
+			<channel id="DIO13" typeId="DIO13" />
+			<channel id="DIO14" typeId="DIO14" />
+			<channel id="DIO15" typeId="DIO15" />
+			<channel id="DIO16" typeId="DIO16" />
+			<channel id="DIO17" typeId="DIO17" />
+			<channel id="DIO18" typeId="DIO18" />
+			<channel id="DIO19" typeId="DIO19" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-        </config-description>
-    </thing-type>
-    <thing-type id="cafe1000">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 ID : CAFE1000</label>
-        <description>Sample thing for SNAVXbee2 Binding ID : CAFE1000</description>
-        <channels>
-            <channel id="S1" typeId="S1" />
-            <channel id="S2" typeId="S2" />
-            <channel id="S3" typeId="S3" />
-            <channel id="AD0DIO0" typeId="AD0DIO0" />
-            <channel id="AD1DIO1" typeId="AD1DIO1" />
-            <channel id="AD2DIO2" typeId="AD2DIO2" />
-            <channel id="AD3DIO3" typeId="AD3DIO3" />
-            <channel id="AD4DIO4" typeId="AD4DIO4" />
-            <channel id="AD5DIO5" typeId="AD5DIO5" />
-            <channel id="DIO6" typeId="DIO6" />
-            <channel id="DIO7" typeId="DIO7" />
-            <channel id="DIO8" typeId="DIO8" />
-            <channel id="DIO9" typeId="DIO9" />
-            <channel id="PWM0DIO10" typeId="PWM0DIO10" />
-            <channel id="PWM1DIO11" typeId="PWM1DIO11" />
-            <channel id="DIO12" typeId="DIO12" />
-            <channel id="DIO13" typeId="DIO13" />
-            <channel id="DIO14" typeId="DIO14" />
-            <channel id="DIO15" typeId="DIO15" />
-            <channel id="DIO16" typeId="DIO16" />
-            <channel id="DIO17" typeId="DIO17" />
-            <channel id="DIO18" typeId="DIO18" />
-            <channel id="DIO19" typeId="DIO19" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<thing-type id="xbeeapi">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>XBee API mode 1</label>
+		<description>XBee Things using API mode 1</description>
+		<channels>
+			<channel id="temperature" typeId="temperature" />
+			<channel id="humidity" typeId="humidity" />
+			<channel id="light" typeId="light" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-        </config-description>
-    </thing-type>
+			</parameter>
+		</config-description>
+	</thing-type>
 
-    <thing-type id="xbeeapi">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>XBee API mode 1</label>
-        <description>XBee Things using API mode 1</description>
-        <channels>
-            <channel id="temperature" typeId="temperature" />
-            <channel id="humidity" typeId="humidity" />
-            <channel id="light" typeId="light" />
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
+	<thing-type id="cafe0edf">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : CAFE0EDF</label>
+		<description>Teleinfo edf pour SNAVXbee2 Binding ID : CAFE0EDF</description>
+		<channels>
+			<channel id="ADCO" typeId="ADCO" />
+			<channel id="OPTARIF" typeId="OPTARIF" />
+			<channel id="ISOUSC" typeId="ISOUSC" />
+			<channel id="BASE" typeId="BASE" />
+			<channel id="HCHC" typeId="HCHC" />
+			<channel id="HCHP" typeId="HCHP" />
+			<channel id="EJP_HN" typeId="EJP_HN" />
+			<channel id="EJP_HPM" typeId="EJP_HPM" />
+			<channel id="BBR_HC_JB" typeId="BBR_HC_JB" />
+			<channel id="BBR_HP_JB" typeId="BBR_HP_JB" />
+			<channel id="BBR_HC_JW" typeId="BBR_HC_JW" />
+			<channel id="BBR_HP_JW" typeId="BBR_HP_JW" />
+			<channel id="BBR_HC_JR" typeId="BBR_HC_JR" />
+			<channel id="BBR_HP_JR" typeId="BBR_HP_JR" />
+			<channel id="PEJP" typeId="PEJP" />
+			<channel id="PTEC" typeId="PTEC" />
+			<channel id="DEMAIN" typeId="DEMAIN" />
+			<channel id="IINST" typeId="IINST" />
+			<channel id="ADPS" typeId="ADPS" />
+			<channel id="IMAX" typeId="IMAX" />
+			<channel id="PAPP" typeId="PAPP" />
+			<channel id="HHPHC" typeId="HHPHC" />
+			<channel id="MOTDETAT" typeId="MOTDETAT" />
+
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-        </config-description>
-    </thing-type>
+			</parameter>
+		</config-description>
+	</thing-type>
 
-    <thing-type id="cafe0edf">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 ID : CAFE0EDF</label>
-        <description>Teleinfo edf pour SNAVXbee2 Binding ID : CAFE0EDF</description>
-        <channels>
-            <channel id="ADCO" typeId="ADCO" />
-            <channel id="OPTARIF" typeId="OPTARIF" />
-            <channel id="ISOUSC" typeId="ISOUSC" />
-            <channel id="BASE" typeId="BASE" />
-            <channel id="HCHC" typeId="HCHC" />
-            <channel id="HCHP" typeId="HCHP" />
-            <channel id="EJP_HN" typeId="EJP_HN" />
-            <channel id="EJP_HPM" typeId="EJP_HPM" />
-            <channel id="BBR_HC_JB" typeId="BBR_HC_JB" />
-            <channel id="BBR_HP_JB" typeId="BBR_HP_JB" />
-            <channel id="BBR_HC_JW" typeId="BBR_HC_JW" />
-            <channel id="BBR_HP_JW" typeId="BBR_HP_JW" />
-            <channel id="BBR_HC_JR" typeId="BBR_HC_JR" />
-            <channel id="BBR_HP_JR" typeId="BBR_HP_JR" />
-            <channel id="PEJP" typeId="PEJP" />
-            <channel id="PTEC" typeId="PTEC" />
-            <channel id="DEMAIN" typeId="DEMAIN" />
-            <channel id="IINST" typeId="IINST" />
-            <channel id="ADPS" typeId="ADPS" />
-            <channel id="IMAX" typeId="IMAX" />
-            <channel id="PAPP" typeId="PAPP" />
-            <channel id="HHPHC" typeId="HHPHC" />
-            <channel id="MOTDETAT" typeId="MOTDETAT" />
-
-        </channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit addrees Xbee64BitsAddress
-                </description>
-            </parameter>
-        </config-description>
-    </thing-type>
-
-    <!-- Sample Channel Type -->
-    <channel-type id="channel1">
-        <item-type>channel1</item-type>
-        <label>SNAVXbee2 Binding Channel  for testing Purpose</label>
-        <description>Sample channel for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="humidity" advanced="true">
-        <item-type>Number</item-type>
-        <label>Test humidity</label>
-        <description>Test</description>
-        <category>humidity</category>
-        <state readOnly="true" />
-    </channel-type>
-    <channel-type id="temperature">
-        <item-type>Number</item-type>
-        <label>TOSR0xT temperature DS18B20</label>
-        <description>temperature channel for SNAVXbee2 Binding using DS18B20 device</description>
-        <category>Temperature</category>
-        <state readOnly="true" />
-    </channel-type>
-    <channel-type id="relay1">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 1</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay2">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 2</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay3">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 3</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay4">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 4</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay5">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 5</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay6">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 6</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay7">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 7</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="relay8">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding relay Number 8</label>
-        <description>Relay for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD0DIO0">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding AD0DIO0 port </label>
-        <description>AD0DIO0 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD1DIO1">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding AD1DIO1 port </label>
-        <description>AD1DIO1 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD2DIO2">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding AD2DIO2 port </label>
-        <description>AD2DIO2 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD3DIO3">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding  AD3DIO3 port </label>
-        <description>AD3DIO3 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD4DIO4">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO4 port </label>
-        <description>DIO4 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="AD5DIO5">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO5 port </label>
-        <description>AD5DIO5 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO6">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO6 port </label>
-        <description>DIO6 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO7">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO7 port </label>
-        <description>DIO7 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO8">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO8 port </label>
-        <description>DIO8 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO9">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO9 port </label>
-        <description>DIO9 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="PWM0DIO10">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO10 port</label>
-        <description>DIO10 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="PWM1DIO11">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO11 port</label>
-        <description>DIO11 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO12">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO12 port </label>
-        <description>DIO12 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO13">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO13 port </label>
-        <description>DIO12 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO14">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO14 port </label>
-        <description>DIO14 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO15">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO15 port </label>
-        <description>DIO15 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO16">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO16 port </label>
-        <description>DIO16 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO17">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO17 port </label>
-        <description>DIO17 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO18">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO18 port </label>
-        <description>DIO18 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="DIO19">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding DIO19 port </label>
-        <description>DIO19 port for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="S1">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding switch Number 1</label>
-        <description>switch for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="S2">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding switch Number 2</label>
-        <description>switch for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="S3">
-        <item-type>SwitchItem</item-type>
-        <label>SNAVXbee2 Binding switch Number 3</label>
-        <description>switch for SNAVXbee2 Binding</description>
-    </channel-type>
-    <channel-type id="ADCO">
-        <item-type>Decimal</item-type>
-        <label> Identifiant du compteur</label>
-        <description> Identifiant du compteur</description>
-    </channel-type>
-    <channel-type id="OPTARIF">
-        <item-type>String</item-type>
-        <label> Option tarifaire (type d’abonnement)</label>
-        <description> Option tarifaire (type d’abonnement)</description>
-    </channel-type>
-    <channel-type id="ISOUSC">
-        <item-type>Number</item-type>
-        <label> Intensité souscrite</label>
-        <description> Intensité souscrite</description>
-    </channel-type>
-    <channel-type id="BASE">
-        <item-type>SwitchItem</item-type>
-        <label> Index si option = base (en Wh)</label>
-        <description> Index si option = base (en Wh)</description>
-    </channel-type>
-    <channel-type id="HCHC">
-        <item-type>SwitchItem</item-type>
-        <label> Index heures creuses si option = heures creuses (en Wh)</label>
-        <description> Index heures creuses si option = heures creuses (en Wh)</description>
-    </channel-type>
-    <channel-type id="HCHP">
-        <item-type>SwitchItem</item-type>
-        <label> Index heures pleines si option = heures creuses (en Wh)</label>
-        <description> Index heures pleines si option = heures creuses (en Wh)</description>
-    </channel-type>
-    <channel-type id="EJP_HN">
-        <item-type>SwitchItem</item-type>
-        <label> Index heures normales si option = EJP (en Wh)</label>
-        <description> Index heures normales si option = EJP (en Wh)</description>
-    </channel-type>
-    <channel-type id="EJP_HPM">
-        <item-type>Number</item-type>
-        <label> Index heures de pointe mobile si option = EJP (en Wh)</label>
-        <description> Index heures de pointe mobile si option = EJP (en Wh)</description>
-    </channel-type>
-    <channel-type id="BBR_HC_JB">
-        <item-type>Number</item-type>
-        <label> Index heures creuses jours bleus si option = tempo (en Wh)</label>
-        <description> Index heures creuses jours bleus si option = tempo (en Wh)</description>
-    </channel-type>
-    <channel-type id="BBR_HP_JB">
-        <item-type>Number</item-type>
-        <label> Index heures pleines jours bleus si option = tempo (en Wh)</label>
-        <description> Index heures pleines jours bleus si option = tempo (en Wh)</description>
-    </channel-type>
-    <channel-type id="BBR_HC_JW">
-        <item-type>Number</item-type>
-        <label> Index heures creuses jours blancs si option = tempo (en Wh)</label>
-        <description> Index heures creuses jours blancs si option = tempo (en Wh)</description>
-    </channel-type>
-    <channel-type id="BBR_HP_JW">
-        <item-type>Number</item-type>
-        <label> Index heures pleines jours blancs si option = tempo (en Wh)</label>
-        <description> Index heures pleines jours blancs si option = tempo (en Wh)</description>
-    </channel-type>
-    <channel-type id="BBR_HC_JR">
-        <item-type>Number</item-type>
-        <label> Index heures creuses jours rouges si option = tempo  (en Wh)</label>
-        <description> Index heures creuses jours rouges si option = tempo  (en Wh)</description>
-    </channel-type>
-    <channel-type id="BBR_HP_JR">
-        <item-type>Number</item-type>
-        <label> Index heures pleines jours rouges si option = tempo (en Wh)</label>
-        <description> Index heures pleines jours rouges si option = tempo (en Wh)</description>
-    </channel-type>
-    <channel-type id="PEJP">
-        <item-type>SwitchItem</item-type>
-        <label> Préavis EJP si option = EJP 30mn avant période EJP</label>
-        <description> Préavis EJP si option = EJP 30mn avant période EJP</description>
-    </channel-type>
-    <channel-type id="PTEC">
-        <item-type>SwitchItem</item-type>
-        <label> Période tarifaire en cours</label>
-        <description> Période tarifaire en cours</description>
-    </channel-type>
-    <channel-type id="DEMAIN">
-        <item-type>SwitchItem</item-type>
-        <label> Couleur du lendemain si option = tempo</label>
-        <description> Couleur du lendemain si option = tempo</description>
-    </channel-type>
-    <channel-type id="IINST">
-        <item-type>Number</item-type>
-        <label> Intensité instantanée (en ampères)</label>
-        <description> Intensité instantanée (en ampères)</description>
-    </channel-type>
-    <channel-type id="ADPS">
-        <item-type>SwitchItem</item-type>
-        <label> Avertissement de dépassement de puissance souscrite (en ampères)</label>
-        <description> Avertissement de dépassement de puissance souscrite (en ampères)</description>
-    </channel-type>
-    <channel-type id="IMAX">
-        <item-type>Number</item-type>
-        <label> Intensité maximale (en ampères)</label>
-        <description> Intensité maximale (en ampères)</description>
-    </channel-type>
-    <channel-type id="PAPP">
-        <item-type>Number</item-type>
-        <label> Puissance apparente (en Volt.ampères)</label>
-        <description> Puissance apparente (en Volt.ampères)</description>
-    </channel-type>
-    <channel-type id="HHPHC">
-        <item-type>SwitchItem</item-type>
-        <label> Groupe horaire si option = heures creuses ou tempo</label>
-        <description> Groupe horaire si option = heures creuses ou tempo</description>
-    </channel-type>
-    <channel-type id="MOTDETAT">
-        <item-type>SwitchItem</item-type>
-        <label> Mot d’état (autocontrôle)</label>
-        <description> Mot d’état (autocontrôle)</description>
-    </channel-type>
+	<!-- Sample Channel Type -->
+	<channel-type id="channel1">
+		<item-type>channel1</item-type>
+		<label>SNAVXbee2 Binding Channel  for testing Purpose</label>
+		<description>Sample channel for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="humidity" advanced="true">
+		<item-type>Number</item-type>
+		<label>Test humidity</label>
+		<description>Test</description>
+		<category>humidity</category>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="temperature">
+		<item-type>Number</item-type>
+		<label>TOSR0xT temperature DS18B20</label>
+		<description>temperature channel for SNAVXbee2 Binding using DS18B20 device</description>
+		<category>Temperature</category>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="relay1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 1</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 2</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 3</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay4">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 4</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay5">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 5</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay6">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 6</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay7">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 7</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="relay8">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding relay Number 8</label>
+		<description>Relay for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD0DIO0">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding AD0DIO0 port </label>
+		<description>AD0DIO0 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD1DIO1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding AD1DIO1 port </label>
+		<description>AD1DIO1 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD2DIO2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding AD2DIO2 port </label>
+		<description>AD2DIO2 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD3DIO3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding  AD3DIO3 port </label>
+		<description>AD3DIO3 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD4DIO4">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO4 port </label>
+		<description>DIO4 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="AD5DIO5">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO5 port </label>
+		<description>AD5DIO5 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO6">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO6 port </label>
+		<description>DIO6 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO7">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO7 port </label>
+		<description>DIO7 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO8">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO8 port </label>
+		<description>DIO8 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO9">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO9 port </label>
+		<description>DIO9 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="PWM0DIO10">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO10 port</label>
+		<description>DIO10 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="PWM1DIO11">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO11 port</label>
+		<description>DIO11 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO12">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO12 port </label>
+		<description>DIO12 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO13">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO13 port </label>
+		<description>DIO12 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO14">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO14 port </label>
+		<description>DIO14 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO15">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO15 port </label>
+		<description>DIO15 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO16">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO16 port </label>
+		<description>DIO16 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO17">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO17 port </label>
+		<description>DIO17 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO18">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO18 port </label>
+		<description>DIO18 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="DIO19">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding DIO19 port </label>
+		<description>DIO19 port for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="S1">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding switch Number 1</label>
+		<description>switch for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="S2">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding switch Number 2</label>
+		<description>switch for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="S3">
+		<item-type>SwitchItem</item-type>
+		<label>SNAVXbee2 Binding switch Number 3</label>
+		<description>switch for SNAVXbee2 Binding</description>
+	</channel-type>
+	<channel-type id="ADCO">
+		<item-type>Decimal</item-type>
+		<label> Identifiant du compteur</label>
+		<description> Identifiant du compteur</description>
+	</channel-type>
+	<channel-type id="OPTARIF">
+		<item-type>String</item-type>
+		<label> Option tarifaire (type d’abonnement)</label>
+		<description> Option tarifaire (type d’abonnement)</description>
+	</channel-type>
+	<channel-type id="ISOUSC">
+		<item-type>Number</item-type>
+		<label> Intensité souscrite</label>
+		<description> Intensité souscrite</description>
+	</channel-type>
+	<channel-type id="BASE">
+		<item-type>SwitchItem</item-type>
+		<label> Index si option = base (en Wh)</label>
+		<description> Index si option = base (en Wh)</description>
+	</channel-type>
+	<channel-type id="HCHC">
+		<item-type>SwitchItem</item-type>
+		<label> Index heures creuses si option = heures creuses (en Wh)</label>
+		<description> Index heures creuses si option = heures creuses (en Wh)</description>
+	</channel-type>
+	<channel-type id="HCHP">
+		<item-type>SwitchItem</item-type>
+		<label> Index heures pleines si option = heures creuses (en Wh)</label>
+		<description> Index heures pleines si option = heures creuses (en Wh)</description>
+	</channel-type>
+	<channel-type id="EJP_HN">
+		<item-type>SwitchItem</item-type>
+		<label> Index heures normales si option = EJP (en Wh)</label>
+		<description> Index heures normales si option = EJP (en Wh)</description>
+	</channel-type>
+	<channel-type id="EJP_HPM">
+		<item-type>Number</item-type>
+		<label> Index heures de pointe mobile si option = EJP (en Wh)</label>
+		<description> Index heures de pointe mobile si option = EJP (en Wh)</description>
+	</channel-type>
+	<channel-type id="BBR_HC_JB">
+		<item-type>Number</item-type>
+		<label> Index heures creuses jours bleus si option = tempo (en Wh)</label>
+		<description> Index heures creuses jours bleus si option = tempo (en Wh)</description>
+	</channel-type>
+	<channel-type id="BBR_HP_JB">
+		<item-type>Number</item-type>
+		<label> Index heures pleines jours bleus si option = tempo (en Wh)</label>
+		<description> Index heures pleines jours bleus si option = tempo (en Wh)</description>
+	</channel-type>
+	<channel-type id="BBR_HC_JW">
+		<item-type>Number</item-type>
+		<label> Index heures creuses jours blancs si option = tempo (en Wh)</label>
+		<description> Index heures creuses jours blancs si option = tempo (en Wh)</description>
+	</channel-type>
+	<channel-type id="BBR_HP_JW">
+		<item-type>Number</item-type>
+		<label> Index heures pleines jours blancs si option = tempo (en Wh)</label>
+		<description> Index heures pleines jours blancs si option = tempo (en Wh)</description>
+	</channel-type>
+	<channel-type id="BBR_HC_JR">
+		<item-type>Number</item-type>
+		<label> Index heures creuses jours rouges si option = tempo  (en Wh)</label>
+		<description> Index heures creuses jours rouges si option = tempo  (en Wh)</description>
+	</channel-type>
+	<channel-type id="BBR_HP_JR">
+		<item-type>Number</item-type>
+		<label> Index heures pleines jours rouges si option = tempo (en Wh)</label>
+		<description> Index heures pleines jours rouges si option = tempo (en Wh)</description>
+	</channel-type>
+	<channel-type id="PEJP">
+		<item-type>SwitchItem</item-type>
+		<label> Préavis EJP si option = EJP 30mn avant période EJP</label>
+		<description> Préavis EJP si option = EJP 30mn avant période EJP</description>
+	</channel-type>
+	<channel-type id="PTEC">
+		<item-type>SwitchItem</item-type>
+		<label> Période tarifaire en cours</label>
+		<description> Période tarifaire en cours</description>
+	</channel-type>
+	<channel-type id="DEMAIN">
+		<item-type>SwitchItem</item-type>
+		<label> Couleur du lendemain si option = tempo</label>
+		<description> Couleur du lendemain si option = tempo</description>
+	</channel-type>
+	<channel-type id="IINST">
+		<item-type>Number</item-type>
+		<label> Intensité instantanée (en ampères)</label>
+		<description> Intensité instantanée (en ampères)</description>
+	</channel-type>
+	<channel-type id="ADPS">
+		<item-type>SwitchItem</item-type>
+		<label> Avertissement de dépassement de puissance souscrite (en ampères)</label>
+		<description> Avertissement de dépassement de puissance souscrite (en ampères)</description>
+	</channel-type>
+	<channel-type id="IMAX">
+		<item-type>Number</item-type>
+		<label> Intensité maximale (en ampères)</label>
+		<description> Intensité maximale (en ampères)</description>
+	</channel-type>
+	<channel-type id="PAPP">
+		<item-type>Number</item-type>
+		<label> Puissance apparente (en Volt.ampères)</label>
+		<description> Puissance apparente (en Volt.ampères)</description>
+	</channel-type>
+	<channel-type id="HHPHC">
+		<item-type>SwitchItem</item-type>
+		<label> Groupe horaire si option = heures creuses ou tempo</label>
+		<description> Groupe horaire si option = heures creuses ou tempo</description>
+	</channel-type>
+	<channel-type id="MOTDETAT">
+		<item-type>SwitchItem</item-type>
+		<label> Mot d’état (autocontrôle)</label>
+		<description> Mot d’état (autocontrôle)</description>
+	</channel-type>
 
 
 

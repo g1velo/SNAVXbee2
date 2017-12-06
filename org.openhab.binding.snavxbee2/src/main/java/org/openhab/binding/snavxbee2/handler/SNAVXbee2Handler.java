@@ -23,6 +23,7 @@ import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xT;
@@ -207,26 +208,30 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         logger.trace(" Number of things in config : {} ", m.size());
 
         for (String key : m.keySet()) {
-            logger.debug(" SN KKKEYS : {} ", key);
-            logger.debug(" VVVValues: {} ", m.get(key));
+            logger.trace(" SN KKKEYS : {} ", key);
+            logger.trace(" VVVValues: {} ", m.get(key));
         }
 
         this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
+
+        updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.HANDLER_CONFIGURATION_PENDING, "In initialise() Method ");
 
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
             // starting automatic refresh for this device
             startAutomaticRefresh();
         }
 
+        checkDeviceConfig();
+
         // Getting IOline configuration
 
         logger.debug("getting IOLine config for device : {} ", this.xbee64BitsAddress);
-        this.IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(this.xbee64BitsAddress);
-        for (IOLineIOModeMapping map : this.IOsMapping) {
-            logger.debug("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
-        }
 
-        updateStatus(ThingStatus.ONLINE);
+        // this.IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(this.xbee64BitsAddress);
+        // logger.debug("Point2.2 : {} ", System.currentTimeMillis() - startTime);
+        // for (IOLineIOModeMapping map : this.IOsMapping) {
+        // logger.debug("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
+        // }
 
     }
 
@@ -234,6 +239,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
     public void dispose() {
         // TODO Auto-generated method stub
         refreshJob.cancel(true);
+        updateStatus(ThingStatus.OFFLINE);
         super.dispose();
     }
 
@@ -243,6 +249,40 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         Bridge bridge = getBridge();
         myBridgeHandler = (SNAVXbee2BridgeHandler) bridge.getHandler();
         return myBridgeHandler;
+    }
+
+    private void checkDeviceConfig() {
+
+        logger.debug("checkDeviceConfig()");
+
+        Runnable checkDevice = new Runnable() {
+            @Override
+            public void run() {
+
+                IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(xbee64BitsAddress);
+
+                logger.debug("Checking Device {} is on the network ! ", xbee64BitsAddress);
+                for (IOLineIOModeMapping map : IOsMapping) {
+                    logger.trace("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
+                }
+                logger.trace("IOsMapping has : {} Lines", IOsMapping.size());
+
+                if (!IOsMapping.isEmpty()) {
+                    if (!getThing().getStatus().equals(ThingStatus.ONLINE)) {
+                        updateStatus(ThingStatus.ONLINE);
+                    }
+                } else {
+                    if (!getThing().getStatus().equals(ThingStatus.OFFLINE)) {
+                        updateStatus(ThingStatus.OFFLINE);
+                    }
+                    logger.info("{} Could not be set online ", getThing().getUID());
+                }
+            }
+
+        };
+
+        refreshJob = scheduler.scheduleWithFixedDelay(checkDevice, 20, 300, TimeUnit.SECONDS);
+
     }
 
     private void startAutomaticRefresh() {
@@ -256,28 +296,64 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
                 logger.debug("The scheduled thread is running ! ");
                 getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, "b");
+                getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, "[");
             }
         };
+
         refreshJob = scheduler.scheduleWithFixedDelay(runnable, 30, 60, TimeUnit.SECONDS);
     }
 
     @Override
     public void handleConfigurationUpdate(Map<String, Object> configurationParmeters) {
         // can be overridden by subclasses
+
         logger.info("handle ConfigurationUpdate ");
         Configuration configuration = editConfiguration();
         for (Entry<String, Object> configurationParmeter : configurationParmeters.entrySet()) {
             logger.info("updating : {} with : {} ", configurationParmeter.getKey(), configurationParmeter.getValue());
             configuration.put(configurationParmeter.getKey(), configurationParmeter.getValue());
             if (configurationParmeter.getKey().equals("Reset")) {
-                logger.info("doing something to Reset DS11");
-            }
-        }
+                logger.info("doing something to Reset device {} ", getThing().getUID());
+                getBridgeHandler().resetXBeeDevice(xbee64BitsAddress);
 
+                updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.HANDLER_CONFIGURATION_PENDING,
+                        "In handleConfigurationUpdate() method");
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(xbee64BitsAddress);
+                logger.debug("Checking Device {} is on the network ! ", xbee64BitsAddress);
+                for (IOLineIOModeMapping map : IOsMapping) {
+                    logger.trace("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
+                }
+
+                logger.trace("IOsMapping has : {} Lines", IOsMapping.size());
+                if (!IOsMapping.isEmpty()) {
+                    if (!getThing().getStatus().equals(ThingStatus.ONLINE)) {
+                        updateStatus(ThingStatus.ONLINE);
+                    }
+                    logger.info("device {} looks to be OK", getThing().getUID());
+                } else {
+                    if (!getThing().getStatus().equals(ThingStatus.OFFLINE)) {
+                        updateStatus(ThingStatus.OFFLINE);
+                    }
+                    logger.info("{} Could not be set online ", getThing().getUID());
+                }
+
+                configuration.put(configurationParmeter.getKey(), false);
+
+            }
+            updateConfiguration(configuration);
+        }
         // reinitialize with new configuration and persist changes
-        dispose();
+        // dispose();
+
         updateConfiguration(configuration);
-        initialize();
+        // initialize();
     }
 
 }

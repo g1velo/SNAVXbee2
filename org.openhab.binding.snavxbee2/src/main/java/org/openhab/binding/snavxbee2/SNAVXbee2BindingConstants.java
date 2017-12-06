@@ -98,7 +98,7 @@ public class SNAVXbee2BindingConstants {
     public final static String ANALOG_TEMPERATURE = "analog_temperature";
 
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
-    public static final String PARAMETER_IOCHANNEL = "IOChannel";
+    public static final String PARAMETER_RESETXBEE = "ResetXbee";
 
     // supported channels for tosr0xt devices;
     // Not really sure that it is usefull

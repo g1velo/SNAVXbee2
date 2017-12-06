@@ -1,17 +1,22 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api;
 
 import java.io.IOException;
+import java.net.Inet6Address;
 
 import com.digi.xbee.api.exceptions.InterfaceNotOpenException;
 import com.digi.xbee.api.exceptions.TimeoutException;
@@ -28,6 +33,7 @@ import com.digi.xbee.api.models.XBeeProtocol;
  * @see RemoteDigiMeshDevice
  * @see RemoteDigiPointDevice
  * @see RemoteRaw802Device
+ * @see RemoteThreadDevice
  * @see RemoteZigBeeDevice
  */
 public class RemoteXBeeDevice extends AbstractXBeeDevice {
@@ -76,6 +82,49 @@ public class RemoteXBeeDevice extends AbstractXBeeDevice {
 	public RemoteXBeeDevice(XBeeDevice localXBeeDevice, XBee64BitAddress addr64, 
 			XBee16BitAddress addr16, String ni) {
 		super(localXBeeDevice, addr64, addr16, ni);
+	}
+	
+	/**
+	 * Class constructor. Instantiates a new {@code RemoteXBeeDevice} object 
+	 * with the given local {@code XBeeDevice} which contains the connection 
+	 * interface to be used.
+	 * 
+	 * @param localXBeeDevice The local XBee device that will behave as 
+	 *                        connection interface to communicate with this 
+	 *                        remote XBee device.
+	 * @param ipv6Addr The IPv6 address to identify this XBee device.
+	 * 
+	 * @throws IllegalArgumentException if {@code localXBeeDevice.isRemote() == true}.
+	 * @throws NullPointerException if {@code localXBeeDevice == null} or
+	 *                              if {@code ipv6Addr == null}.
+	 * 
+	 * @see java.net.Inet6Address
+	 */
+	public RemoteXBeeDevice(XBeeDevice localXBeeDevice, Inet6Address ipv6Addr) {
+		super(localXBeeDevice, ipv6Addr);
+	}
+	
+	/**
+	 * Class constructor. Instantiates a new {@code RemoteXBeeDevice} object 
+	 * with the given local {@code XBeeDevice} which contains the connection 
+	 * interface to be used.
+	 * 
+	 * @param localXBeeDevice The local XBee device that will behave as 
+	 *                        connection interface to communicate with this 
+	 *                        remote XBee device.
+	 * @param ipv6Addr The IPv6 address to identify this XBee device.
+	 * @param ni The node identifier of this remote XBee device. It might be 
+	 *           {@code null}.
+	 * 
+	 * @throws IllegalArgumentException if {@code localXBeeDevice.isRemote() == true}.
+	 * @throws NullPointerException if {@code localXBeeDevice == null} or
+	 *                              if {@code ipv6Addr == null}.
+	 * 
+	 * @see java.net.Inet6Address
+	 */
+	public RemoteXBeeDevice(XBeeDevice localXBeeDevice, Inet6Address ipv6Addr,
+			String ni) {
+		super(localXBeeDevice, ipv6Addr, ni);
 	}
 	
 	/**

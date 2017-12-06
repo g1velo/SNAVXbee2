@@ -18,7 +18,6 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xTparser;
-import org.openhab.binding.snavxbee2.devices.teleinfoEDF.TeleinfoEDFParser;
 import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.openhab.binding.snavxbee2.utils.RCAndIOValue;
@@ -55,9 +54,9 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2BridgeHandler.class);
     private SerialPortConfigParameters portconfig = new SerialPortConfigParameters();
-    // TODO Replace with the serial port where your receiver module is connected.
+    // PORT parameter Should be update to what is in the Thing Definition
     private static String PORT = "COM2";
-    // TODO Replace with the baud rate of you receiver module.
+    // BAUD_RATE parameter Should be update to what is in the Thing Definition
     private static int BAUD_RATE = 9600;
 
     private Configuration config = this.getConfig();
@@ -65,7 +64,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     private XBeeNetwork xbeeNetwork = null;
     private List<RemoteXBeeDevice> remoteDeviceList;
     private ScheduledFuture<?> refreshJob;
-    private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
+    // private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
 
     public SNAVXbee2BridgeHandler(Bridge bridge) {
         super(bridge);
@@ -356,7 +355,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             myDevice.addDataListener(this);
             myDevice.addIOSampleListener(this);
             this.xbeeNetwork = myDevice.getNetwork();
-            myDevice.setReceiveTimeout(10000);
+            myDevice.setReceiveTimeout(2000);
 
             xbeeNetwork.startDiscoveryProcess();
 
@@ -368,8 +367,15 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             updateStatus(ThingStatus.UNINITIALIZED);
         }
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         if (myDevice.isOpen()) {
-            logger.info("Port {} open, ", PORT);
+            logger.debug("Port {} open, ", PORT);
             updateStatus(ThingStatus.ONLINE);
             startAutomaticRefresh();
         } else {
@@ -391,7 +397,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
         Thing thingToUpdate = null;
         ThingUID thingUIDToUpdate = null;
-        // String channelToUpdate = null;
+        String channelToUpdate = null;
 
         // logger.debug("dataReceived in bridge method : dataReceived(XBeeMessage xbeeMessage) ");
 
@@ -489,7 +495,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
             @Override
             public void run() {
-                logger.debug("automatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
+                logger.trace("automatic discovery started : {} ", xbeeNetwork.isDiscoveryRunning());
                 if (!xbeeNetwork.isDiscoveryRunning()) {
                     logger.trace(" Bridge Automatic running Discovery 1");
                     xbeeNetwork.startDiscoveryProcess();
@@ -501,27 +507,14 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
             @Override
             public void run() {
-                // TODO Auto-generated method stub
-                logger.debug("checking Network: {} ", xbeeNetwork.getDevices().size());
-                for (RemoteXBeeDevice xBeeDev : xbeeNetwork.getDevices()) {
-
-                    try {
-                        logger.info(" readDeviceInfo for : {} ", xBeeDev.get64BitAddress().toString());
-                        xBeeDev.readDeviceInfo();
-                    } catch (TimeoutException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (XBeeException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
+                // TODO Don't know yet what to do here ... Sure it will come !
+                logger.trace("CheckingNetwork : {} ", xbeeNetwork.getDevices().size());
 
             }
         };
 
         refreshJob = scheduler.scheduleWithFixedDelay(runnable, 60, 300, TimeUnit.SECONDS);
-        refreshJob = scheduler.scheduleWithFixedDelay(checkXBeeNetwork, 10, 10, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleWithFixedDelay(checkXBeeNetwork, 10, 300, TimeUnit.SECONDS);
 
     }
 }

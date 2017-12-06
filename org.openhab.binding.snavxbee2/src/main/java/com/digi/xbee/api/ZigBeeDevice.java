@@ -1,17 +1,26 @@
 /**
- * Copyright (c) 2014-2015 Digi International Inc.,
- * All rights not expressly granted are reserved.
+ * Copyright 2017, Digi International Inc.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/.
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, you can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
- * =======================================================================
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN 
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 package com.digi.xbee.api;
 
+import android.content.Context;
+
+import java.net.Inet6Address;
+
 import com.digi.xbee.api.connection.IConnectionInterface;
+import com.digi.xbee.api.connection.android.AndroidUSBPermissionListener;
 import com.digi.xbee.api.connection.serial.SerialPortParameters;
 import com.digi.xbee.api.exceptions.InterfaceNotOpenException;
 import com.digi.xbee.api.exceptions.OperationNotSupportedException;
@@ -33,13 +42,19 @@ import com.digi.xbee.api.utils.HexUtils;
 /**
  * This class represents a local ZigBee device.
  * 
- * @see XBeeDevice
- * @see DigiMeshDevice
+ * @see CellularDevice
  * @see DigiPointDevice
+ * @see DigiMeshDevice
  * @see Raw802Device
+ * @see ThreadDevice
+ * @see WiFiDevice
+ * @see XBeeDevice
  */
 public class ZigBeeDevice extends XBeeDevice {
 
+	// Constants
+	private static final String OPERATION_EXCEPTION = "Operation not supported in ZigBee protocol.";
+	
 	/**
 	 * Class constructor. Instantiates a new {@code ZigBeeDevice} object in the 
 	 * given port name and baud rate.
@@ -51,6 +66,14 @@ public class ZigBeeDevice extends XBeeDevice {
 	 * 
 	 * @throws IllegalArgumentException if {@code baudRate < 0}.
 	 * @throws NullPointerException if {@code port == null}.
+	 * 
+	 * @see #ZigBeeDevice(IConnectionInterface)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
 	 */
 	public ZigBeeDevice(String port, int baudRate) {
 		this(XBee.createConnectiontionInterface(port, baudRate));
@@ -73,6 +96,14 @@ public class ZigBeeDevice extends XBeeDevice {
 	 *                                  if {@code parity < 0} or
 	 *                                  if {@code flowControl < 0}.
 	 * @throws NullPointerException if {@code port == null}.
+	 * 
+	 * @see #ZigBeeDevice(IConnectionInterface)
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
 	 */
 	public ZigBeeDevice(String port, int baudRate, int dataBits, int stopBits, int parity, int flowControl) {
 		this(port, new SerialPortParameters(baudRate, dataBits, stopBits, parity, flowControl));
@@ -88,10 +119,127 @@ public class ZigBeeDevice extends XBeeDevice {
 	 * @throws NullPointerException if {@code port == null} or
 	 *                              if {@code serialPortParameters == null}.
 	 * 
+	 * @see #ZigBeeDevice(IConnectionInterface)
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
 	 * @see com.digi.xbee.api.connection.serial.SerialPortParameters
 	 */
 	public ZigBeeDevice(String port, SerialPortParameters serialPortParameters) {
 		this(XBee.createConnectiontionInterface(port, serialPortParameters));
+	}
+	
+	/**
+	 * Class constructor. Instantiates a new {@code ZigBeeDevice} object for
+	 * Android with the given parameters.
+	 * 
+	 * @param context The Android context.
+	 * @param baudRate The USB connection baud rate.
+	 * 
+	 * @throws IllegalArgumentException if {@code baudRate < 1}.
+	 * @throws NullPointerException if {@code context == null}.
+	 * 
+	 * @see #ZigBeeDevice(IConnectionInterface)
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
+	 * 
+	 * @since 1.2.0
+	 */
+	public ZigBeeDevice(Context context, int baudRate) {
+		super(XBee.createConnectiontionInterface(context, baudRate));
+	}
+	
+	/**
+	 * Class constructor. Instantiates a new {@code ZigBeeDevice} object for
+	 * Android with the given parameters.
+	 * 
+	 * @param context The Android context.
+	 * @param baudRate The USB connection baud rate.
+	 * @param permissionListener The USB permission listener that will be 
+	 *                           notified when user grants USB permissions.
+	 * 
+	 * @throws IllegalArgumentException if {@code baudRate < 1}.
+	 * @throws NullPointerException if {@code context == null}.
+	 * 
+	 * @see #ZigBeeDevice(IConnectionInterface)
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
+	 * @see com.digi.xbee.api.connection.android.AndroidUSBPermissionListener
+	 * 
+	 * @since 1.2.0
+	 */
+	public ZigBeeDevice(Context context, int baudRate, AndroidUSBPermissionListener permissionListener) {
+		super(XBee.createConnectiontionInterface(context, baudRate, permissionListener));
+	}
+	
+	/**
+	 * Class constructor. Instantiates a new {@code XBeeDevice} object for
+	 * Android with the given parameters.
+	 * 
+	 * <p>This constructor uses the Digi Android Serial Port API based on the
+	 * RxTx library to communicate with the devices.</p>
+	 * 
+	 * @param context The Android application context.
+	 * @param port Serial port name where XBee device is attached to.
+	 * @param baudRate The serial port connection baud rate.
+	 * 
+	 * @throws NullPointerException If {@code context == null} or
+	 *                              if {@code port == null}.
+	 * @throws IllegalArgumentException if {@code baudRate < 1}.
+	 * 
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
+	 * 
+	 * @since 1.2.0
+	 */
+	public ZigBeeDevice(Context context, String port, int baudRate) {
+		super(XBee.createConnectiontionInterface(context, port, baudRate));
+	}
+	
+	/**
+	 * Class constructor. Instantiates a new {@code XBeeDevice} object for
+	 * Android with the given parameters.
+	 * 
+	 * <p>This constructor uses the Digi Android Serial Port API based on the
+	 * RxTx library to communicate with the devices.</p>
+	 * 
+	 * @param context The Android application context.
+	 * @param port Serial port name where XBee device is attached to.
+	 * @param parameters The serial port parameters.
+	 * 
+	 * @throws NullPointerException If {@code context == null} or
+	 *                              if {@code port == null} or
+	 *                              if {@code parameters == null}.
+	 * 
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see com.digi.xbee.api.connection.serial.SerialPortParameters
+	 * 
+	 * @since 1.2.0
+	 */
+	public ZigBeeDevice(Context context, String port, SerialPortParameters parameters) {
+		super(XBee.createConnectiontionInterface(context, port, parameters));
 	}
 	
 	/**
@@ -103,6 +251,14 @@ public class ZigBeeDevice extends XBeeDevice {
 	 * 
 	 * @throws NullPointerException if {@code connectionInterface == null}
 	 * 
+	 * @see #ZigBeeDevice(IConnectionInterface)
+	 * @see #ZigBeeDevice(String, int)
+	 * @see #ZigBeeDevice(String, SerialPortParameters)
+	 * @see #ZigBeeDevice(String, int, int, int, int, int)
+	 * @see #ZigBeeDevice(Context, int)
+	 * @see #ZigBeeDevice(Context, int, AndroidUSBPermissionListener)
+	 * @see #ZigBeeDevice(Context, String, int)
+	 * @see #ZigBeeDevice(Context, String, SerialPortParameters)
 	 * @see com.digi.xbee.api.connection.IConnectionInterface
 	 */
 	public ZigBeeDevice(IConnectionInterface connectionInterface) {
@@ -424,5 +580,36 @@ public class ZigBeeDevice extends XBeeDevice {
 		XBeePacket xbeePacket = new ExplicitAddressingPacket(getNextFrameID(), XBee64BitAddress.UNKNOWN_ADDRESS, 
 				groupID, sourceEndpoint, destEndpoint, clusterID, profileID, 0, XBeeTransmitOptions.ENABLE_MULTICAST, data);
 		sendAndCheckXBeePacket(xbeePacket, true);
+	}
+	
+	/**
+	 * @deprecated ZigBee protocol does not have an associated IPv6 address.
+	 */
+	@Override
+	public Inet6Address getIPv6Address() {
+		// ZigBee protocol does not have IPv6 address.
+		return null;
+	}
+	
+	/**
+	 * @deprecated Operation not supported in ZigBee protocol. This method
+	 *             will raise an {@link UnsupportedOperationException}.
+	 */
+	@Override
+	public Inet6Address getIPv6DestinationAddress()
+			throws TimeoutException, XBeeException {
+		// Not supported in ZigBee.
+		throw new UnsupportedOperationException(OPERATION_EXCEPTION);
+	}
+	
+	/**
+	 * @deprecated Operation not supported in ZigBee protocol. This method
+	 *             will raise an {@link UnsupportedOperationException}.
+	 */
+	@Override
+	public void setIPv6DestinationAddress(Inet6Address ipv6Address)
+			throws TimeoutException, XBeeException {
+		// Not supported in ZigBee.
+		throw new UnsupportedOperationException(OPERATION_EXCEPTION);
 	}
 }
