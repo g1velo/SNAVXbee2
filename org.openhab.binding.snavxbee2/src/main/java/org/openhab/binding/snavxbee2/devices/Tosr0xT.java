@@ -38,8 +38,6 @@ public class Tosr0xT {
         String actionToPeform = relay + status;
         String commandToSend = null;
 
-        System.out.println(actionToPeform);
-
         switch (actionToPeform) {
             case "relay1ON":
                 commandToSend = relay1On;

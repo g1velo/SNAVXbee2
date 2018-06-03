@@ -25,6 +25,10 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
+import org.eclipse.smarthome.core.thing.binding.ThingHandlerCallback;
+import org.eclipse.smarthome.core.thing.binding.firmware.Firmware;
+import org.eclipse.smarthome.core.thing.binding.firmware.FirmwareUpdateHandler;
+import org.eclipse.smarthome.core.thing.binding.firmware.ProgressCallback;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xT;
 import org.openhab.binding.snavxbee2.utils.ChannelToXBeePort;
@@ -43,14 +47,18 @@ import com.digi.xbee.api.models.XBee64BitAddress;
  *
  * @author Stephan NAVARRO - Initial contribution
  */
-public class SNAVXbee2Handler extends BaseThingHandler {
+public class SNAVXbee2Handler extends BaseThingHandler implements FirmwareUpdateHandler {
+    // Handler for thing types :
+    // CAFE1000 ( With TOSR0X Attached
+    // Any Xbee with no type in learn Mode
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2Handler.class);
-    private Configuration thingConfig;
+    private Configuration thingConfig = this.getConfig();
     private XBee64BitAddress xbee64BitsAddress;
     private String xbeeCommand;
     private ScheduledFuture<?> refreshJob;
     private List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
+    private Map<String, Object> bridgeconfigMap;
 
     public SNAVXbee2Handler(Thing thing) {
         super(thing);
@@ -79,7 +87,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             if (this.xbeeCommand != null) {
                 logger.debug(" handler xbee64BitsAddress : {}  this.xbeeCommand : {} ", this.xbee64BitsAddress,
                         this.xbeeCommand);
-                // getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
+
             }
         }
 
@@ -143,15 +151,11 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         if (thing.getThingTypeUID().equals(THING_TYPE_TOSR0XT)) {
 
             if (channelUID.getId().equals(TEMPERATURE)) {
-                // updatest
+                // updates
                 this.xbeeCommand = "b";
             }
 
             if (SUPPORTED_TOSR0XT_RELAY_CHANNELS.contains(channelUID.getId())) {
-
-                // logger.debug(" Coudl be handling command ----------------------------------");
-                /// logger.debug(getThing().getStatusInfo() + " " + getThing().getUID() + getThing().getThingTypeUID());
-                // + " Could be handling command ----------------------------------");
 
                 switch (command.toString()) {
                     case "ON":
@@ -185,9 +189,12 @@ public class SNAVXbee2Handler extends BaseThingHandler {
         if (this.xbeeCommand != null) {
             logger.debug(" handler xbee64BitsAddress : {}  this.xbeeCommand : {} ", this.xbee64BitsAddress,
                     this.xbeeCommand);
-            getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
+            if (thingConfig.get("SyncCommunutation").toString() == "true") {
+                getBridgeHandler().sendSyncCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
+            } else {
+                getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, this.xbeeCommand);
+            }
         }
-
     }
 
     @Override
@@ -203,16 +210,17 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         thingConfig = thing.getConfiguration();
 
-        Map<String, Object> m = thing.getConfiguration().getProperties();
+        bridgeconfigMap = thing.getConfiguration().getProperties();
 
-        logger.trace(" Number of things in config : {} ", m.size());
+        logger.trace(" Number of things in config : {} ", bridgeconfigMap.size());
 
-        for (String key : m.keySet()) {
-            logger.trace(" SN KKKEYS : {} ", key);
-            logger.trace(" VVVValues: {} ", m.get(key));
+        for (Entry<String, Object> configParameter : bridgeconfigMap.entrySet()) {
+            logger.info("updating {} Key : {} with : {} ", thing.getThingTypeUID(), configParameter.getKey(),
+                    configParameter.getValue());
         }
 
-        this.xbee64BitsAddress = new XBee64BitAddress((String) m.get("Xbee64BitsAddress"));
+        this.xbee64BitsAddress = new XBee64BitAddress((String) bridgeconfigMap.get("Xbee64BitsAddress"));
+        // this.xbee64BitsAddress =
 
         updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.HANDLER_CONFIGURATION_PENDING, "In initialise() Method ");
 
@@ -223,24 +231,32 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
         checkDeviceConfig();
 
-        // Getting IOline configuration
-
-        logger.debug("getting IOLine config for device : {} ", this.xbee64BitsAddress);
-
-        // this.IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(this.xbee64BitsAddress);
-        // logger.debug("Point2.2 : {} ", System.currentTimeMillis() - startTime);
-        // for (IOLineIOModeMapping map : this.IOsMapping) {
-        // logger.debug("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
-        // }
-
     }
 
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
         refreshJob.cancel(true);
-        updateStatus(ThingStatus.OFFLINE);
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.NONE, "Done by Dispose()");
         super.dispose();
+    }
+
+    @Override
+    public void updateFirmware(Firmware firmware, ProgressCallback progressCallback) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancel() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isUpdateExecutable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     public synchronized SNAVXbee2BridgeHandler getBridgeHandler() {
@@ -262,6 +278,7 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                 IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(xbee64BitsAddress);
 
                 logger.debug("Checking Device {} is on the network ! ", xbee64BitsAddress);
+
                 for (IOLineIOModeMapping map : IOsMapping) {
                     logger.trace("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
                 }
@@ -285,6 +302,13 @@ public class SNAVXbee2Handler extends BaseThingHandler {
 
     }
 
+    @Override
+    public void setCallback(ThingHandlerCallback thingHandlerCallback) {
+        // TODO Auto-generated method stub
+        logger.info("ThingHandlerCallBack was called for {}", this.thing.getUID());
+        super.setCallback(thingHandlerCallback);
+    }
+
     private void startAutomaticRefresh() {
 
         logger.debug("startAutomaticRefresh()");
@@ -295,7 +319,16 @@ public class SNAVXbee2Handler extends BaseThingHandler {
             public void run() {
 
                 logger.debug("The scheduled thread is running ! ");
+
                 getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, "b");
+
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
                 getBridgeHandler().sendAsyncCommandToDevice(xbee64BitsAddress, "[");
             }
         };
@@ -304,15 +337,19 @@ public class SNAVXbee2Handler extends BaseThingHandler {
     }
 
     @Override
-    public void handleConfigurationUpdate(Map<String, Object> configurationParmeters) {
+    public void handleConfigurationUpdate(Map<String, Object> configurationParameters) {
         // can be overridden by subclasses
 
-        logger.info("handle ConfigurationUpdate ");
-        Configuration configuration = editConfiguration();
-        for (Entry<String, Object> configurationParmeter : configurationParmeters.entrySet()) {
-            logger.info("updating : {} with : {} ", configurationParmeter.getKey(), configurationParmeter.getValue());
-            configuration.put(configurationParmeter.getKey(), configurationParmeter.getValue());
-            if (configurationParmeter.getKey().equals("Reset")) {
+        logger.info("handle ConfigurationUpdate for :", this.thing.getUID());
+
+        thingConfig = editConfiguration();
+
+        for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
+            logger.info("updating : {} with : {} ", configurationParameter.getKey(), configurationParameter.getValue());
+            thingConfig.put(configurationParameter.getKey(), configurationParameter.getValue());
+
+            if (configurationParameter.getKey().equals("ResetXBee") && configurationParameter.getValue().equals(true)) {
+
                 logger.info("doing something to Reset device {} ", getThing().getUID());
                 getBridgeHandler().resetXBeeDevice(xbee64BitsAddress);
 
@@ -326,7 +363,9 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                     e.printStackTrace();
                 }
                 IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(xbee64BitsAddress);
+
                 logger.debug("Checking Device {} is on the network ! ", xbee64BitsAddress);
+
                 for (IOLineIOModeMapping map : IOsMapping) {
                     logger.trace("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
                 }
@@ -339,21 +378,19 @@ public class SNAVXbee2Handler extends BaseThingHandler {
                     logger.info("device {} looks to be OK", getThing().getUID());
                 } else {
                     if (!getThing().getStatus().equals(ThingStatus.OFFLINE)) {
-                        updateStatus(ThingStatus.OFFLINE);
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
                     }
                     logger.info("{} Could not be set online ", getThing().getUID());
                 }
 
-                configuration.put(configurationParmeter.getKey(), false);
-
+                logger.info("thingConfig.put(\"Reset\", false);");
+                thingConfig.put("ResetXBee", false);
             }
-            updateConfiguration(configuration);
-        }
-        // reinitialize with new configuration and persist changes
-        // dispose();
 
-        updateConfiguration(configuration);
-        // initialize();
+        }
+
+        updateConfiguration(thingConfig);
+
     }
 
 }

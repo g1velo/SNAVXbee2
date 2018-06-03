@@ -71,7 +71,7 @@ public class Tosr0xTparser {
         }
 
         if (xbeeMessage.getData().length == 1) {
-            logger.info(" This is the relay State : "
+            logger.debug(" This is the relay State : "
                     + HexUtils.prettyHexString(HexUtils.byteArrayToHexString(xbeeMessage.getData())));
 
             // Instanciating the parser

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SNAVXbee2 Binding using XBeeLibrary 1.2
 Bundle-SymbolicName: org.openhab.binding.snavxbee2;singleton:=true
 Bundle-Vendor: openHAB
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Import-Package: 
@@ -17,6 +17,7 @@ Import-Package:
  org.eclipse.smarthome.core.thing,
  org.eclipse.smarthome.core.thing.binding,
  org.eclipse.smarthome.core.thing.binding.builder,
+ org.eclipse.smarthome.core.thing.binding.firmware,
  org.eclipse.smarthome.core.thing.type,
  org.eclipse.smarthome.core.transform.actions,
  org.eclipse.smarthome.core.types,

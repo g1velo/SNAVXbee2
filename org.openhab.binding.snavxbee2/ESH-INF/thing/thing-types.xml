@@ -16,6 +16,17 @@
 				<description>In Case Thing is offline and should not try to set to true</description>
 				<default>false</default>
 			</parameter>
+			<parameter name="SerialPortName" type="text" required="true">
+				<context>Serial Port Name</context>
+				<label>Serial Port Name</label>
+				<description>Serial Port Name used to connect to XBee Coordinator</description>
+			</parameter>
+            <parameter name="SerialPortName" type="text" required="true">
+                <context>Serial Port Name</context>
+                <label>Serial Port Name</label>
+                <description>Serial Port Name used to connect to XBee Coordinator</description>
+            </parameter>
+
 		</config-description>
 	</bridge-type>
 	<!-- Sample Thing Type -->
@@ -95,19 +106,32 @@
 			<channel id="DIO19" typeId="DIO19" />
 		</channels>
 		<config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit address Xbee64BitsAddress
+			<parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-            <parameter name="ResetXBee" type="boolean" required="true">
-                <context>ResetContext</context>
-                <label>Send Reset() to this XBee Device</label>
-                <description>In Case Thing is offline and should not try to set to true</description>
-                <default>false</default>
-            </parameter>
+			</parameter>
+			<parameter name="ResetXBee" type="boolean" required="true">
+				<context>ResetContext</context>
+				<label>Send Reset() to this XBee Device</label>
+				<description>In Case Thing is offline and should not try to set to true</description>
+				<default>false</default>
+			</parameter>
+			<parameter name="WatchDogMe" type="boolean" required="true">
+				<context>WatchDogMe</context>
+				<label>WatchDogMe</label>
+				<description>Should we make sure this device is alive ? </description>
+				<default>true</default>
+			</parameter>
+			<parameter name="SyncCommunutation" type="boolean" required="true">
+				<context>SyncContext</context>
+				<label>Use Synchronous api </label>
+				<description>Use Synchronous Api to communicate with XBee Node</description>
+				<default>false</default>
+			</parameter>
 		</config-description>
+
 	</thing-type>
 	<thing-type id="cafe1001">
 		<supported-bridge-type-refs>

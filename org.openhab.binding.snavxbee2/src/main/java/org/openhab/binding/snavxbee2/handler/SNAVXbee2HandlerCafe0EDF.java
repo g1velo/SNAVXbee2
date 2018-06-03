@@ -11,6 +11,7 @@ import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.THING_TYPE
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
@@ -44,11 +45,16 @@ public class SNAVXbee2HandlerCafe0EDF extends BaseThingHandler {
     private ScheduledFuture<?> refreshJob;
     private List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
     private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
+    private Date lastPoke = new Date();
 
     public SNAVXbee2HandlerCafe0EDF(Thing thing) {
         super(thing);
         logger.debug("in {} method : contructor(Thing) ", this.getClass());
 
+    }
+
+    public void pokeIt() {
+        lastPoke = new Date();
     }
 
     @Override
