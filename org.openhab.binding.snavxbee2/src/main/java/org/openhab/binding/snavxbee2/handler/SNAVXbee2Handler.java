@@ -333,7 +333,7 @@ public class SNAVXbee2Handler extends BaseThingHandler implements FirmwareUpdate
             }
         };
 
-        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 30, 60, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 120, 60, TimeUnit.SECONDS);
     }
 
     @Override

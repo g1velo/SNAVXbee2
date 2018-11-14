@@ -10,21 +10,27 @@
 		<description>Xbee S2 connected using serial port
         </description>
 		<config-description>
-			<parameter name="ResetXBee" type="boolean" required="true">
-				<context>ResetContext</context>
-				<label>Send Reset() to this XBee Device</label>
-				<description>In Case Thing is offline and should not try to set to true</description>
-				<default>false</default>
-			</parameter>
 			<parameter name="SerialPortName" type="text" required="true">
 				<context>Serial Port Name</context>
 				<label>Serial Port Name</label>
 				<description>Serial Port Name used to connect to XBee Coordinator</description>
 			</parameter>
-            <parameter name="SerialPortName" type="text" required="true">
-                <context>Serial Port Name</context>
-                <label>Serial Port Name</label>
-                <description>Serial Port Name used to connect to XBee Coordinator</description>
+			<parameter name="SerialPortSpeed" type="text" required="true">
+				<context>Serial Port Speed ( BaudRate )</context>
+				<label>Serial Port Name</label>
+				<description>Serial Port Name used to connect to XBee Coordinator</description>
+			</parameter>
+			<parameter name="ResetXBee" type="boolean" required="false">
+                <context>ResetContext</context>
+                <label>Send Reset() to this XBee Device</label>
+                <description>In Case Thing is offline and should not try to set to true</description>
+                <default>false</default>
+            </parameter>
+            <parameter name="WatchDogTimer" type="text" required="false">
+                <context>WatchDogTimer</context>
+                <label>WatchDog Timer</label>
+                <description>WatchDogTimer will check local device is open</description>
+                <default>false</default>
             </parameter>
 
 		</config-description>
@@ -84,6 +90,12 @@
 			<channel id="temperature" typeId="temperature" />
 			<channel id="relay1" typeId="relay1" />
 			<channel id="relay2" typeId="relay2" />
+			<channel id="relay3" typeId="relay3" />
+			<channel id="relay4" typeId="relay4" />
+			<channel id="relay5" typeId="relay5" />
+			<channel id="relay6" typeId="relay6" />
+            <channel id="relay7" typeId="relay7" />
+            <channel id="relay8" typeId="relay8" />
 			<channel id="AD0DIO0" typeId="AD0DIO0" />
 			<channel id="AD1DIO1" typeId="AD1DIO1" />
 			<channel id="AD2DIO2" typeId="AD2DIO2" />
@@ -235,12 +247,12 @@
 		</config-description>
 	</thing-type>
 
-	<thing-type id="cafe0edf">
+	<thing-type id="cafead00">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge" />
 		</supported-bridge-type-refs>
-		<label>SNAVXbee2 ID : CAFE0EDF</label>
-		<description>Teleinfo edf pour SNAVXbee2 Binding ID : CAFE0EDF</description>
+		<label>SNAVXbee2 ID : CAFEAD00</label>
+		<description>Test Teleinfo edf pour SNAVXbee2 Binding ID : CAFEAD00</description>
 		<channels>
 			<channel id="ADCO" typeId="ADCO" />
 			<channel id="OPTARIF" typeId="OPTARIF" />
@@ -267,15 +279,72 @@
 			<channel id="MOTDETAT" typeId="MOTDETAT" />
 
 		</channels>
-		<config-description>
-			<parameter name="Xbee64BitsAddress" type="text" required="true">
-				<context>Xbee64BitsAddress</context>
-				<label>Xbee64BitsAddress</label>
-				<description>The 64 bit address Xbee64BitsAddress
+        <config-description>
+            <parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
+                <context>Xbee64BitsAddress</context>
+                <label>Xbee64BitsAddress</label>
+                <description>The 64 bit address Xbee64BitsAddress
                 </description>
-			</parameter>
-		</config-description>
+            </parameter>
+            <parameter name="ResetXBee" type="boolean" required="true">
+                <context>ResetContext</context>
+                <label>Send Reset() to this XBee Device</label>
+                <description>In Case Thing is offline and should not try to set to true</description>
+                <default>false</default>
+            </parameter>
+        </config-description>
 	</thing-type>
+
+
+    <thing-type id="cafe0edf">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+        <label>SNAVXbee2 ID : CAFE0EDF</label>
+        <description>Teleinfo edf pour SNAVXbee2 Binding ID : CAFE0EDF</description>
+        <channels>
+            <channel id="ADCO" typeId="ADCO" />
+            <channel id="OPTARIF" typeId="OPTARIF" />
+            <channel id="ISOUSC" typeId="ISOUSC" />
+            <channel id="BASE" typeId="BASE" />
+            <channel id="HCHC" typeId="HCHC" />
+            <channel id="HCHP" typeId="HCHP" />
+            <channel id="EJP_HN" typeId="EJP_HN" />
+            <channel id="EJP_HPM" typeId="EJP_HPM" />
+            <channel id="BBR_HC_JB" typeId="BBR_HC_JB" />
+            <channel id="BBR_HP_JB" typeId="BBR_HP_JB" />
+            <channel id="BBR_HC_JW" typeId="BBR_HC_JW" />
+            <channel id="BBR_HP_JW" typeId="BBR_HP_JW" />
+            <channel id="BBR_HC_JR" typeId="BBR_HC_JR" />
+            <channel id="BBR_HP_JR" typeId="BBR_HP_JR" />
+            <channel id="PEJP" typeId="PEJP" />
+            <channel id="PTEC" typeId="PTEC" />
+            <channel id="DEMAIN" typeId="DEMAIN" />
+            <channel id="IINST" typeId="IINST" />
+            <channel id="ADPS" typeId="ADPS" />
+            <channel id="IMAX" typeId="IMAX" />
+            <channel id="PAPP" typeId="PAPP" />
+            <channel id="HHPHC" typeId="HHPHC" />
+            <channel id="MOTDETAT" typeId="MOTDETAT" />
+
+        </channels>
+                <config-description>
+            <parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
+                <context>Xbee64BitsAddress</context>
+                <label>Xbee64BitsAddress</label>
+                <description>The 64 bit address Xbee64BitsAddress
+                </description>
+            </parameter>
+            <parameter name="ResetXBee" type="boolean" required="true">
+                <context>ResetContext</context>
+                <label>Send Reset() to this XBee Device</label>
+                <description>In Case Thing is offline and should not try to set to true</description>
+                <default>false</default>
+            </parameter>
+        </config-description>
+
+    </thing-type>
+
 
 	<!-- Sample Channel Type -->
 	<channel-type id="channel1">
@@ -453,7 +522,7 @@
 		<description>switch for SNAVXbee2 Binding</description>
 	</channel-type>
 	<channel-type id="ADCO">
-		<item-type>Decimal</item-type>
+		<item-type>String</item-type>
 		<label> Identifiant du compteur</label>
 		<description> Identifiant du compteur</description>
 	</channel-type>
@@ -468,22 +537,22 @@
 		<description> Intensité souscrite</description>
 	</channel-type>
 	<channel-type id="BASE">
-		<item-type>SwitchItem</item-type>
+		<item-type>Number</item-type>
 		<label> Index si option = base (en Wh)</label>
 		<description> Index si option = base (en Wh)</description>
 	</channel-type>
 	<channel-type id="HCHC">
-		<item-type>SwitchItem</item-type>
+		<item-type>Number</item-type>
 		<label> Index heures creuses si option = heures creuses (en Wh)</label>
 		<description> Index heures creuses si option = heures creuses (en Wh)</description>
 	</channel-type>
 	<channel-type id="HCHP">
-		<item-type>SwitchItem</item-type>
+		<item-type>Number</item-type>
 		<label> Index heures pleines si option = heures creuses (en Wh)</label>
 		<description> Index heures pleines si option = heures creuses (en Wh)</description>
 	</channel-type>
 	<channel-type id="EJP_HN">
-		<item-type>SwitchItem</item-type>
+		<item-type>Number</item-type>
 		<label> Index heures normales si option = EJP (en Wh)</label>
 		<description> Index heures normales si option = EJP (en Wh)</description>
 	</channel-type>
@@ -523,17 +592,17 @@
 		<description> Index heures pleines jours rouges si option = tempo (en Wh)</description>
 	</channel-type>
 	<channel-type id="PEJP">
-		<item-type>SwitchItem</item-type>
+		<item-type>Number</item-type>
 		<label> Préavis EJP si option = EJP 30mn avant période EJP</label>
 		<description> Préavis EJP si option = EJP 30mn avant période EJP</description>
 	</channel-type>
 	<channel-type id="PTEC">
-		<item-type>SwitchItem</item-type>
+		<item-type>String</item-type>
 		<label> Période tarifaire en cours</label>
 		<description> Période tarifaire en cours</description>
 	</channel-type>
 	<channel-type id="DEMAIN">
-		<item-type>SwitchItem</item-type>
+		<item-type>String</item-type>
 		<label> Couleur du lendemain si option = tempo</label>
 		<description> Couleur du lendemain si option = tempo</description>
 	</channel-type>
@@ -543,7 +612,7 @@
 		<description> Intensité instantanée (en ampères)</description>
 	</channel-type>
 	<channel-type id="ADPS">
-		<item-type>SwitchItem</item-type>
+		<item-type>Number</item-type>
 		<label> Avertissement de dépassement de puissance souscrite (en ampères)</label>
 		<description> Avertissement de dépassement de puissance souscrite (en ampères)</description>
 	</channel-type>
@@ -558,12 +627,12 @@
 		<description> Puissance apparente (en Volt.ampères)</description>
 	</channel-type>
 	<channel-type id="HHPHC">
-		<item-type>SwitchItem</item-type>
+		<item-type>String</item-type>
 		<label> Groupe horaire si option = heures creuses ou tempo</label>
 		<description> Groupe horaire si option = heures creuses ou tempo</description>
 	</channel-type>
 	<channel-type id="MOTDETAT">
-		<item-type>SwitchItem</item-type>
+		<item-type>String</item-type>
 		<label> Mot d’état (autocontrôle)</label>
 		<description> Mot d’état (autocontrôle)</description>
 	</channel-type>

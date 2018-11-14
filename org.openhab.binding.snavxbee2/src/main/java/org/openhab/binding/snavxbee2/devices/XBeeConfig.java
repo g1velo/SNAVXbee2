@@ -32,7 +32,7 @@ public class XBeeConfig {
             if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
                 logger.debug("Setting timeout for to 30000 for {} tuid : {} compared to : {} ",
                         remoteDevice.get64BitAddress(), thingTypeUID, THING_TYPE_TOSR0XT);
-                // remoteDevice.setIOSamplingRate(60000);
+                remoteDevice.setIOSamplingRate(0);
                 // remoteDevice.setParameter("IC", ByteUtils.stringToByteArray(("0012")));
                 // remoteDevice.applyChanges();
 
@@ -45,7 +45,7 @@ public class XBeeConfig {
                 }
                 remoteDevice.applyChanges();
                 remoteDevice.writeChanges();
-                logger.debug(" Config Changes : {} ", remoteDevice.isApplyConfigurationChangesEnabled());
+                logger.warn(" Config Changes : {} ", remoteDevice.isApplyConfigurationChangesEnabled());
             }
 
             if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {

@@ -31,6 +31,7 @@ public class SNAVXbee2BindingConstants {
     public final static ThingTypeUID THING_TYPE_CAFE1000 = new ThingTypeUID(BINDING_ID, "cafe1000");
     public final static ThingTypeUID THING_TYPE_CAFE1001 = new ThingTypeUID(BINDING_ID, "cafe1001");
     public final static ThingTypeUID THING_TYPE_CAFE0EDF = new ThingTypeUID(BINDING_ID, "cafe0edf");
+    public final static ThingTypeUID THING_TYPE_CAFEAD00 = new ThingTypeUID(BINDING_ID, "cafead00");
 
     // List of all Channel ids
     public final static String CHANNEL_1 = "channel1";
@@ -67,8 +68,8 @@ public class SNAVXbee2BindingConstants {
     public final static String S2 = "S2";
     public final static String S3 = "S3";
 
-    public final static String ADCO = "ADC0";
-    public final static String OPTARIF = "OPTARIF ";
+    public final static String ADCO = "ADCO";
+    public final static String OPTARIF = "OPTARIF";
     public final static String ISOUSC = "ISOUSC";
     public final static String BASE = "BASE";
     public final static String HCHC = "HCHC";
@@ -130,7 +131,8 @@ public class SNAVXbee2BindingConstants {
 
     /** Per handler supported type */
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_CAFE1001 = ImmutableSet.of(THING_TYPE_CAFE1001);
-    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_CAFE0EDF = ImmutableSet.of(THING_TYPE_CAFE0EDF);
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_CAFE0EDF = ImmutableSet.of(THING_TYPE_CAFE0EDF,
+            THING_TYPE_CAFEAD00);
     public final static Set<ThingTypeUID> FIRST_SUPPORTED_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
             THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000);
 
@@ -140,6 +142,6 @@ public class SNAVXbee2BindingConstants {
     /** Supported devices (things + bridges) */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_TYPES_UIDS = ImmutableSet.of(THING_TYPE_SAMPLE,
             THING_TYPE_BRIDGE, THING_TYPE_TOSR0XT, THING_TYPE_XBEEAPI, THING_TYPE_CAFE1000, THING_TYPE_CAFE1001,
-            THING_TYPE_CAFE0EDF);
+            THING_TYPE_CAFE0EDF, THING_TYPE_CAFEAD00);
 
 }

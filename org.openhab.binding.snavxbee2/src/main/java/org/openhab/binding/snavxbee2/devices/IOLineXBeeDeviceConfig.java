@@ -39,13 +39,13 @@ public class IOLineXBeeDeviceConfig {
         }
 
         if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
-            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO1_AD1, IOMode.ADC));
-            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO2_AD2, IOMode.ADC));
-            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO3_AD3, IOMode.ADC));
+            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO1_AD1, IOMode.DISABLED));
+            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO2_AD2, IOMode.DISABLED));
+            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO3_AD3, IOMode.DISABLED));
             ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO4_AD4, IOMode.DISABLED));
             ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO5_AD5, IOMode.DISABLED));
             ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO11_PWM1, IOMode.DISABLED));
-            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO12, IOMode.DIGITAL_IN));
+            ioLinesConfig.add(new IOLineIOModeMapping(IOLine.DIO12, IOMode.DISABLED));
         }
 
         if (thingTypeUID.equals(THING_TYPE_XBEEAPI)) {

@@ -1,7 +1,16 @@
 package org.openhab.binding.snavxbee2.devices.teleinfoEDF;
 
-import java.io.UnsupportedEncodingException;
+import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.SUPPORTED_CAFE0EDF_CHANNELS;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
+
+import org.eclipse.smarthome.core.thing.Channel;
+import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,126 +19,127 @@ import org.slf4j.LoggerFactory;
  * @author Stephan Navarro - Initial contribution
  */
 
-public class TeleinfoEDFParser {
+public class TeleinfoEDFParser extends Thread {
 
     private Logger logger = LoggerFactory.getLogger(TeleinfoEDFParser.class);
     private StringBuffer messageToParse = new StringBuffer();
-    private StringBuffer messageModifiedToParse = new StringBuffer();
+    private ThingUID thingUIDToUpdate;
+    private Thing thingToUpdate;
+    private ArrayList<ChannelActionToPerform> listOfChannelActionToPerform = new ArrayList<>();
+
+    // private StringBuffer messageModifiedToParse = new StringBuffer();
     // private ExecutorService executor = Executors.newFixedThreadPool(10);
 
     // private byte[] b;
 
+    public synchronized void putMessage(Thing thingToUpdate, byte[] message) {
+        this.thingToUpdate = thingToUpdate;
+        this.thingUIDToUpdate = thingToUpdate.getUID();
+        this.putMessage(message);
+
+    }
+
     public void putMessage(byte[] message) {
 
-        logger.debug(" JSJSS {}", Thread.currentThread().getName());
-        // messageModifiedToParse.append(message);
-
-        byte[] b = new byte[message.length + 1];
+        logger.trace(" Current thread :  {}", Thread.currentThread().getName());
+        // messageToParse.append(message);
 
         for (int j = 0; j < message.length; j++) {
-            // logger.debug(" Byte [{}] : {} ", j, message[j] & 127);
-            b[j] = (byte) (message[j] & 127); // b[j] = (byte) (message[j] & 127);
 
-            // logger.debug(" Byte [{}] : {} ", j, b[j]);
+            if ((message[j] & 127) != 2 && (message[j] & 127) != 3) {
 
+                logger.trace(new String(Character.toChars((message[j] & 127))));
+                messageToParse.append(new String(Character.toChars((message[j] & 127))));
+            }
         }
-
-        try {
-            // logger.debug(new String(b, "UTF-8"));
-            messageToParse.append(new String(b, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
         this.parse();
+
     }
 
     private void parse() {
 
-        boolean frame_begin_found = false;
-        // boolean frame_end_found_once = false;
-        boolean frame_begin_found_once = false;
-        int frame_begin = 0;
-        int firstFrameToDelete = 0;
-        // int lastFrameToDelete = -1;
-        int last_frame_end = 0;
+        logger.trace("Parsing : {} ", messageToParse);
+        int first = messageToParse.indexOf("\n");
+        int last = messageToParse.lastIndexOf("\r");
 
-        for (int i = 0; i < messageToParse.length(); i++) {
-            // logger.debug(messageToParse.charAt(i));
+        // int next = messageToParse.indexOf("\u0003\u0002", first + 1);
 
-            int ascii = messageToParse.charAt(i);
+        logger.trace("first : {}  last : {} ", first, last);
+        logger.trace("MESSAGE Before  : {} ", messageToParse.toString());
+        logger.trace("Frame length : {}", messageToParse.length());
 
-            // logger.debug("Value : {} {} ", i, ascii);
-            // logger.debug("start Frame : {}", i);
+        ThingUID thingUIDToUpdate = thingToUpdate.getUID();
+        Collection<Channel> thingChannels = thingToUpdate.getChannels();
+        ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
 
-            switch (ascii) {
-                case 10:
-                    // logger.debug("start Frame : {}", i);
-                    if (!frame_begin_found_once) {
-                        frame_begin_found_once = true;
-                    }
+        if (last > first) {
 
-                    frame_begin_found = true;
-                    frame_begin = i;
-                    break;
-                case 13:
-                    if (frame_begin_found && frame_begin_found_once) {
+            Scanner frame = new Scanner(messageToParse.toString());
 
-                        String stringMessageToParse = (String) messageToParse.subSequence(frame_begin + 1, i);
-                        logger.debug("Message to parse : {} ", stringMessageToParse);
-                        // executor.execute(new TeleinfoMessageReceived(stringMessageToParse, thing));
-                        TeleinfoMessageReceived timr = new TeleinfoMessageReceived(stringMessageToParse); // , thing);
-                        timr.run();
+            // while (frame.hasNextLine()) {
+            while (frame.hasNextLine()) {
 
-                        last_frame_end = i;
-                        frame_begin_found = false;
+                String etiquette = frame.nextLine();
 
+                String[] msg = etiquette.split(" ");
+
+                for (int p = 0; p < msg.length; p++) {
+
+                    if (SUPPORTED_CAFE0EDF_CHANNELS.contains(msg[p]) && p == 0) {
+                        logger.warn("msg : {} ", msg[p]);
                     } else {
-                        // if not start Frame was previously found, we delete the beginning
-                        // of the Frame
-                        firstFrameToDelete = 0;
-                        // messageToPa// rse.delete(0, i);
+                        if (p == 0 && msg[p].length() > 0) {
+                            logger.warn("Strange etiquette : {} : {} {}", p, msg[p], msg.length);
+                        }
                     }
-                    // frame_end_found = true;
-                    // frame_end = i;
-                    // logger.debug("end Frame : {}", i);
-                    break;
-                default:
-                    // useless so far
-                    if (ascii > 20 && ascii < 127) {
-                        // logger.debug("good caracter : {} i: {} ", ascii, i);
-                    } else {
-                        logger.trace("Stange caracter : {} at : {} ", ascii, i);
+                    if (p == 1) {
+                        logger.trace("Value: {} ", msg[p]);
                     }
-                    break;
+                    if (p == 2) {
+                        logger.trace("is correct : {} ", TeleInfoEDFCheckSum.isCheckSumCorrect(etiquette));
+                        logger.trace("CheckSum: {} ", msg[p]);
+                    }
+
+                    channelActionToPerform.setChannelUIDToUpdate(new ChannelUID(thingUIDToUpdate + msg[0]));
+                    if (true) {
+                        // channelActionToPerform.setState(new StringType(msg[1].toString()));
+                        // channelActionToPerform.setState(new StringType(new String(msg[1])));
+                        listOfChannelActionToPerform.add(channelActionToPerform);
+                    }
+                }
+
+                logger.warn("message : {} ", etiquette);
+
             }
+
+            // for (ChannelActionToPerform actionToPerform : listOfChannelActionToPerform) {
+            // logger.warn("channel to update : {} to value : {} ", actionToPerform.getChannelUIDToUpdate(),
+            // actionToPerform.getState());
+            // updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
+            // }
+            frame.close();
+
+            logger.trace("MESSAGE After : {} ", messageToParse.length());
+
+            messageToParse.delete(0, last);
+            logger.trace("first : {} last : {} ", first, last);
+
         }
 
-        // logger.debug("message length 1 : {} ", messageToParse.length());
-
-        if (last_frame_end != 0) {//
-            // logger.debug("firstFrameToDelete : {} last_frame_end : {} ", firstFrameToDelete, last_frame_end + 1);
-            messageToParse.delete(firstFrameToDelete, last_frame_end);
-            // logger.debug("message length : {} ", messageToParse.length());
+        if (messageToParse.length() > 512) {
+            logger.warn("Message parser is too big discarding ");
+            messageToParse.delete(0, messageToParse.length());
         }
 
-        if (messageToParse.length() > 256) {
-            logger.debug("Message parser to big discarding ");
-            messageToParse = new StringBuffer();
-            // messageToParse.delete(0, 1024);
-        }
-
-        // logger.debug("message length 2 : {} ", messageToParse.length());
-        // logger.debug("full msg : {} ", messageToParse.capacity());
-        // messageToParse.trimToSize();
-
-        // String stringMessageToParse = (String) messageToParse.subSequence(0, messageToParse.length());
-        // logger.debug("Mess to par look lke : {} ", stringMessageToParse.toCharArray());
-
-        // messageToParse = new StringBuffer();
     }
 
-    private void reset() {
+    public ArrayList<ChannelActionToPerform> getListOfChannelActionToPerform() {
+        return listOfChannelActionToPerform;
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ExtraLibs"/>
+	<classpathentry kind="lib" path="/home/ste/openhab2-master9/Extra-libs/XBJL-1.2.1/xbee-java-library-1.2.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

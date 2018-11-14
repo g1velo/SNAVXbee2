@@ -845,10 +845,10 @@ public class DataReader extends Thread {
 	 */
 	private void notifyDataReceived(final XBeeMessage xbeeMessage) {
 		if (xbeeMessage.isBroadcast())
-			logger.info(connectionInterface.toString() + 
+			logger.debug(connectionInterface.toString() + 
 					"Broadcast data received from {} >> {}.", xbeeMessage.getDevice().get64BitAddress(), HexUtils.prettyHexString(xbeeMessage.getData()));
 		else
-			logger.info(connectionInterface.toString() + 
+			logger.debug(connectionInterface.toString() + 
 					"Data received from {} >> {}.", xbeeMessage.getDevice().get64BitAddress(), HexUtils.prettyHexString(xbeeMessage.getData()));
 		
 		try {

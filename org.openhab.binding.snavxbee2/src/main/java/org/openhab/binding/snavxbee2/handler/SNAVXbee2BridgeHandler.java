@@ -7,11 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -26,11 +26,12 @@ import org.eclipse.smarthome.core.thing.binding.firmware.FirmwareUpdateHandler;
 import org.eclipse.smarthome.core.thing.binding.firmware.ProgressCallback;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.snavxbee2.devices.Tosr0xTparser;
+import org.openhab.binding.snavxbee2.devices.teleinfoEDF.TeleinfoEDFParser;
 import org.openhab.binding.snavxbee2.utils.ChannelActionToPerform;
 import org.openhab.binding.snavxbee2.utils.IOLineIOModeMapping;
 import org.openhab.binding.snavxbee2.utils.RCAndIOValue;
-import org.openhab.binding.snavxbee2.utils.SerialPortConfigParameters;
 import org.openhab.binding.snavxbee2.utils.XbeeIOSampleParser;
+import org.openhab.binding.snavxbee2.utils.objects.XbeeLastSeen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         implements IDataReceiveListener, IDiscoveryListener, IIOSampleReceiveListener, FirmwareUpdateHandler {
 
     private Logger logger = LoggerFactory.getLogger(SNAVXbee2BridgeHandler.class);
-    private SerialPortConfigParameters portconfig = new SerialPortConfigParameters();
+    // private SerialPortConfigParameters portconfig = new SerialPortConfigParameters();
     // PORT parameter Should be update to what is in the Thing Definition
     private static String PORT = "COM2";
     // BAUD_RATE parameter Should be update to what is in the Thing Definition
@@ -72,7 +73,10 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     private XBeeNetwork xbeeNetwork = null;
     private List<RemoteXBeeDevice> remoteDeviceList;
     private ScheduledFuture<?> refreshJob;
-    // private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
+
+    private TeleinfoEDFParser teleinfoParser = new TeleinfoEDFParser();
+    // private Vector xBeeVector;
+    private ConcurrentNavigableMap<XBee64BitAddress, XbeeLastSeen> xBeeList;
 
     public SNAVXbee2BridgeHandler(Bridge bridge) {
         super(bridge);
@@ -80,6 +84,12 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         // logger.debug(" In the brige constructor , can handle commands");
     }
 
+    /**
+     * This is the method perform a discovery and return discovered devices.
+     *
+     * @param timeout set the DiscoveryTimetout.
+     * @return List of XBee devices discovered.
+     */
     public List<RemoteXBeeDevice> startSearch(int timeout) {
 
         logger.trace("Start Search in Bridge Handler");
@@ -87,6 +97,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         if (!xbeeNetwork.isDiscoveryRunning()) {
 
             try {
+                xbeeNetwork.clearDeviceList();
                 xbeeNetwork.setDiscoveryTimeout(timeout);
                 // xbeeNetwork.setDiscoveryOptions(EnumSet.of(DiscoveryOptions.APPEND_DD));
                 // .setDiscoveryOptions(EnumSet.of(DiscoveryOptions.APPEND_DD, DiscoveryOptions.DISCOVER_MYSELF));
@@ -94,7 +105,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 xbeeNetwork.startDiscoveryProcess();
 
                 while (xbeeNetwork.isDiscoveryRunning()) {
-                    logger.trace("Xbee discoverin running 3: {}", xbeeNetwork.isDiscoveryRunning());
+                    logger.trace("Xbee discovery  running : {}", xbeeNetwork.isDiscoveryRunning());
                     Thread.sleep(timeout + 2000);
 
                     if (this.remoteDeviceList != null) {
@@ -118,7 +129,6 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
     @Override
     public void deviceDiscovered(RemoteXBeeDevice discoveredDevice) {
-
         logger.debug(" devices discoverered : {} {}", discoveredDevice.getNodeID(), discoveredDevice.get64BitAddress());
 
     }
@@ -126,7 +136,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     @Override
     public void discoveryError(String error) {
         // TODO Auto-generated method stub
-        logger.info(">> There was an error discovering devices: {}", error);
+        logger.error(">> There was an error discovering devices: {}", error);
     }
 
     @Override
@@ -221,7 +231,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         }
     }
 
-    public synchronized void sendSyncCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
+    public void sendSyncCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
 
         logger.debug("Sending Sync command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
 
@@ -250,17 +260,14 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         }
     }
 
-    /**
-     * This method is used to change Xbee device IOLine Value
-     * the IOLine has to be configured as DIGITAL_OUT.
-     *
-     * @param xbee64BitsAddress is XBee Device XBee64BitAddress to update
-     * @param String is the IOLine to update
-     * @param iovalue is the IOValue
-     * @return Nothing.
-     */
+    public String getFirmwareLevel(XBee64BitAddress xbee64BitsAddress) {
 
-    public synchronized void sendAsyncCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
+        RemoteXBeeDevice getFWRemoteDevice = xbeeNetwork.getDevice(xbee64BitsAddress);
+        getFWRemoteDevice.getFirmwareVersion();
+        return getFWRemoteDevice.getFirmwareVersion();
+    }
+
+    public void sendAsyncCommandToDevice(XBee64BitAddress xbee64BitsAddress, String xbeeCommmand) {
 
         logger.debug(" sending Async command : {} to : {} ", xbeeCommmand, xbee64BitsAddress);
 
@@ -332,7 +339,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
             configuration.put(configurationParameter.getKey(), configurationParameter.getValue());
 
             if (configurationParameter.getKey().equals("ResetXBee") && configurationParameter.getValue().equals(true)) {
-                logger.debug("We need to do something for this Bridge");
+                logger.warn("We need to do something for this Bridge");
 
                 this.dispose();
                 this.initialize();
@@ -358,8 +365,9 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
-        logger.debug(" In the brige, Disposing config : " + portconfig.serialPort + " " + portconfig.baudRate);
-        // xbeeNetwork.lis
+        logger.debug(" In the brige, Disposing config : " + config.get("SerialPortName").toString() + " "
+                + Integer.valueOf(config.get("SerialPortSpeed").toString()));
+
         refreshJob.cancel(true);
         myDevice.removeDataListener(this);
         myDevice.removeIOSampleListener(this);
@@ -371,21 +379,18 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     @Override
     public void initialize() {
 
-        // TODO Auto-generated method stub
-        // to remove
-        // updateStatus(ThingStatus.ONLINE);
+        // String port = (String) config.get("serialPort");
+        // String baud = config.get("baudRate").toString();
+        // String port = (String) config.get("SerialPortName");
+        // String baud = config.get("SerialPortSpeed").toString();
 
-        String port = (String) config.get("serialPort");
-        String baud = config.get("baudRate").toString();
+        // portconfig.baudRate = baud;
+        // portconfig.serialPort = port;
 
-        portconfig.baudRate = baud;
-        portconfig.serialPort = port;
+        PORT = config.get("SerialPortName").toString();
+        BAUD_RATE = Integer.valueOf(config.get("SerialPortSpeed").toString());
 
-        PORT = portconfig.serialPort;
-        BAUD_RATE = Integer.valueOf(portconfig.baudRate);
-
-        // logger.trace(" SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ");
-        logger.trace(" In the brige, Initialising config : " + portconfig.serialPort + " " + portconfig.baudRate);
+        logger.debug(" In the brige, Initialising config : " + PORT + " " + BAUD_RATE);
 
         try {
 
@@ -414,9 +419,13 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
 
         } catch (XBeeException e) {
             e.printStackTrace();
+            logger.error("XBeeException Occured");
+            logger.error(e.getMessage());
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "had an XBeeException");
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Exception Occured");
+            logger.error(e.getMessage());
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "had another exception");
         }
 
@@ -439,13 +448,11 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
      */
     @Override
     public void dataReceived(XBeeMessage xbeeMessage) {
-        // TODO Auto-generated method stub
 
         Thing thingToUpdate = null;
         ThingUID thingUIDToUpdate = null;
-        String channelToUpdate = null;
 
-        logger.debug("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
+        logger.trace("data Received from : {} : {}", xbeeMessage.getDevice().get64BitAddress().toString(),
                 xbeeMessage.getData());
 
         Collection<Thing> things = getThing().getThings();
@@ -479,20 +486,21 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 if (thing.getThingTypeUID().equals(THING_TYPE_SAMPLE)) {
                 }
 
-                if (thing.getThingTypeUID().equals(THING_TYPE_CAFE0EDF)) {
-                    // logger.debug("thing.getUID() : {} ", thing.getUID());
+                // if (thing.getThingTypeUID().equals(THING_TYPE_CAFE0EDF)) {
+                if (SUPPORTED_THING_TYPES_CAFE0EDF.contains(thing.getThingTypeUID())) {
+                    logger.trace("thing.getUID() : {} ", thing.getUID());
 
-                    // thingToUpdate.getHandler(). // .handleUpdate(new ChannelUID(thingUIDToUpdate + ":ADCO"),
-                    // new StringType(msg));
-                    // if (xbeeMessage.getDevice().get64BitAddress()toString().equals("))
-                    // SNAVXbee2HandlerCafe0EDF tedf = (SNAVXbee2HandlerCafe0EDF) thingToUpdate.getHandler();
-                    // tedf.sendMessage(xbeeMessage.getData());
-                    // teleinfoParser.putMessage(xbeeMessage.getData());
-                    // logger.debug("MSG : {} ", Thread.currentThread().getName().split("-")[1]);
-                    logger.debug("MSG : {} ", thingUIDToUpdate + ":ADCO");
+                    // TeleinfoEDFParser t = new TeleinfoEDFParser();
+                    teleinfoParser.putMessage(thingToUpdate, xbeeMessage.getData());
 
-                    updateState(thingUIDToUpdate + ":ADCO",
-                            new DecimalType(Integer.valueOf(Thread.currentThread().getName().split("-")[1])));
+                    ArrayList<ChannelActionToPerform> listOfActionToPerform = teleinfoParser
+                            .getListOfChannelActionToPerform();
+
+                    for (ChannelActionToPerform actionToPerform : listOfActionToPerform) {
+                        logger.trace("channel to update : {} to value : {} ", actionToPerform.getChannelUIDToUpdate(),
+                                actionToPerform.getState());
+                        updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
+                    }
 
                 }
 
@@ -532,8 +540,17 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
     public void childHandlerInitialized(ThingHandler childHandler, Thing childThing) {
         // TODO Auto-generated method stub
         logger.info("childHandlerInitialized for {}", childThing.getUID());
+
         super.childHandlerInitialized(childHandler, childThing);
     }
+
+    private class ReceivedDataParser implements Runnable {
+        @Override
+        public void run() {
+            logger.debug("Starting Parsing Data for CAFEEDF0 : {}");
+        }
+
+    };
 
     @Override
     public void childHandlerDisposed(ThingHandler childHandler, Thing childThing) {
@@ -583,7 +600,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
         };
 
         refreshJob = scheduler.scheduleWithFixedDelay(runnable, 60, 300, TimeUnit.SECONDS);
-        refreshJob = scheduler.scheduleWithFixedDelay(checkXBeeNetwork, 10, 30, TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleWithFixedDelay(checkXBeeNetwork, 50, 30, TimeUnit.SECONDS);
 
     }
 

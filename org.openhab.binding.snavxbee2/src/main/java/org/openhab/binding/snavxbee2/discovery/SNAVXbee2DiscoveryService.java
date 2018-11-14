@@ -126,6 +126,13 @@ public class SNAVXbee2DiscoveryService extends AbstractDiscoveryService {
                         // remote.get64BitAddress().toString());
                         thingLabel = "XBee controller attached To teleinfo EDF";
                         break;
+                    case "CAFEAD00":
+                        logger.warn("Discovered CAFEAD00");
+                        tuid = THING_TYPE_CAFEAD00;
+                        // uid = new ThingUID(THING_TYPE_CAFE1001, bridgeHandler.getThing().getUID(),
+                        // remote.get64BitAddress().toString());
+                        thingLabel = "Test XBee controller attached To teleinfo EDF";
+                        break;
                     default:
                         tuid = THING_TYPE_SAMPLE;
                         // uid = new ThingUID(THING_TYPE_SAMPLE, bridgeHandler.getThing().getUID(),
