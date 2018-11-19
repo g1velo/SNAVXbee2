@@ -5,6 +5,7 @@ import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentNavigableMap;
@@ -475,6 +476,8 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                     Tosr0xTparser tp = new Tosr0xTparser(thingToUpdate, xbeeMessage);
                     ArrayList<ChannelActionToPerform> listOfActionToPerform = tp.getListOfChannelActionToPerform();
 
+                    logger.warn("THING_TYPE_TOSR0XT : {} ", listOfActionToPerform.size());
+
                     for (ChannelActionToPerform actionToPerform : listOfActionToPerform) {
                         logger.trace("channel to update : {} to value : {} ", actionToPerform.getChannelUIDToUpdate(),
                                 actionToPerform.getState());
@@ -490,18 +493,29 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                 if (SUPPORTED_THING_TYPES_CAFE0EDF.contains(thing.getThingTypeUID())) {
                     logger.trace("thing.getUID() : {} ", thing.getUID());
 
+                    // Collection<Channel> thingChannels = thingToUpdate.getChannels();
+
                     // TeleinfoEDFParser t = new TeleinfoEDFParser();
                     teleinfoParser.putMessage(thingToUpdate, xbeeMessage.getData());
 
-                    ArrayList<ChannelActionToPerform> listOfActionToPerform = teleinfoParser
-                            .getListOfChannelActionToPerform();
+                    ArrayList<ChannelActionToPerform> listOfActionToPerform = new ArrayList<>();
+                    listOfActionToPerform = teleinfoParser.getListOfChannelActionToPerform();
+
+                    logger.trace("list : {} ", listOfActionToPerform.size());
+
+                    ListIterator<ChannelActionToPerform> listIterator = listOfActionToPerform
+                            .listIterator(listOfActionToPerform.size());
+
+                    while (listIterator.hasNext()) {
+                        ChannelActionToPerform a = listIterator.next();
+                    }
 
                     for (ChannelActionToPerform actionToPerform : listOfActionToPerform) {
                         logger.trace("channel to update : {} to value : {} ", actionToPerform.getChannelUIDToUpdate(),
                                 actionToPerform.getState());
                         updateState(actionToPerform.getChannelUIDToUpdate(), actionToPerform.getState());
                     }
-
+                    // logger.warn("here");
                 }
 
             }
@@ -588,6 +602,7 @@ public class SNAVXbee2BridgeHandler extends BaseBridgeHandler
                     logger.error("Device {} is closed", PORT);
                     try {
                         myDevice.open();
+                        myDevice.getHardwareVersion();
                     } catch (XBeeException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

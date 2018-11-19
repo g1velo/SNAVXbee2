@@ -25,6 +25,7 @@ Import-Package:
  org.openhab.binding.snavxbee2,
  org.openhab.binding.snavxbee2.handler,
  org.openhab.core.items,
+ org.openhab.core.library.items,
  org.osgi.framework;version="1.8.0",
  org.slf4j
 Service-Component: OSGI-INF/*.xml
