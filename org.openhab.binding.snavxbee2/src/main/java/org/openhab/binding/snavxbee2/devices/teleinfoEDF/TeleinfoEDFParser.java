@@ -39,20 +39,18 @@ public class TeleinfoEDFParser extends Thread {
 
     }
 
-    public void putMessage(byte[] message) {
+    public synchronized void putMessage(byte[] message) {
 
         logger.trace(" Current thread :  {}", Thread.currentThread().getName());
-
-        // messageToParse.append(message);
 
         for (int j = 0; j < message.length; j++) {
 
             if ((message[j] & 127) != 2 && (message[j] & 127) != 3) {
-
                 logger.trace(new String(Character.toChars((message[j] & 127))));
                 messageToParse.append(new String(Character.toChars((message[j] & 127))));
             }
         }
+
         this.parse();
 
     }
@@ -63,91 +61,75 @@ public class TeleinfoEDFParser extends Thread {
         int first = messageToParse.indexOf("\n");
         int last = messageToParse.lastIndexOf("\r");
 
-        // int next = messageToParse.indexOf("\u0003\u0002", first + 1);
-
-        logger.trace("first : {}  last : {} ", first, last);
+        logger.trace("first : {}  last : {} length : {}", first, last, messageToParse.length());
         logger.trace("MESSAGE Before  : {} ", messageToParse.toString());
         logger.trace("Frame length : {}", messageToParse.length());
 
         ThingUID thingUIDToUpdate = thingToUpdate.getUID();
         // Collection<Channel> thingChannels = thingToUpdate.getChannels();
 
+        if (messageToParse.length() > 512) {
+            logger.warn("Message parser is too big discarding ");
+            messageToParse.delete(0, messageToParse.length());
+        }
+
         if (last > first) {
 
             Scanner frame = new Scanner(messageToParse.toString());
 
-            // while (frame.hasNextLine()) {
             while (frame.hasNextLine()) {
 
                 ChannelActionToPerform channelActionToPerform = new ChannelActionToPerform();
 
                 String etiquette = frame.nextLine();
-                logger.trace("etiquette : {} ", etiquette);
 
                 if (etiquette.length() != 0) {
+                    logger.trace("etiquette : {} ", etiquette);
 
                     boolean isDouble = false;
 
                     TeleinfoMessage tim = new TeleinfoMessage(etiquette);
                     logger.trace("result :  {} ", tim.isChecksumValid());
 
-                    String[] msg = etiquette.split(" ");
+                    if (tim.isChecksumValid()) {
+                        if (SUPPORTED_CAFE0EDF_CHANNELS.contains(tim.getMessageID())) {
+                            logger.trace("Etiquette: {} ", tim.getMessageID());
+                            ChannelUID cuid = new ChannelUID(thingUIDToUpdate + ":" + tim.getMessageID());
 
-                    for (int p = 0; p < msg.length; p++) {
+                            channelActionToPerform.setChannelUIDToUpdate(cuid);
 
-                        if (msg.length == 3) {
+                            logger.trace(" thingToUpdate.getUID() : {} ",
+                                    thingToUpdate.getChannel(tim.getMessageID()).getAcceptedItemType());
 
-                            if (SUPPORTED_CAFE0EDF_CHANNELS.contains(msg[p]) && p == 0) {
-                                logger.trace("Etiquette: {} ", msg[p]);
-                                ChannelUID cuid = new ChannelUID(thingUIDToUpdate + ":" + msg[p]);
-                                channelActionToPerform.setChannelUIDToUpdate(cuid);
-                                // Channel ch = new ChannelUID(channelUid)
-                            } else {
-                                if (p == 0 && msg[p].length() > 0) {
-                                    logger.warn("Strange etiquette : {} : {} {}", p, msg[p], msg.length);
-                                }
-                            }
-
-                            if (p == 1) {
-                                logger.trace("Value: {} ", msg[1]);
-
-                                String value = msg[p].trim();
-
-                                try {
-                                    Double.parseDouble(value);
-                                    logger.trace("is a Double");
-                                    isDouble = true;
-                                } catch (NumberFormatException e) {
-                                    logger.trace("Not a Double");
+                            switch (thingToUpdate.getChannel(tim.getMessageID()).getAcceptedItemType()) {
+                                case "String":
                                     isDouble = false;
-                                }
-
-                                Class<?> dataType = msg[1].getClass();
-
-                                if (isDouble) {
-                                    logger.trace("BigDecimal");
-                                    channelActionToPerform.setState(new DecimalType(Double.parseDouble(value)));
-                                } else {
-                                    if (String.class.isAssignableFrom(dataType)) {
-                                        logger.trace("String");
-                                        channelActionToPerform.setState(new StringType(value));
-                                    }
-                                }
-
-                                // channelActionToPerform.setState(new DecimalType("123"));
-                            }
-                            if (p == 2) {
-                                logger.trace("is correct : {} ", TeleInfoEDFCheckSum.isCheckSumCorrect(etiquette));
-                                logger.trace("CheckSum: {} ", msg[p]);
-                                logger.trace("adding value : {} to {} ", msg[1], msg[0]);
-                                listOfChannelActionToPerform.add(channelActionToPerform);
+                                    break;
+                                case "Number":
+                                    isDouble = true;
+                                    break;
                             }
 
+                            String value = tim.getValue();
+
+                            if (isDouble) {
+                                logger.trace("BigDecimal");
+                                channelActionToPerform.setState(new DecimalType(Double.parseDouble(value)));
+                            } else {
+                                logger.trace("String");
+                                channelActionToPerform.setState(new StringType(value));
+                            }
+
+                            logger.trace("is correct : {} ", TeleInfoEDFCheckSum.isCheckSumCorrect(etiquette));
+                            logger.trace("CheckSum: {} ", tim.getChecksum());
+                            logger.trace("adding value : {} to {} ", tim.getValue(), tim.getMessageID());
+                            listOfChannelActionToPerform.add(channelActionToPerform);
+
+                        } else {
+                            logger.warn("Strange etiquette : {}", tim.getMessageID());
                         }
-
                     }
                 }
-
             }
 
             frame.close();
@@ -156,12 +138,6 @@ public class TeleinfoEDFParser extends Thread {
 
             messageToParse.delete(0, last);
             logger.trace("first : {} last : {} ", first, last);
-
-        }
-
-        if (messageToParse.length() > 512) {
-            logger.trace("Message parser is too big discarding ");
-            messageToParse.delete(0, messageToParse.length());
         }
 
     }
@@ -169,6 +145,7 @@ public class TeleinfoEDFParser extends Thread {
     public ArrayList<ChannelActionToPerform> getListOfChannelActionToPerform() {
         ArrayList<ChannelActionToPerform> l = (ArrayList<ChannelActionToPerform>) listOfChannelActionToPerform.clone();
         listOfChannelActionToPerform = new ArrayList();
+
         // logger.trace(" listOfChannelActionToPerform.size : {} ", listOfChannelActionToPerform.size());
         // logger.trace(" l.size : {} ", l.size());
         return l;

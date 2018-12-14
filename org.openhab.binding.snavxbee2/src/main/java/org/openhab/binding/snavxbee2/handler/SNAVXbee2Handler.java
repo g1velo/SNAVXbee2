@@ -11,6 +11,7 @@ import static org.openhab.binding.snavxbee2.SNAVXbee2BindingConstants.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -59,11 +60,16 @@ public class SNAVXbee2Handler extends BaseThingHandler implements FirmwareUpdate
     private ScheduledFuture<?> refreshJob;
     private List<IOLineIOModeMapping> IOsMapping = new ArrayList<>();
     private Map<String, Object> bridgeconfigMap;
+    private Date lastPoke = new Date();
 
     public SNAVXbee2Handler(Thing thing) {
         super(thing);
         logger.debug("in {} method : contructor(Thing) ", this.getClass());
 
+    }
+
+    public void pokeIt() {
+        this.lastPoke = new Date();
     }
 
     @Override
@@ -341,15 +347,22 @@ public class SNAVXbee2Handler extends BaseThingHandler implements FirmwareUpdate
         // can be overridden by subclasses
 
         logger.info("handle ConfigurationUpdate for :", this.thing.getUID());
+        logger.info("handle ConfigurationUpdate for :", this.xbee64BitsAddress);
 
         thingConfig = editConfiguration();
 
+        // if(configurationParameters.containsKey(key))
+        xbee64BitsAddress = new XBee64BitAddress(configurationParameters.get("Xbee64BitsAddress").toString());
+
+        logger.info("handle ConfigurationUpdate for :", this.xbee64BitsAddress);
+
         for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
+
             logger.info("updating : {} with : {} ", configurationParameter.getKey(), configurationParameter.getValue());
             thingConfig.put(configurationParameter.getKey(), configurationParameter.getValue());
 
             if (configurationParameter.getKey().equals("ResetXBee") && configurationParameter.getValue().equals(true)) {
-
+                // scheduler.execute(new resetXbeeDevice());
                 logger.info("doing something to Reset device {} ", getThing().getUID());
                 getBridgeHandler().resetXBeeDevice(xbee64BitsAddress);
 
@@ -362,6 +375,75 @@ public class SNAVXbee2Handler extends BaseThingHandler implements FirmwareUpdate
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+
+                IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(xbee64BitsAddress);
+
+                logger.debug("Checking Device {} is on the network ! ", xbee64BitsAddress);
+
+                for (IOLineIOModeMapping map : IOsMapping) {
+                    logger.trace("IOLIne : {} IOMode : {} ", map.getIoLine(), map.getIoMode());
+                }
+
+                logger.trace("IOsMapping has : {} Lines", IOsMapping.size());
+
+                if (!IOsMapping.isEmpty()) {
+                    if (!getThing().getStatus().equals(ThingStatus.ONLINE)) {
+                        updateStatus(ThingStatus.ONLINE);
+                    }
+                    logger.info("device {} looks to be OK", getThing().getUID());
+                } else {
+                    if (!getThing().getStatus().equals(ThingStatus.OFFLINE)) {
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+                    }
+                    logger.info("{} Could not be set online ", getThing().getUID());
+                }
+
+                logger.info("thingConfig.put(\"Reset\", false);");
+                thingConfig.put("ResetXBee", false);
+            }
+
+            if (configurationParameter.getKey().equals("XBeeDeviceTypeID")) {
+                // this.getBridgeHandler().setRemoteATConfig(xbee64BitsAddress, "DD", "CAFE0EDF".getBytes());
+                // ((String) configurationParameter.getValue()).getBytes());
+                logger.warn("Setting : {} to : {}", configurationParameter.getKey(), configurationParameter.getValue());
+
+            }
+
+        }
+
+        updateConfiguration(thingConfig);
+
+    }
+
+    /**
+     * A thread to do something.....
+     */
+    private class resetXbeeDevice implements Runnable {
+
+        @Override
+        public void run() {
+            // https://community.openhab.org/t/oh2-major-bug-with-scheduled-jobs/12350/11
+            // If any execution of the task encounters an exception, subsequent executions are
+            // suppressed. Otherwise, the task will only terminate via cancellation or
+            // termination of the executor.
+
+            try {
+                // XBee bridge have to be ONLINE because configuration is needed
+
+                SNAVXbee2BridgeHandler bridgeHandler = getBridgeHandler();
+                if (bridgeHandler == null || !bridgeHandler.getThing().getStatus().equals(ThingStatus.ONLINE)) {
+                    logger.warn("bridge handler not found or not ONLINE.");
+                    return;
+                }
+
+                logger.info("doing something to Reset device {} ", getThing().getUID());
+                getBridgeHandler().resetXBeeDevice(xbee64BitsAddress);
+
+                updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.HANDLER_CONFIGURATION_PENDING,
+                        "In handleConfigurationUpdate() method");
+
+                Thread.sleep(10000);
+
                 IOsMapping = getBridgeHandler().getXBeeDeviceIOLineConfig(xbee64BitsAddress);
 
                 logger.debug("Checking Device {} is on the network ! ", xbee64BitsAddress);
@@ -385,12 +467,11 @@ public class SNAVXbee2Handler extends BaseThingHandler implements FirmwareUpdate
 
                 logger.info("thingConfig.put(\"Reset\", false);");
                 thingConfig.put("ResetXBee", false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
         }
-
-        updateConfiguration(thingConfig);
-
-    }
+    };
 
 }

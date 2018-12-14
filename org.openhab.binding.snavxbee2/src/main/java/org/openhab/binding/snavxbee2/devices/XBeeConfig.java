@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.digi.xbee.api.RemoteXBeeDevice;
 import com.digi.xbee.api.exceptions.XBeeException;
 
-public class XBeeConfig {
+public class XBeeConfig implements Runnable {
 
     private ThingTypeUID thingTypeUID;
     private Logger logger = LoggerFactory.getLogger(XBeeConfig.class);
@@ -29,12 +29,14 @@ public class XBeeConfig {
 
         try {
 
+            if (thingTypeUID.equals(THING_TYPE_CAFE0EDF)) {
+                logger.debug("configuring thing type : {}", THING_TYPE_CAFE0EDF);
+
+            }
             if (thingTypeUID.equals(THING_TYPE_TOSR0XT)) {
                 logger.debug("Setting timeout for to 30000 for {} tuid : {} compared to : {} ",
                         remoteDevice.get64BitAddress(), thingTypeUID, THING_TYPE_TOSR0XT);
                 remoteDevice.setIOSamplingRate(0);
-                // remoteDevice.setParameter("IC", ByteUtils.stringToByteArray(("0012")));
-                // remoteDevice.applyChanges();
 
                 for (IOLineIOModeMapping ioLineIOModeMapping : IOLinesxbeeConfig) {
 
@@ -50,19 +52,18 @@ public class XBeeConfig {
 
             if (thingTypeUID.equals(THING_TYPE_SAMPLE)) {
                 logger.debug(" Thung UID : {}  no config change , has to be done manually", thingTypeUID);
-                // logger.debug("Setting timeout for to 3000 for {} tuid : {} ", remoteDevice.get64BitAddress(),
-                // thingTypeUID);
-
-                remoteDevice.setIOSamplingRate(60000);
-                // logger.debug("Setting timeout for {} tuid : {} ", remoteDevice.getIOSamplingRate(), thingTypeUID);
-                remoteDevice.applyChanges();
-                remoteDevice.writeChanges();
             }
 
         } catch (XBeeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
 
     }
 

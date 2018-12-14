@@ -2,9 +2,7 @@
 <thing:thing-descriptions bindingId="snavxbee2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-
 	<!-- Bridge definition -->
-
 	<bridge-type id="bridge">
 		<label>SNAV Xbee2 Serial Gateway</label>
 		<description>Xbee S2 connected using serial port
@@ -21,17 +19,17 @@
 				<description>Serial Port Name used to connect to XBee Coordinator</description>
 			</parameter>
 			<parameter name="ResetXBee" type="boolean" required="false">
-                <context>ResetContext</context>
-                <label>Send Reset() to this XBee Device</label>
-                <description>In Case Thing is offline and should not try to set to true</description>
-                <default>false</default>
-            </parameter>
-            <parameter name="WatchDogTimer" type="text" required="false">
-                <context>WatchDogTimer</context>
-                <label>WatchDog Timer</label>
-                <description>WatchDogTimer will check local device is open</description>
-                <default>false</default>
-            </parameter>
+				<context>ResetContext</context>
+				<label>Send Reset() to this XBee Device</label>
+				<description>In Case Thing is offline and should not try to set to true</description>
+				<default>false</default>
+			</parameter>
+			<parameter name="WatchDogTimer" type="text" required="false">
+				<context>WatchDogTimer</context>
+				<label>WatchDog Timer</label>
+				<description>WatchDogTimer will check local device is open</description>
+				<default>false</default>
+			</parameter>
 
 		</config-description>
 	</bridge-type>
@@ -71,11 +69,28 @@
 				<description>The 64 bit address Xbee64BitsAddress
                 </description>
 			</parameter>
+			<parameter name="XBeeDeviceTypeID" type="text" required="true" readOnly="false">
+				<context>XbeeDeviceType</context>
+				<label>XBeeDeviceTypeID</label>
+				<description>Set the device type</description>
+				<default>CAFE0EDF</default>
+			</parameter>
 			<parameter name="ResetXBee" type="boolean" required="true">
 				<context>ResetContext</context>
 				<label>Send Reset() to this XBee Device</label>
 				<description>In Case Thing is offline and should not try to set to true</description>
 				<default>false</default>
+			</parameter>
+			<parameter name="DD" type="text" required="false">
+				<context>Device Indentifier</context>
+				<label>Override the Device indentifier</label>
+				<description>Override the Device indentifier</description>
+				<default>0</default>
+				<options>
+					<option value="0">None</option>
+					<option value="CAFE0002">tosr0xt</option>
+					<option value="CAFE0EDF">Linky Teleinfo</option>
+				</options>
 			</parameter>
 		</config-description>
 	</thing-type>
@@ -94,8 +109,8 @@
 			<channel id="relay4" typeId="relay4" />
 			<channel id="relay5" typeId="relay5" />
 			<channel id="relay6" typeId="relay6" />
-            <channel id="relay7" typeId="relay7" />
-            <channel id="relay8" typeId="relay8" />
+			<channel id="relay7" typeId="relay7" />
+			<channel id="relay8" typeId="relay8" />
 			<channel id="AD0DIO0" typeId="AD0DIO0" />
 			<channel id="AD1DIO1" typeId="AD1DIO1" />
 			<channel id="AD2DIO2" typeId="AD2DIO2" />
@@ -279,92 +294,705 @@
 			<channel id="MOTDETAT" typeId="MOTDETAT" />
 
 		</channels>
-        <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit address Xbee64BitsAddress
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-            <parameter name="ResetXBee" type="boolean" required="true">
-                <context>ResetContext</context>
-                <label>Send Reset() to this XBee Device</label>
-                <description>In Case Thing is offline and should not try to set to true</description>
-                <default>false</default>
-            </parameter>
-        </config-description>
+			</parameter>
+			<parameter name="ResetXBee" type="boolean" required="true">
+				<context>ResetContext</context>
+				<label>Send Reset() to this XBee Device</label>
+				<description>In Case Thing is offline and should not try to set to true</description>
+				<default>false</default>
+			</parameter>
+		</config-description>
 	</thing-type>
 
 
-    <thing-type id="cafe0edf">
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        <label>SNAVXbee2 ID : CAFE0EDF</label>
-        <description>Teleinfo edf pour SNAVXbee2 Binding ID : CAFE0EDF</description>
-        <channels>
-            <channel id="ADCO" typeId="ADCO" />
-            <channel id="OPTARIF" typeId="OPTARIF" />
-            <channel id="ISOUSC" typeId="ISOUSC" />
-            <channel id="BASE" typeId="BASE" />
-            <channel id="HCHC" typeId="HCHC" />
-            <channel id="HCHP" typeId="HCHP" />
-            <channel id="EJP_HN" typeId="EJP_HN" />
-            <channel id="EJP_HPM" typeId="EJP_HPM" />
-            <channel id="BBR_HC_JB" typeId="BBR_HC_JB" />
-            <channel id="BBR_HP_JB" typeId="BBR_HP_JB" />
-            <channel id="BBR_HC_JW" typeId="BBR_HC_JW" />
-            <channel id="BBR_HP_JW" typeId="BBR_HP_JW" />
-            <channel id="BBR_HC_JR" typeId="BBR_HC_JR" />
-            <channel id="BBR_HP_JR" typeId="BBR_HP_JR" />
-            <channel id="PEJP" typeId="PEJP" />
-            <channel id="PTEC" typeId="PTEC" />
-            <channel id="DEMAIN" typeId="DEMAIN" />
-            <channel id="IINST" typeId="IINST" />
-            <channel id="ADPS" typeId="ADPS" />
-            <channel id="IMAX" typeId="IMAX" />
-            <channel id="PAPP" typeId="PAPP" />
-            <channel id="HHPHC" typeId="HHPHC" />
-            <channel id="MOTDETAT" typeId="MOTDETAT" />
-
-        </channels>
-                <config-description>
-            <parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
-                <context>Xbee64BitsAddress</context>
-                <label>Xbee64BitsAddress</label>
-                <description>The 64 bit address Xbee64BitsAddress
+	<thing-type id="cafe0edf">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+		<label>SNAVXbee2 ID : CAFE0EDF</label>
+		<description>Teleinfo edf pour SNAVXbee2 Binding ID : CAFE0EDF</description>
+		<channels>
+			<channel id="ADCO" typeId="ADCO" />
+			<channel id="OPTARIF" typeId="OPTARIF" />
+			<channel id="ISOUSC" typeId="ISOUSC" />
+			<channel id="BASE" typeId="BASE" />
+			<channel id="PAPP" typeId="PAPP" />
+			<channel id="IINST" typeId="IINST" />
+			<channel id="IMAX" typeId="IMAX" />
+			<channel id="MOTDETAT" typeId="MOTDETAT" />
+			<channel id="HCHC" typeId="HCHC" />
+			<channel id="HCHP" typeId="HCHP" />
+			<channel id="EJP_HN" typeId="EJP_HN" />
+			<channel id="EJP_HPM" typeId="EJP_HPM" />
+			<channel id="BBR_HC_JB" typeId="BBR_HC_JB" />
+			<channel id="BBR_HP_JB" typeId="BBR_HP_JB" />
+			<channel id="BBR_HC_JW" typeId="BBR_HC_JW" />
+			<channel id="BBR_HP_JW" typeId="BBR_HP_JW" />
+			<channel id="BBR_HC_JR" typeId="BBR_HC_JR" />
+			<channel id="BBR_HP_JR" typeId="BBR_HP_JR" />
+			<channel id="PEJP" typeId="PEJP" />
+			<channel id="PTEC" typeId="PTEC" />
+			<channel id="DEMAIN" typeId="DEMAIN" />
+			<channel id="ADPS" typeId="ADPS" />
+			<channel id="HHPHC" typeId="HHPHC" />
+		</channels>
+		<config-description>
+			<parameter name="Xbee64BitsAddress" type="text" required="true" readOnly="true">
+				<context>Xbee64BitsAddress</context>
+				<label>Xbee64BitsAddress</label>
+				<description>The 64 bit address Xbee64BitsAddress
                 </description>
-            </parameter>
-            <parameter name="ResetXBee" type="boolean" required="true">
-                <context>ResetContext</context>
-                <label>Send Reset() to this XBee Device</label>
-                <description>In Case Thing is offline and should not try to set to true</description>
-                <default>false</default>
-            </parameter>
-        </config-description>
+			</parameter>
+			<parameter name="XBeeDeviceTypeID" type="text" required="true" readOnly="false">
+				<context>XbeeDeviceType</context>
+				<label>XBeeDeviceTypeID</label>
+				<description>Set the device type</description>
+				<default>CAFE0EDF</default>
+			</parameter>
+			<parameter name="ResetXBee" type="boolean" required="true">
+				<context>ResetContext</context>
+				<label>Send Reset() to this XBee Device</label>
+				<description>In Case Thing is offline and should not try to set to true</description>
+				<default>false</default>
+			</parameter>
+			<parameter name="linkyMode" type="integer" required="true">
+				<context>linkyMode</context>
+				<label>linkyMode</label>
+				<description>linkyMode (0 Historique ) (1 Standard )</description>
+				<default>0</default>
+				<options>
+					<option value="0">Historique</option>
+					<option value="1">Standard</option>
+				</options>
+			</parameter>
+		</config-description>
 
-    </thing-type>
-
-
-	<!-- Sample Channel Type -->
-	<channel-type id="channel1">
-		<item-type>channel1</item-type>
-		<label>SNAVXbee2 Binding Channel  for testing Purpose</label>
-		<description>Sample channel for SNAVXbee2 Binding</description>
+	</thing-type>
+	<channel-type id="ADCO">
+		<item-type>String</item-type>
+		<label>Adresse du compteur</label>
+		<description>Adresse du compteur</description>
+		<state pattern="%s" readOnly="true" />
 	</channel-type>
-	<channel-type id="humidity" advanced="true">
+	<channel-type id="OPTARIF">
+		<item-type>String</item-type>
+		<label>Option tarifaire choisie</label>
+		<description>Option tarifaire choisie</description>
+		<state pattern="%s" readOnly="true" />
+	</channel-type>
+	<channel-type id="ISOUSC">
 		<item-type>Number</item-type>
-		<label>Test humidity</label>
-		<description>Test</description>
-		<category>humidity</category>
-		<state readOnly="true" />
+		<label>Intensité souscrite</label>
+		<description>Intensité souscrite</description>
+		<state pattern="%d A" readOnly="true" />
 	</channel-type>
+	<channel-type id="BASE">
+		<item-type>Number</item-type>
+		<label>Index option Base</label>
+		<description>Index option Base</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="HCHC">
+		<item-type>Number</item-type>
+		<label>Index option Heures Creuses</label>
+		<description>Index option Heures Creuses</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="HCHP">
+		<item-type>Number</item-type>
+		<label>Index option Heures Pleines</label>
+		<description>Index option Heures Pleines</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EJPHN">
+		<item-type>Number</item-type>
+		<label>Index option EJP Heures Normales</label>
+		<description>Index option EJP Heures Normales</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EJPHPM">
+		<item-type>Number</item-type>
+		<label>Heures de Pointe Index option EJPMobile</label>
+		<description>Heures de Pointe Index option EJPMobile</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="BBRHCJB">
+		<item-type>Number</item-type>
+		<label>Index option Tempo Heures Creuses Jours Bleus</label>
+		<description>Index option Tempo Heures Creuses Jours Bleus</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="BBRHPJB">
+		<item-type>Number</item-type>
+		<label>Index option Tempo Heures Pleines Jours Bleus</label>
+		<description>Index option Tempo Heures Pleines Jours Bleus</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="BBRHCJW">
+		<item-type>Number</item-type>
+		<label>Index option Tempo Heures Creuses Jours Blancs</label>
+		<description>Index option Tempo Heures Creuses Jours Blancs</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="BBRHPJW">
+		<item-type>Number</item-type>
+		<label>Index option Tempo Heures Pleines Jours Blancs</label>
+		<description>Index option Tempo Heures Pleines Jours Blancs</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="BBRHCJR">
+		<item-type>Number</item-type>
+		<label>Index option Tempo Heures Creuses Jours Rouges</label>
+		<description>Index option Tempo Heures Creuses Jours Rouges</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="BBRHPJR">
+		<item-type>Number</item-type>
+		<label>Index option Tempo Heures Pleines Jours Rouges</label>
+		<description>Index option Tempo Heures Pleines Jours Rouges</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="PEJP">
+		<item-type>Number</item-type>
+		<label>Préavis Début EJP (30 min)</label>
+		<description>Préavis Début EJP (30 min)</description>
+		<state pattern="%d min" readOnly="true" />
+	</channel-type>
+	<channel-type id="PTEC">
+		<item-type>String</item-type>
+		<label>Période Tarifaire en cours</label>
+		<description>Période Tarifaire en cours</description>
+		<state pattern="%s" readOnly="true" />
+	</channel-type>
+	<channel-type id="DEMAIN">
+		<item-type>String</item-type>
+		<label>Couleur du lendemain</label>
+		<description>Couleur du lendemain</description>
+		<state pattern="%s" readOnly="true" />
+	</channel-type>
+	<channel-type id="IINST">
+		<item-type>Number</item-type>
+		<label>Intensité Instantanée</label>
+		<description>Intensité Instantanée</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="ADPS">
+		<item-type>Number</item-type>
+		<label>Avertissement de Dépassement De Puissance Souscrite</label>
+		<description>Avertissement de Dépassement De Puissance Souscrite</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IMAX">
+		<item-type>Number</item-type>
+		<label>Intensité maximale appelée</label>
+		<description>Intensité maximale appelée</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="PAPP">
+		<item-type>Number</item-type>
+		<label>Puissance apparente</label>
+		<description>Puissance apparente</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="HHPHC">
+		<item-type>String</item-type>
+		<label>Horaire Heures Pleines Heures Creuses</label>
+		<description>Horaire Heures Pleines Heures Creuses</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="MOTDETAT">
+		<item-type>String</item-type>
+		<label>Mot d'état du compteur</label>
+		<description>Mot d'état du compteur</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="IINST1">
+		<item-type>Number</item-type>
+		<label>Intensité Instantanée phase 1</label>
+		<description>Intensité Instantanée phase 1</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IINST2">
+		<item-type>Number</item-type>
+		<label>Intensité Instantanée phase 2</label>
+		<description>Intensité Instantanée phase 2</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IINST3">
+		<item-type>Number</item-type>
+		<label>Intensité Instantanée phase 3</label>
+		<description>Intensité Instantanée phase 3</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IMAX1">
+		<item-type>Number</item-type>
+		<label>Intensité maximale phase 1 </label>
+		<description>Intensité maximale phase 1 </description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IMAX2">
+		<item-type>Number</item-type>
+		<label>Intensité maximale phase 2</label>
+		<description>Intensité maximale phase 2</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IMAX3">
+		<item-type>Number</item-type>
+		<label>Intensité maximale phase 3</label>
+		<description>Intensité maximale phase 3</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="PMAX">
+		<item-type>Number</item-type>
+		<label>Puissance maximale triphasée atteinte</label>
+		<description>Puissance maximale triphasée atteinte</description>
+		<state pattern="%d W" readOnly="true" />
+	</channel-type>
+	<channel-type id="PPOT">
+		<item-type>String</item-type>
+		<label>Présence des potentiels</label>
+		<description>Présence des potentiels</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="ADSC">
+		<item-type>String</item-type>
+		<label>Adresse Secondaire du compteur</label>
+		<description>Adresse Secondaire du compteur</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="VTIC">
+		<item-type>String</item-type>
+		<label>Version de la TIC</label>
+		<description>Version de la TIC</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="DATE">
+		<item-type>String</item-type>
+		<label>Date et heure courante</label>
+		<description>Date et heure courante</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="NGTF">
+		<item-type>String</item-type>
+		<label>Nom du calendrier tarifaire fournisseur</label>
+		<description>Nom du calendrier tarifaire fournisseur</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="LTARF">
+		<item-type>String</item-type>
+		<label>Libellé tarif fournisseur en cours</label>
+		<description>Libellé tarif fournisseur en cours</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="EAST">
+		<item-type>Number</item-type>
+		<label>Energie active soutirée totale</label>
+		<description>Energie active soutirée totale</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF01">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 01"</label>
+		<description>"Energie active soutirée Fournisseur, index 01"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF02">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 02"</label>
+		<description>"Energie active soutirée Fournisseur, index 02"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF03">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 03"</label>
+		<description>"Energie active soutirée Fournisseur, index 03"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF04">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 04"</label>
+		<description>"Energie active soutirée Fournisseur, index 04"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF05">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 05"</label>
+		<description>"Energie active soutirée Fournisseur, index 05"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF06">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 06"</label>
+		<description>"Energie active soutirée Fournisseur, index 06"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF07">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 07"</label>
+		<description>"Energie active soutirée Fournisseur, index 07"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF08">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 08"</label>
+		<description>"Energie active soutirée Fournisseur, index 08"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF09">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 09"</label>
+		<description>"Energie active soutirée Fournisseur, index 09"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASF10">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Fournisseur, index 10"</label>
+		<description>"Energie active soutirée Fournisseur, index 10"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASD01">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Distributeur, index 01"</label>
+		<description>"Energie active soutirée Distributeur, index 01"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASD02">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Distributeur, index 02"</label>
+		<description>"Energie active soutirée Distributeur, index 02"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASD03">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Distributeur, index 03"</label>
+		<description>"Energie active soutirée Distributeur, index 03"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EASD04">
+		<item-type>Number</item-type>
+		<label>"Energie active soutirée Distributeur, index 04"</label>
+		<description>"Energie active soutirée Distributeur, index 04"</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="EAIT">
+		<item-type>Number</item-type>
+		<label>Energie active injectée totale</label>
+		<description>Energie active injectée totale</description>
+		<state pattern="%d Wh" readOnly="true" />
+	</channel-type>
+	<channel-type id="ERQ1">
+		<item-type>Number</item-type>
+		<label>Energie réactive Q1 totale</label>
+		<description>Energie réactive Q1 totale</description>
+		<state pattern="%d VArh" readOnly="true" />
+	</channel-type>
+	<channel-type id="ERQ2">
+		<item-type>Number</item-type>
+		<label>Energie réactive Q2 totale</label>
+		<description>Energie réactive Q2 totale</description>
+		<state pattern="%d VArh" readOnly="true" />
+	</channel-type>
+	<channel-type id="ERQ3">
+		<item-type>Number</item-type>
+		<label>Energie réactive Q3 totale</label>
+		<description>Energie réactive Q3 totale</description>
+		<state pattern="%d VArh" readOnly="true" />
+	</channel-type>
+	<channel-type id="ERQ4">
+		<item-type>Number</item-type>
+		<label>Energie réactive Q4 totale</label>
+		<description>Energie réactive Q4 totale</description>
+		<state pattern="%d VArh" readOnly="true" />
+	</channel-type>
+	<channel-type id="IRMS1">
+		<item-type>Number</item-type>
+		<label>"Courant efficace, phase 1"</label>
+		<description>"Courant efficace, phase 1"</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IRMS2">
+		<item-type>Number</item-type>
+		<label>"Courant efficace, phase 2"</label>
+		<description>"Courant efficace, phase 2"</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="IRMS3">
+		<item-type>Number</item-type>
+		<label>"Courant efficace, phase 3"</label>
+		<description>"Courant efficace, phase 3"</description>
+		<state pattern="%d A" readOnly="true" />
+	</channel-type>
+	<channel-type id="URMS1">
+		<item-type>Number</item-type>
+		<label>"Tension efficace, phase 1"</label>
+		<description>"Tension efficace, phase 1"</description>
+		<state pattern="%d V" readOnly="true" />
+	</channel-type>
+	<channel-type id="URMS2">
+		<item-type>Number</item-type>
+		<label>"Tension efficace, phase 2"</label>
+		<description>"Tension efficace, phase 2"</description>
+		<state pattern="%d V" readOnly="true" />
+	</channel-type>
+	<channel-type id="URMS3">
+		<item-type>Number</item-type>
+		<label>"Tension efficace, phase 3"</label>
+		<description>"Tension efficace, phase 3"</description>
+		<state pattern="%d V" readOnly="true" />
+	</channel-type>
+	<channel-type id="PREF">
+		<item-type>Number</item-type>
+		<label>Puissance app. de référence (PREF)</label>
+		<description>Puissance app. de référence (PREF)</description>
+		<state pattern="%d kVA" readOnly="true" />
+	</channel-type>
+	<channel-type id="PCOUP">
+		<item-type>Number</item-type>
+		<label>Puissance app. de coupure (PCOUP)</label>
+		<description>Puissance app. de coupure (PCOUP)</description>
+		<state pattern="%d kVA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SINSTS">
+		<item-type>Number</item-type>
+		<label>Puissance app. Instantanée soutirée</label>
+		<description>Puissance app. Instantanée soutirée</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SINSTS1">
+		<item-type>Number</item-type>
+		<label>Puissance app. Instantanée soutirée phase 1</label>
+		<description>Puissance app. Instantanée soutirée phase 1</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SINSTS2">
+		<item-type>Number</item-type>
+		<label>Puissance app. Instantanée soutirée phase 2</label>
+		<description>Puissance app. Instantanée soutirée phase 2</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SINSTS3">
+		<item-type>Number</item-type>
+		<label>Puissance app. Instantanée soutirée phase 3</label>
+		<description>Puissance app. Instantanée soutirée phase 3</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN">
+		<item-type>Number</item-type>
+		<label>Puissance app. max. soutirée n</label>
+		<description>Puissance app. max. soutirée n</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN1">
+		<item-type>Number</item-type>
+		<label>Puissance app. max. soutirée n phase 1</label>
+		<description>Puissance app. max. soutirée n phase 1</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN2">
+		<item-type>Number</item-type>
+		<label>Puissance app. max. soutirée n phase 2</label>
+		<description>Puissance app. max. soutirée n phase 2</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN3">
+		<item-type>Number</item-type>
+		<label>Puissance app. max. soutirée n phase 3</label>
+		<description>Puissance app. max. soutirée n phase 3</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN-1">
+		<item-type>Number</item-type>
+		<label>Puissance app max. soutirée n-1</label>
+		<description>Puissance app max. soutirée n-1</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN1-1">
+		<item-type>Number</item-type>
+		<label>Puissance app max. soutirée n-1 phase 1</label>
+		<description>Puissance app max. soutirée n-1 phase 1</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN2-1">
+		<item-type>Number</item-type>
+		<label>Puissance app max. soutirée n-1 phase 2</label>
+		<description>Puissance app max. soutirée n-1 phase 2</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXSN3-1">
+		<item-type>Number</item-type>
+		<label>Puissance app max. soutirée n-1 phase 3</label>
+		<description>Puissance app max. soutirée n-1 phase 3</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SINSTI">
+		<item-type>Number</item-type>
+		<label>Puissance app. Instantanée injectée</label>
+		<description>Puissance app. Instantanée injectée</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXIN">
+		<item-type>Number</item-type>
+		<label>Puissance app. max. injectée n</label>
+		<description>Puissance app. max. injectée n</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="SMAXIN-1">
+		<item-type>Number</item-type>
+		<label>Puissance app max. injectée n-1</label>
+		<description>Puissance app max. injectée n-1</description>
+		<state pattern="%d VA" readOnly="true" />
+	</channel-type>
+	<channel-type id="CCASN">
+		<item-type>Number</item-type>
+		<label>Point n de la courbe de charge active soutirée</label>
+		<description>Point n de la courbe de charge active soutirée</description>
+		<state pattern="%d W" readOnly="true" />
+	</channel-type>
+	<channel-type id="CCASN-1">
+		<item-type>Number</item-type>
+		<label>Point n-1 de la courbe de charge active soutirée</label>
+		<description>Point n-1 de la courbe de charge active soutirée</description>
+		<state pattern="%d W" readOnly="true" />
+	</channel-type>
+	<channel-type id="CCAIN">
+		<item-type>Number</item-type>
+		<label>Point n de la courbe de charge active injectée</label>
+		<description>Point n de la courbe de charge active injectée</description>
+		<state pattern="%d W" readOnly="true" />
+	</channel-type>
+	<channel-type id="CCAIN-1">
+		<item-type>Number</item-type>
+		<label>Point n-1 de la courbe de charge active injectée</label>
+		<description>Point n-1 de la courbe de charge active injectée</description>
+		<state pattern="%d W" readOnly="true" />
+	</channel-type>
+	<channel-type id="UMOY1">
+		<item-type>Number</item-type>
+		<label>Tension moy. ph. 1</label>
+		<description>Tension moy. ph. 1</description>
+		<state pattern="%d V" readOnly="true" />
+	</channel-type>
+	<channel-type id="UMOY2">
+		<item-type>Number</item-type>
+		<label>Tension moy. ph. 2</label>
+		<description>Tension moy. ph. 2</description>
+		<state pattern="%d V" readOnly="true" />
+	</channel-type>
+	<channel-type id="UMOY3">
+		<item-type>Number</item-type>
+		<label>Tension moy. ph. 3</label>
+		<description>Tension moy. ph. 3</description>
+		<state pattern="%d V" readOnly="true" />
+	</channel-type>
+	<channel-type id="STGE">
+		<item-type>String</item-type>
+		<label>Registre de Statuts</label>
+		<description>Registre de Statuts</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="DPM1">
+		<item-type>String</item-type>
+		<label>Début Pointe Mobile 1</label>
+		<description>Début Pointe Mobile 1</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="FPM1">
+		<item-type>String</item-type>
+		<label>Fin Pointe Mobile 1</label>
+		<description>Fin Pointe Mobile 1</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="DPM2">
+		<item-type>String</item-type>
+		<label>Début Pointe Mobile 2</label>
+		<description>Début Pointe Mobile 2</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="FPM2">
+		<item-type>String</item-type>
+		<label>Fin Pointe Mobile 2</label>
+		<description>Fin Pointe Mobile 2</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="DPM3">
+		<item-type>String</item-type>
+		<label>Début Pointe Mobile 3</label>
+		<description>Début Pointe Mobile 3</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="FPM3">
+		<item-type>String</item-type>
+		<label>Fin Pointe Mobile 3</label>
+		<description>Fin Pointe Mobile 3</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="MSG1">
+		<item-type>String</item-type>
+		<label>Message court</label>
+		<description>Message court</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="MSG2">
+		<item-type>String</item-type>
+		<label>Message Ultra court</label>
+		<description>Message Ultra court</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="PRM">
+		<item-type>String</item-type>
+		<label>PRM</label>
+		<description>PRM</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="RELAIS">
+		<item-type>String</item-type>
+		<label>Relais</label>
+		<description>Relais</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="NTARF">
+		<item-type>String</item-type>
+		<label>Numéro de l index tarifaire en cours</label>
+		<description>Numéro de l index tarifaire en cours</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="NJOURF">
+		<item-type>String</item-type>
+		<label>Numéro du jour en cours calendrier fournisseur</label>
+		<description>Numéro du jour en cours calendrier fournisseur</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="NJOURF1">
+		<item-type>String</item-type>
+		<label>Numéro du prochain jour calendrier fournisseur</label>
+		<description>Numéro du prochain jour calendrier fournisseur</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="PJOURF1">
+		<item-type>String</item-type>
+		<label>Profil du prochain jour calendrier fournisseur</label>
+		<description>Profil du prochain jour calendrier fournisseur</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+	<channel-type id="PPOINTE">
+		<item-type>String</item-type>
+		<label>Profil du prochain jour de pointe</label>
+		<description>Profil du prochain jour de pointe</description>
+		<state pattern="%s " readOnly="true" />
+	</channel-type>
+
 	<channel-type id="temperature">
 		<item-type>Number</item-type>
 		<label>TOSR0xT temperature DS18B20</label>
 		<description>temperature channel for SNAVXbee2 Binding using DS18B20 device</description>
 		<category>Temperature</category>
-		<state readOnly="true" />
+		<state pattern="%s " readOnly="true" />
 	</channel-type>
 	<channel-type id="relay1">
 		<item-type>SwitchItem</item-type>
@@ -521,121 +1149,7 @@
 		<label>SNAVXbee2 Binding switch Number 3</label>
 		<description>switch for SNAVXbee2 Binding</description>
 	</channel-type>
-	<channel-type id="ADCO">
-		<item-type>String</item-type>
-		<label> Identifiant du compteur</label>
-		<description> Identifiant du compteur</description>
-	</channel-type>
-	<channel-type id="OPTARIF">
-		<item-type>String</item-type>
-		<label> Option tarifaire (type d’abonnement)</label>
-		<description> Option tarifaire (type d’abonnement)</description>
-	</channel-type>
-	<channel-type id="ISOUSC">
-		<item-type>Number</item-type>
-		<label> Intensité souscrite</label>
-		<description> Intensité souscrite</description>
-	</channel-type>
-	<channel-type id="BASE">
-		<item-type>Number</item-type>
-		<label> Index si option = base (en Wh)</label>
-		<description> Index si option = base (en Wh)</description>
-	</channel-type>
-	<channel-type id="HCHC">
-		<item-type>Number</item-type>
-		<label> Index heures creuses si option = heures creuses (en Wh)</label>
-		<description> Index heures creuses si option = heures creuses (en Wh)</description>
-	</channel-type>
-	<channel-type id="HCHP">
-		<item-type>Number</item-type>
-		<label> Index heures pleines si option = heures creuses (en Wh)</label>
-		<description> Index heures pleines si option = heures creuses (en Wh)</description>
-	</channel-type>
-	<channel-type id="EJP_HN">
-		<item-type>Number</item-type>
-		<label> Index heures normales si option = EJP (en Wh)</label>
-		<description> Index heures normales si option = EJP (en Wh)</description>
-	</channel-type>
-	<channel-type id="EJP_HPM">
-		<item-type>Number</item-type>
-		<label> Index heures de pointe mobile si option = EJP (en Wh)</label>
-		<description> Index heures de pointe mobile si option = EJP (en Wh)</description>
-	</channel-type>
-	<channel-type id="BBR_HC_JB">
-		<item-type>Number</item-type>
-		<label> Index heures creuses jours bleus si option = tempo (en Wh)</label>
-		<description> Index heures creuses jours bleus si option = tempo (en Wh)</description>
-	</channel-type>
-	<channel-type id="BBR_HP_JB">
-		<item-type>Number</item-type>
-		<label> Index heures pleines jours bleus si option = tempo (en Wh)</label>
-		<description> Index heures pleines jours bleus si option = tempo (en Wh)</description>
-	</channel-type>
-	<channel-type id="BBR_HC_JW">
-		<item-type>Number</item-type>
-		<label> Index heures creuses jours blancs si option = tempo (en Wh)</label>
-		<description> Index heures creuses jours blancs si option = tempo (en Wh)</description>
-	</channel-type>
-	<channel-type id="BBR_HP_JW">
-		<item-type>Number</item-type>
-		<label> Index heures pleines jours blancs si option = tempo (en Wh)</label>
-		<description> Index heures pleines jours blancs si option = tempo (en Wh)</description>
-	</channel-type>
-	<channel-type id="BBR_HC_JR">
-		<item-type>Number</item-type>
-		<label> Index heures creuses jours rouges si option = tempo  (en Wh)</label>
-		<description> Index heures creuses jours rouges si option = tempo  (en Wh)</description>
-	</channel-type>
-	<channel-type id="BBR_HP_JR">
-		<item-type>Number</item-type>
-		<label> Index heures pleines jours rouges si option = tempo (en Wh)</label>
-		<description> Index heures pleines jours rouges si option = tempo (en Wh)</description>
-	</channel-type>
-	<channel-type id="PEJP">
-		<item-type>Number</item-type>
-		<label> Préavis EJP si option = EJP 30mn avant période EJP</label>
-		<description> Préavis EJP si option = EJP 30mn avant période EJP</description>
-	</channel-type>
-	<channel-type id="PTEC">
-		<item-type>String</item-type>
-		<label> Période tarifaire en cours</label>
-		<description> Période tarifaire en cours</description>
-	</channel-type>
-	<channel-type id="DEMAIN">
-		<item-type>String</item-type>
-		<label> Couleur du lendemain si option = tempo</label>
-		<description> Couleur du lendemain si option = tempo</description>
-	</channel-type>
-	<channel-type id="IINST">
-		<item-type>Number</item-type>
-		<label> Intensité instantanée (en ampères)</label>
-		<description> Intensité instantanée (en ampères)</description>
-	</channel-type>
-	<channel-type id="ADPS">
-		<item-type>Number</item-type>
-		<label> Avertissement de dépassement de puissance souscrite (en ampères)</label>
-		<description> Avertissement de dépassement de puissance souscrite (en ampères)</description>
-	</channel-type>
-	<channel-type id="IMAX">
-		<item-type>Number</item-type>
-		<label> Intensité maximale (en ampères)</label>
-		<description> Intensité maximale (en ampères)</description>
-	</channel-type>
-	<channel-type id="PAPP">
-		<item-type>Number</item-type>
-		<label> Puissance apparente (en Volt.ampères)</label>
-		<description> Puissance apparente (en Volt.ampères)</description>
-	</channel-type>
-	<channel-type id="HHPHC">
-		<item-type>String</item-type>
-		<label> Groupe horaire si option = heures creuses ou tempo</label>
-		<description> Groupe horaire si option = heures creuses ou tempo</description>
-	</channel-type>
-	<channel-type id="MOTDETAT">
-		<item-type>String</item-type>
-		<label> Mot d’état (autocontrôle)</label>
-		<description> Mot d’état (autocontrôle)</description>
-	</channel-type>
+
 
 
 

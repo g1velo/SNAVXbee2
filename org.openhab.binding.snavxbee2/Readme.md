@@ -1,7 +1,7 @@
 # SNAVXbee2 for OpenHAB 2.x Binding
 
 ## Configuring the XBee Devices 
-I configured the Xbees devices using XCTU ( Under Windows ) with the follwing parameters ! 
+I configured the Xbees devices using XCTU ( Under Windows ) with the following parameters ! 
 
 Coordinator ( The one connected to OpenHab with serial connection ) 
 ```
@@ -131,7 +131,7 @@ Things file under "conf/things/demo.things".
 Local Serial Gateway:
 
 ```
-Bridge snavxbee2:bridge:gateway[ serialPort="COM9", baudRate=115200 ] 
+Bridge snavxbee2:bridge:gateway[ SerialPortName="COM9", SerialPortSpeed=115200 ] 
 {
         /** define things connected to that bridge here */
 }
@@ -195,11 +195,13 @@ DIO19         |   DIO19
 ## Supported sensors using Xbee Serial Port 
 
 - TOSR02-T as tosr0xT using DD 'CAFE0002' 
+- Attached to Linky device 'CAFE0EDF' 
 - More to come.   
 
 Device        | Xbee Device indentifier ( DD ) 
 ------------- | -------------
 TOSR02-T      |   CAFE0002
+Linky         |   CAFE0EDF
 
 
 ## debug / trace mode

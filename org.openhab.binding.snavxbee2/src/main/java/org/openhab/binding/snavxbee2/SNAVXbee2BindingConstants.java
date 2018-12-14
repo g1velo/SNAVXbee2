@@ -100,6 +100,7 @@ public class SNAVXbee2BindingConstants {
 
     public static final String PARAMETER_XBEE64BITSADDRESS = "Xbee64BitsAddress";
     public static final String PARAMETER_RESETXBEE = "ResetXbee";
+    public static final String PARAMETER_XBEEDEVICETYPEID = "XBeeDeviceTypeID";
 
     // supported channels for tosr0xt devices;
     // Not really sure that it is usefull
